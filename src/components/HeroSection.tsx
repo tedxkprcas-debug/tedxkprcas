@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
 import { ArrowRight, MapPin, Calendar, Users } from "lucide-react";
+import AnimatedBackground from "./AnimatedBackground";
 
 const GOOGLE_FORM_LINK = "#";
 
 const HeroSection = () => {
   return (
     <section id="home" className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-tedx-red/5 to-transparent pointer-events-none" />
+      <AnimatedBackground variant="hero" particleCount={12} />
+      <div className="absolute inset-0 bg-gradient-to-b from-tedx-red/5 via-transparent to-background/50 pointer-events-none" />
 
       <div className="container mx-auto px-4 text-center relative z-10">
         <motion.div
@@ -15,6 +16,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="inline-block border border-tedx-red/30 rounded-full px-6 py-2 mb-8"
+          whileHover={{ scale: 1.05, borderColor: "hsl(0 84% 50%)" }}
         >
           <span className="text-tedx-red text-sm tracking-wide">x = Independently organised TED event</span>
         </motion.div>
@@ -25,7 +27,13 @@ const HeroSection = () => {
           transition={{ delay: 0.4, duration: 0.6 }}
           className="mb-4"
         >
-          <span className="font-heading text-7xl md:text-9xl font-black text-tedx-red">TED</span>
+          <motion.span
+            className="font-heading text-7xl md:text-9xl font-black text-tedx-red inline-block"
+            animate={{ textShadow: ["0 0 20px hsl(0 84% 50% / 0.3)", "0 0 60px hsl(0 84% 50% / 0.6)", "0 0 20px hsl(0 84% 50% / 0.3)"] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            TED
+          </motion.span>
           <span className="font-heading text-5xl md:text-7xl font-black text-foreground relative -left-1">
             <sup className="text-tedx-red">x</sup>
           </span>
@@ -64,14 +72,21 @@ const HeroSection = () => {
           transition={{ delay: 1.2 }}
           className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12"
         >
-          <a
+          <motion.a
             href={GOOGLE_FORM_LINK}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-tedx-red hover:bg-tedx-dark-red text-foreground font-heading font-bold text-lg px-8 py-3 rounded flex items-center gap-2 transition-colors"
+            className="bg-tedx-red hover:bg-tedx-dark-red text-foreground font-heading font-bold text-lg px-8 py-3 rounded flex items-center gap-2 transition-colors relative overflow-hidden"
+            whileHover={{ scale: 1.05, boxShadow: "0 0 30px hsl(0 84% 50% / 0.5)" }}
+            whileTap={{ scale: 0.95 }}
           >
-            Register Now <ArrowRight size={20} />
-          </a>
+            <motion.span
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-foreground/10 to-transparent"
+              animate={{ x: ["-200%", "200%"] }}
+              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+            />
+            <span className="relative z-10 flex items-center gap-2">Register Now <ArrowRight size={20} /></span>
+          </motion.a>
         </motion.div>
 
         <motion.div
@@ -80,18 +95,21 @@ const HeroSection = () => {
           transition={{ delay: 1.4 }}
           className="flex flex-wrap justify-center gap-8 text-muted-foreground text-sm"
         >
-          <div className="flex items-center gap-2">
-            <Calendar size={16} className="text-tedx-red" />
-            Coming Soon 2025
-          </div>
-          <div className="flex items-center gap-2">
-            <MapPin size={16} className="text-tedx-red" />
-            KPRCAS Campus
-          </div>
-          <div className="flex items-center gap-2">
-            <Users size={16} className="text-tedx-red" />
-            500+ Attendees
-          </div>
+          {[
+            { icon: Calendar, text: "Coming Soon 2025" },
+            { icon: MapPin, text: "KPRCAS Campus" },
+            { icon: Users, text: "500+ Attendees" },
+          ].map((item, i) => (
+            <motion.div
+              key={item.text}
+              className="flex items-center gap-2"
+              whileHover={{ scale: 1.1, color: "hsl(0 0% 100%)" }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <item.icon size={16} className="text-tedx-red" />
+              {item.text}
+            </motion.div>
+          ))}
         </motion.div>
       </div>
     </section>
