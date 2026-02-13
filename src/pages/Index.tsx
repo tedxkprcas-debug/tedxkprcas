@@ -7,6 +7,8 @@ import SpeakersSection from "@/components/SpeakersSection";
 import CountdownSection from "@/components/CountdownSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import CursorParticles from "@/components/CursorParticles";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const Index = () => {
   const [loading, setLoading] = useState(true);
@@ -21,13 +23,24 @@ const Index = () => {
 
   return (
     <div className="bg-background min-h-screen">
+      <CursorParticles />
       <Navbar />
       <HeroSection />
-      <AboutSection />
-      <SpeakersSection />
-      <CountdownSection />
-      <ContactSection />
-      <Footer />
+      <ScrollReveal direction="up">
+        <AboutSection />
+      </ScrollReveal>
+      <ScrollReveal direction="left" delay={0.1}>
+        <SpeakersSection />
+      </ScrollReveal>
+      <ScrollReveal direction="up" delay={0.1}>
+        <CountdownSection />
+      </ScrollReveal>
+      <ScrollReveal direction="right" delay={0.1}>
+        <ContactSection />
+      </ScrollReveal>
+      <ScrollReveal direction="up" delay={0.05}>
+        <Footer />
+      </ScrollReveal>
     </div>
   );
 };
