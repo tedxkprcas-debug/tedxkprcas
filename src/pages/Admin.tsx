@@ -2,8 +2,9 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send, CheckCircle, Shield, Trash2, Filter, Users,
-  Calendar, ChevronDown, Search, X, Mail
+  Calendar, ChevronDown, Search, X, Mail, Palette
 } from "lucide-react";
+import CertificateEditor, { CertificateConfig } from "@/components/admin/CertificateEditor";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,8 @@ const AdminPage = () => {
   const [dateTo, setDateTo] = useState<Date | undefined>();
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [certEditorOpen, setCertEditorOpen] = useState(false);
+  const [certConfig, setCertConfig] = useState<CertificateConfig | undefined>();
 
   const filtered = useMemo(() => {
     return participants.filter((p) => {
@@ -139,12 +142,26 @@ const AdminPage = () => {
             </h1>
           </div>
           <p className="text-muted-foreground text-lg">Registration & Certificate Management</p>
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="h-[2px] w-32 bg-primary origin-left mt-3"
-          />
+          <div className="flex items-center gap-4 mt-3">
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              className="h-[2px] w-32 bg-primary origin-left"
+            />
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 20px hsl(var(--primary) / 0.3)" }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setCertEditorOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-primary/30 bg-primary/5 hover:bg-primary/10 text-primary text-sm font-medium transition-colors"
+            >
+              <Palette className="w-4 h-4" />
+              Edit Certificate
+            </motion.button>
+          </div>
         </motion.div>
 
         {/* Filters Section */}
@@ -427,6 +444,14 @@ const AdminPage = () => {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Certificate Editor Modal */}
+      <CertificateEditor
+        open={certEditorOpen}
+        onClose={() => setCertEditorOpen(false)}
+        onSave={(cfg) => setCertConfig(cfg)}
+        config={certConfig}
+      />
     </div>
   );
 };
