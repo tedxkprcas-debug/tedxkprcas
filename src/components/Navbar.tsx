@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Lock } from "lucide-react";
 
 const GOOGLE_FORM_LINK = "#"; // Replace with actual Google Form link
 
@@ -35,6 +35,13 @@ const Navbar = () => {
               {item.label}
             </a>
           ))}
+          <Link
+            to="/admin"
+            className="text-sm text-muted-foreground hover:text-primary transition-colors font-medium flex items-center gap-1"
+          >
+            <Lock className="w-4 h-4" />
+            Admin
+          </Link>
           <a
             href={GOOGLE_FORM_LINK}
             target="_blank"
@@ -68,6 +75,14 @@ const Navbar = () => {
               {item.label}
             </a>
           ))}
+          <Link
+            to="/admin"
+            onClick={() => setOpen(false)}
+            className="block py-2 text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+          >
+            <Lock className="w-4 h-4" />
+            Admin
+          </Link>
           <a
             href={GOOGLE_FORM_LINK}
             target="_blank"
