@@ -122,52 +122,13 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
           )}
 
           <div className="flex flex-col items-center justify-center relative z-10">
-            {/* Phase 1: TEDx outline with letter-by-letter reveal */}
+            {/* Phase 1: TEDx outline - single clean render */}
             {phase >= 1 && phase < 2 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex items-baseline"
-              >
-                {"TED".split("").map((letter, i) => (
-                  <motion.span
-                    key={i}
-                    className="font-heading text-8xl md:text-[12rem] lg:text-[16rem] font-black tracking-tight"
-                    style={{
-                      WebkitTextStroke: "2px hsl(var(--tedx-red))",
-                      color: "transparent",
-                    }}
-                    initial={{ opacity: 0, y: 60, rotateX: -90 }}
-                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                    transition={{ duration: 0.5, delay: i * 0.15, ease: "backOut" }}
-                  />
-                ))}
-                {"TED".split("").map((letter, i) => (
-                  <motion.span
-                    key={`visible-${i}`}
-                    className="font-heading text-8xl md:text-[12rem] lg:text-[16rem] font-black tracking-tight absolute"
-                    style={{
-                      WebkitTextStroke: "2px hsl(var(--tedx-red))",
-                      color: "transparent",
-                      left: `${i * 33}%`,
-                    }}
-                    initial={{ opacity: 0, y: 60, rotateX: -90 }}
-                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                    transition={{ duration: 0.5, delay: i * 0.15, ease: "backOut" }}
-                  >
-                    {letter}
-                  </motion.span>
-                ))}
-              </motion.div>
-            )}
-
-            {/* Simplified: Phase 1 re-done cleanly */}
-            {phase >= 1 && phase < 2 && (
-              <motion.div className="flex items-baseline absolute">
+              <motion.div className="flex items-baseline">
                 {"TED".split("").map((char, i) => (
                   <motion.span
                     key={`outline-${i}`}
-                    className="font-heading text-8xl md:text-[12rem] lg:text-[16rem] font-black"
+                    className="font-heading text-7xl md:text-[10rem] lg:text-[13rem] font-black"
                     style={{
                       WebkitTextStroke: "2px hsl(var(--tedx-red))",
                       color: "transparent",
@@ -180,7 +141,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
                   </motion.span>
                 ))}
                 <motion.span
-                  className="font-heading text-6xl md:text-[9rem] lg:text-[12rem] font-black -ml-1"
+                  className="font-heading text-5xl md:text-[7rem] lg:text-[10rem] font-black"
                   style={{
                     WebkitTextStroke: "2px hsl(var(--tedx-red))",
                     color: "transparent",
@@ -212,7 +173,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
                   {"TED".split("").map((char, i) => (
                     <motion.span
                       key={`filled-${i}`}
-                      className="font-heading text-8xl md:text-[12rem] lg:text-[16rem] font-black tracking-tight"
+                      className="font-heading text-7xl md:text-[10rem] lg:text-[13rem] font-black"
                       style={{ WebkitTextStroke: "2px hsl(var(--tedx-red))" }}
                       initial={{ color: "transparent" }}
                       animate={{ color: "hsl(var(--tedx-red))" }}
@@ -222,7 +183,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
                     </motion.span>
                   ))}
                   <motion.span
-                    className="font-heading text-6xl md:text-[9rem] lg:text-[12rem] font-black -ml-1 text-tedx-red"
+                    className="font-heading text-5xl md:text-[7rem] lg:text-[10rem] font-black text-tedx-red"
                     initial={{ color: "transparent" }}
                     animate={{ color: "hsl(var(--tedx-red))" }}
                     transition={{ duration: 0.3, delay: 0.3 }}
@@ -235,7 +196,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
                 {phase === 2 && (
                   <>
                     <motion.span
-                      className="absolute font-heading text-8xl md:text-[12rem] lg:text-[16rem] font-black tracking-tight text-tedx-red/30"
+                      className="absolute font-heading text-7xl md:text-[10rem] lg:text-[13rem] font-black text-tedx-red/30"
                       initial={{ x: 0 }}
                       animate={{ x: [0, 5, -3, 0], opacity: [0, 0.5, 0.3, 0] }}
                       transition={{ duration: 0.4 }}
@@ -244,7 +205,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
                       TED
                     </motion.span>
                     <motion.span
-                      className="absolute font-heading text-8xl md:text-[12rem] lg:text-[16rem] font-black tracking-tight"
+                      className="absolute font-heading text-7xl md:text-[10rem] lg:text-[13rem] font-black"
                       initial={{ x: 0 }}
                       animate={{ x: [0, -4, 6, 0], opacity: [0, 0.3, 0.2, 0] }}
                       transition={{ duration: 0.5, delay: 0.1 }}
