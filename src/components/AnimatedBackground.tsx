@@ -25,7 +25,7 @@ const AnimatedBackground = ({ variant = "default", particleCount = 8 }: Animated
   }));
 
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
       {/* Floating orbs */}
       {variant !== "grid" &&
         [...Array(3)].map((_, i) => (
