@@ -35,13 +35,13 @@ const Navbar = () => {
               {item.label}
             </a>
           ))}
-          <Link
-            to="/admin"
-            className="text-sm text-muted-foreground hover:text-primary transition-colors font-medium flex items-center gap-1"
-          >
-            <Lock className="w-4 h-4" />
-            Admin
-          </Link>
+          {/*<Link*/}
+          {/*  to="/admin"*/}
+          {/*  className="text-sm text-muted-foreground hover:text-primary transition-colors font-medium flex items-center gap-1"*/}
+          {/*>*/}
+          {/*  <Lock className="w-4 h-4" />*/}
+          {/*  Admin*/}
+          {/*</Link>*/}
           <a
             href={GOOGLE_FORM_LINK}
             target="_blank"
