@@ -24,41 +24,56 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  useSpeakers,
+  useCreateSpeaker,
+  useUpdateSpeaker,
+  useDeleteSpeaker,
+  useParticipants,
+  useCreateParticipant,
+  useUpdateParticipant,
+  useDeleteParticipant,
+  useContactInfo,
+  useUpdateContactInfo,
+  useAboutInfo,
+  useUpdateAboutInfo,
+} from "@/hooks/use-database";
 
-// Mock data
-const MOCK_PARTICIPANTS = [
-  { id: 1, name: "Ahmed Hassan", email: "ahmed@example.com", date: "2026-02-01", status: "registered", certSent: false },
-  { id: 2, name: "Sara Ali", email: "sara@example.com", date: "2026-02-01", status: "registered", certSent: false },
-  { id: 3, name: "Omar Khalid", email: "omar@example.com", date: "2026-02-03", status: "registered", certSent: false },
-];
-
-const MOCK_SPEAKERS = [
-  { id: 1, name: "Speaker 1", role: "Industry Expert", image: "" },
-  { id: 2, name: "Speaker 2", role: "Tech Innovator", image: "" },
-  { id: 3, name: "Speaker 3", role: "Business Leader", image: "" },
-];
-
-const MOCK_ABOUT = {
-  title: "About TEDx KPRCAS",
-  description: "TEDx is an independent event that brings people together to share a TED-like experience.",
-  content: "In the spirit of ideas worth spreading, TED has created a program called TEDx.",
+// Type definitions
+type Participant = {
+  id?: string;
+  name: string;
+  email: string;
+  phone?: string;
+  date: string;
+  status: "registered" | "attended" | "no-show";
+  certSent: boolean;
+  certSentDate?: string;
 };
 
-const MOCK_CONTACT = {
-  email: "contact@kprcas.edu.in",
-  phone: "+91-XXXX-XXXX-XX",
-  address: "KPR College of Arts and Science, Coimbatore",
-  formLink: "https://forms.gle/example",
-  registrationLink: "https://forms.gle/example",
-};
-
-type Participant = typeof MOCK_PARTICIPANTS[number];
-type Speaker = typeof MOCK_SPEAKERS[number];
 
 const AdminPage = () => {
   const [tab, setTab] = useState<"participants" | "speakers" | "certificates" | "about" | "contact">("participants");
 
-  // ...existing code...
+  // Database hooks for speakers
+  const { data: speakers = [], isLoading: speakersLoading, error: speakersError } = useSpeakers();
+  const { mutate: createSpeaker, isPending: isCreating } = useCreateSpeaker();
+  const { mutate: updateSpeaker, isPending: isUpdating } = useUpdateSpeaker();
+  const { mutate: deleteSpeaker, isPending: isDeleting } = useDeleteSpeaker();
+
+  // Database hooks for participants
+  const { data: participants = [], isLoading: participantsLoading, error: participantsError } = useParticipants();
+  const { mutate: createParticipant } = useCreateParticipant();
+  const { mutate: updateParticipant } = useUpdateParticipant();
+  const { mutate: deleteParticipant } = useDeleteParticipant();
+
+  // Database hooks for contact info
+  const { data: contact = {}, isLoading: contactLoading } = useContactInfo();
+  const { mutate: updateContact } = useUpdateContactInfo();
+
+  // Database hooks for about info
+  const { data: about = {}, isLoading: aboutLoading } = useAboutInfo();
+  const { mutate: updateAbout } = useUpdateAboutInfo();
 
   // Certificate management state
   const [showCertificateDesigner, setShowCertificateDesigner] = useState(false);
@@ -66,9 +81,8 @@ const AdminPage = () => {
   const [certificateText, setCertificateText] = useState("In recognition of your enthusiasm, engagement, and commitment to spreading ideas worth sharing.");
   const [certificateBgColor, setCertificateBgColor] = useState("from-amber-50 to-yellow-50");
 
-  // Participants state
-  const [participants, setParticipants] = useState<Participant[]>(MOCK_PARTICIPANTS);
-  const [selected, setSelected] = useState<Set<number>>(new Set());
+  // Participants UI state
+  const [selected, setSelected] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState("");
   const [dateFrom, setDateFrom] = useState<Date | undefined>();
   const [dateTo, setDateTo] = useState<Date | undefined>();
@@ -78,21 +92,18 @@ const AdminPage = () => {
   const [editingParticipant, setEditingParticipant] = useState<Participant | null>(null);
   const [formData, setFormData] = useState({ name: "", email: "" });
 
-  // Speakers state
-  const [speakers, setSpeakers] = useState<Speaker[]>(MOCK_SPEAKERS);
+  // Speakers UI state
   const [showSpeakerForm, setShowSpeakerForm] = useState(false);
-  const [editingSpeaker, setEditingSpeaker] = useState<Speaker | null>(null);
+  const [editingSpeaker, setEditingSpeaker] = useState<any>(null);
   const [speakerFormData, setSpeakerFormData] = useState({ name: "", role: "", image: "" });
 
-  // About state
-  const [about, setAbout] = useState(MOCK_ABOUT);
+  // About UI state
   const [editingAbout, setEditingAbout] = useState(false);
-  const [aboutFormData, setAboutFormData] = useState(MOCK_ABOUT);
+  const [aboutFormData, setAboutFormData] = useState({ title: "", description: "", content: "" });
 
-  // Contact state
-  const [contact, setContact] = useState(MOCK_CONTACT);
+  // Contact UI state
   const [editingContact, setEditingContact] = useState(false);
-  const [contactFormData, setContactFormData] = useState(MOCK_CONTACT);
+  const [contactFormData, setContactFormData] = useState({ email: "", phone: "", address: "", formLink: "", registrationLink: "" });
 
   // Certificate & Import state
   const [showCertificatePreview, setShowCertificatePreview] = useState(false);
@@ -117,7 +128,7 @@ const AdminPage = () => {
 
   const allSelected = filtered.length > 0 && filtered.every((p) => selected.has(p.id));
 
-  const toggleSelect = (id: number) => {
+  const toggleSelect = (id: string) => {
     setSelected((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -130,13 +141,13 @@ const AdminPage = () => {
     if (allSelected) {
       setSelected((prev) => {
         const next = new Set(prev);
-        filtered.forEach((p) => next.delete(p.id));
+        filtered.forEach((p) => next.delete(p.id as string));
         return next;
       });
     } else {
       setSelected((prev) => {
         const next = new Set(prev);
-        filtered.forEach((p) => next.add(p.id));
+        filtered.forEach((p) => next.add(p.id as string));
         return next;
       });
     }
@@ -157,33 +168,25 @@ const AdminPage = () => {
   const saveParticipant = () => {
     if (!formData.name || !formData.email) return;
 
-    if (editingParticipant) {
-      setParticipants((prev) =>
-        prev.map((p) =>
-          p.id === editingParticipant.id
-            ? { ...p, name: formData.name, email: formData.email }
-            : p
-        )
-      );
+    if (editingParticipant && editingParticipant.id) {
+      updateParticipant({
+        id: editingParticipant.id,
+        data: { name: formData.name, email: formData.email }
+      });
     } else {
-      const newId = Math.max(...participants.map((p) => p.id), 0) + 1;
-      setParticipants((prev) => [
-        ...prev,
-        {
-          id: newId,
-          name: formData.name,
-          email: formData.email,
-          date: format(new Date(), "yyyy-MM-dd"),
-          status: "registered",
-          certSent: false,
-        },
-      ]);
+      createParticipant({
+        name: formData.name,
+        email: formData.email,
+        date: format(new Date(), "yyyy-MM-dd"),
+        status: "registered",
+        certSent: false
+      });
     }
     setShowParticipantForm(false);
   };
 
-  const deleteParticipant = (id: number) => {
-    setParticipants((prev) => prev.filter((p) => p.id !== id));
+  const handleDeleteParticipant = (id: string) => {
+    deleteParticipant(id);
   };
 
   const handleBulkSend = async () => {
@@ -212,7 +215,7 @@ const AdminPage = () => {
     setShowSpeakerForm(true);
   };
 
-  const editSpeaker = (s: Speaker) => {
+  const editSpeaker = (s: any) => {
     setEditingSpeaker(s);
     setSpeakerFormData(s);
     setShowSpeakerForm(true);
@@ -222,23 +225,31 @@ const AdminPage = () => {
     const dataToSave = data || speakerFormData;
     if (!dataToSave.name || !dataToSave.role) return;
 
-    if (editingSpeaker) {
-      setSpeakers((prev) =>
-        prev.map((s) =>
-          s.id === editingSpeaker.id
-            ? { ...s, ...dataToSave }
-            : s
-        )
-      );
+    if (editingSpeaker && editingSpeaker.id) {
+      // Update existing speaker
+      updateSpeaker({
+        id: editingSpeaker.id,
+        data: {
+          name: dataToSave.name,
+          role: dataToSave.role,
+          image: dataToSave.image || undefined,
+          order: editingSpeaker.order || 0,
+        },
+      });
     } else {
-      const newId = Math.max(...speakers.map((s) => s.id), 0) + 1;
-      setSpeakers((prev) => [...prev, { id: newId, ...dataToSave }]);
+      // Create new speaker
+      createSpeaker({
+        name: dataToSave.name,
+        role: dataToSave.role,
+        image: dataToSave.image || undefined,
+        order: speakers.length,
+      });
     }
     setShowSpeakerForm(false);
   };
 
-  const deleteSpeaker = (id: number) => {
-    setSpeakers((prev) => prev.filter((s) => s.id !== id));
+  const handleDeleteSpeaker = (id: string) => {
+    deleteSpeaker(id);
   };
 
   const handleGoogleFormImport = (importedData: ImportedParticipant[]) => {
@@ -474,8 +485,8 @@ const AdminPage = () => {
                           <td className="px-4 py-3">
                             <input
                               type="checkbox"
-                              checked={selected.has(p.id)}
-                              onChange={() => toggleSelect(p.id)}
+                              checked={selected.has(p.id as string)}
+                              onChange={() => toggleSelect(p.id as string)}
                               className="rounded"
                             />
                           </td>
@@ -498,7 +509,7 @@ const AdminPage = () => {
                               <Edit2 className="w-4 h-4 text-blue-500" />
                             </button>
                             <button
-                              onClick={() => deleteParticipant(p.id)}
+                              onClick={() => handleDeleteParticipant(p.id as string)}
                               className="p-2 hover:bg-red-500/20 rounded transition-colors"
                             >
                               <Trash2 className="w-4 h-4 text-red-500" />
@@ -567,51 +578,77 @@ const AdminPage = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm"
+                  disabled={isCreating}
                 >
                   <Plus className="w-4 h-4" />
-                  Add Speaker
+                  {isCreating ? "Adding..." : "Add Speaker"}
                 </motion.button>
               </div>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {speakers.map((speaker) => (
-                  <motion.div
-                    key={speaker.id}
-                    whileHover={{ y: -4 }}
-                    className="border border-border rounded-xl p-6 bg-card/60 backdrop-blur-sm overflow-hidden"
+              {speakersError && (
+                <div className="bg-red-500/10 border border-red-500/30 text-red-600 p-4 rounded-lg mb-6">
+                  Error loading speakers: {speakersError?.message}
+                </div>
+              )}
+
+              {speakersLoading ? (
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground">Loading speakers...</p>
+                </div>
+              ) : speakers.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground mb-4">No speakers added yet.</p>
+                  <button
+                    onClick={addSpeaker}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-4 py-2.5 rounded-lg inline-flex items-center gap-2 text-sm"
                   >
-                    <div className="w-full aspect-square bg-secondary rounded-lg mb-4 flex items-center justify-center overflow-hidden bg-cover bg-center">
-                      {speaker.image ? (
-                        <img
-                          src={speaker.image}
-                          alt={speaker.name}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <span className="text-4xl font-bold text-primary/30">{speaker.name.charAt(0)}</span>
-                      )}
-                    </div>
-                    <h3 className="font-heading text-lg font-bold mb-1">{speaker.name}</h3>
-                    <p className="text-sm text-primary mb-4">{speaker.role}</p>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => editSpeaker(speaker)}
-                        className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 font-medium py-2 rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => deleteSpeaker(speaker.id)}
-                        className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-600 font-medium py-2 rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        Delete
-                      </button>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+                    <Plus className="w-4 h-4" />
+                    Add First Speaker
+                  </button>
+                </div>
+              ) : (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {speakers.map((speaker) => (
+                    <motion.div
+                      key={speaker.id}
+                      whileHover={{ y: -4 }}
+                      className="border border-border rounded-xl p-6 bg-card/60 backdrop-blur-sm overflow-hidden"
+                    >
+                      <div className="w-full aspect-square bg-secondary rounded-lg mb-4 flex items-center justify-center overflow-hidden bg-cover bg-center">
+                        {speaker.image ? (
+                          <img
+                            src={speaker.image}
+                            alt={speaker.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-4xl font-bold text-primary/30">{speaker.name.charAt(0)}</span>
+                        )}
+                      </div>
+                      <h3 className="font-heading text-lg font-bold mb-1">{speaker.name}</h3>
+                      <p className="text-sm text-primary mb-4">{speaker.role}</p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => editSpeaker(speaker)}
+                          className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 font-medium py-2 rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
+                          disabled={isUpdating}
+                        >
+                          <Edit2 className="w-4 h-4" />
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteSpeaker(speaker.id)}
+                          className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-600 font-medium py-2 rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
+                          disabled={isDeleting}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          Delete
+                        </button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
 
               {/* Speaker Form Dialog */}
               <Dialog open={showSpeakerForm} onOpenChange={setShowSpeakerForm}>
@@ -851,7 +888,11 @@ const AdminPage = () => {
                     <div className="flex gap-3 pt-4">
                       <button
                         onClick={() => {
-                          setAbout(aboutFormData);
+                          updateAbout({
+                            title: aboutFormData.title,
+                            description: aboutFormData.description,
+                            content: aboutFormData.content
+                          });
                           setEditingAbout(false);
                         }}
                         className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 font-medium py-2 rounded-lg"
@@ -973,9 +1014,13 @@ const AdminPage = () => {
                     <div className="flex gap-3 pt-4">
                       <button
                         onClick={() => {
-                          setContact(contactFormData);
-                          // Save to localStorage so website can access the registration link
-                          localStorage.setItem("tedx_contact", JSON.stringify(contactFormData));
+                          updateContact({
+                            email: contactFormData.email,
+                            phone: contactFormData.phone,
+                            address: contactFormData.address,
+                            formLink: contactFormData.formLink,
+                            registrationLink: contactFormData.registrationLink
+                          });
                           setEditingContact(false);
                         }}
                         className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 font-medium py-2 rounded-lg"
