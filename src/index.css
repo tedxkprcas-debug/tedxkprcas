@@ -97,6 +97,10 @@
   to { transform: translateX(-50%); }
 }
 
+.marquee-sprocket {
+  animation: marquee 30s linear infinite;
+}
+
 @keyframes pulse-glow {
   0%, 100% { text-shadow: 0 0 20px hsl(var(--tedx-glow) / 0.3); }
   50% { text-shadow: 0 0 60px hsl(var(--tedx-glow) / 0.8), 0 0 120px hsl(var(--tedx-glow) / 0.4); }
