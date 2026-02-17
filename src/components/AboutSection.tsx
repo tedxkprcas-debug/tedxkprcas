@@ -148,7 +148,7 @@ const AboutSection = () => {
           <div className="h-[3px] bg-gray-500 mb-[6px]" />
           <div className="h-[3px] bg-gray-500" />
           <div className="absolute top-0 left-0 right-0 h-full flex">
-            {Array(80).fill(null).map((_, i) => (
+            {Array(160).fill(null).map((_, i) => (
               <div key={i} className="w-[3px] h-full bg-gray-600 flex-shrink-0" style={{ marginLeft: '20px' }} />
             ))}
           </div>
@@ -156,17 +156,10 @@ const AboutSection = () => {
 
         {/* Train carriages */}
         <div className="marquee whitespace-nowrap flex items-end relative z-10">
-          {Array(8).fill(null).map((_, i) => (
+          {Array(16).fill(null).map((_, i) => (
             <div key={i} className="inline-flex flex-shrink-0 items-end mx-1">
               <div className="relative">
-                <div className={`relative rounded-t-xl border-2 px-6 md:px-10 py-4 md:py-6 ${
-                  i === 0
-                    ? "bg-gradient-to-b from-red-700 to-red-900 border-red-600 rounded-tl-2xl"
-                    : "bg-gradient-to-b from-gray-800 to-gray-950 border-gray-600"
-                }`}>
-                  {i === 0 && (
-                    <div className="absolute -top-5 left-6 w-4 h-5 bg-gray-800 border-2 border-gray-600 rounded-t-md" />
-                  )}
+                <div className="relative rounded-t-xl border-2 px-6 md:px-10 py-4 md:py-6 bg-gradient-to-b from-gray-800 to-gray-950 border-gray-600">
                   <span className="font-heading text-2xl md:text-3xl font-black">
                     <span className="text-tedx-red">TED</span><sup className="text-tedx-red text-xs">x</sup>{" "}
                     <span className="text-white">KPRCAS</span>
