@@ -86,56 +86,52 @@ const AboutSection = () => {
         </div>
       </div>
 
-      {/* Film Roll Marquee */}
-      <div className="mt-20 relative">
-        {/* Film strip container */}
-        <div className="relative bg-gradient-to-r from-gray-950 via-gray-900 to-gray-950 py-0 overflow-hidden">
-          {/* Top sprocket holes */}
-          <div className="absolute top-0 left-0 right-0 h-5 bg-black z-10 flex items-center">
-            <div className="marquee-sprocket whitespace-nowrap flex">
-              {Array(40).fill(null).map((_, i) => (
-                <div key={`st-${i}`} className="w-4 h-3 bg-gray-800 border border-gray-700 rounded-sm mx-3 flex-shrink-0" />
-              ))}
-              {Array(40).fill(null).map((_, i) => (
-                <div key={`st2-${i}`} className="w-4 h-3 bg-gray-800 border border-gray-700 rounded-sm mx-3 flex-shrink-0" />
-              ))}
-            </div>
+      {/* Train Marquee */}
+      <div className="mt-20 relative overflow-hidden pb-4">
+        {/* Rail tracks */}
+        <div className="absolute bottom-3 left-0 right-0 z-0">
+          <div className="h-[3px] bg-gray-500 mb-[6px]" />
+          <div className="h-[3px] bg-gray-500" />
+          <div className="absolute top-0 left-0 right-0 h-full flex">
+            {Array(80).fill(null).map((_, i) => (
+              <div key={i} className="w-[3px] h-full bg-gray-600 flex-shrink-0" style={{ marginLeft: '20px' }} />
+            ))}
           </div>
-          {/* Top film border */}
-          <div className="absolute top-5 left-0 right-0 h-[2px] bg-gray-700 z-10" />
+        </div>
 
-          {/* Main film content area */}
-          <div className="py-8 mt-5 mb-5 relative overflow-hidden">
-            {/* Red gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-red-950/40 via-transparent to-red-950/40 pointer-events-none z-[1]" />
-            {/* Scrolling text */}
-            <div className="marquee whitespace-nowrap relative z-[2]">
-              {Array(10).fill("TEDx KPRCAS").map((text, i) => (
-                <span key={i} className="font-heading text-2xl md:text-3xl font-bold text-white/90 mx-8 tracking-wider drop-shadow-[0_0_10px_rgba(239,68,68,0.4)]">
-                  {text} <span className="text-tedx-red">●</span>
-                </span>
-              ))}
-              {Array(10).fill("TEDx KPRCAS").map((text, i) => (
-                <span key={`d-${i}`} className="font-heading text-2xl md:text-3xl font-bold text-white/90 mx-8 tracking-wider drop-shadow-[0_0_10px_rgba(239,68,68,0.4)]">
-                  {text} <span className="text-tedx-red">●</span>
-                </span>
-              ))}
+        {/* Train carriages */}
+        <div className="marquee whitespace-nowrap flex items-end relative z-10">
+          {Array(8).fill(null).map((_, i) => (
+            <div key={i} className="inline-flex flex-shrink-0 items-end mx-1">
+              <div className="relative">
+                <div className={`relative rounded-t-xl border-2 px-6 md:px-10 py-4 md:py-6 ${
+                  i === 0
+                    ? "bg-gradient-to-b from-red-700 to-red-900 border-red-600 rounded-tl-2xl"
+                    : "bg-gradient-to-b from-gray-800 to-gray-950 border-gray-600"
+                }`}>
+                  {i === 0 && (
+                    <div className="absolute -top-5 left-6 w-4 h-5 bg-gray-800 border-2 border-gray-600 rounded-t-md" />
+                  )}
+                  <span className="font-heading text-2xl md:text-3xl font-black">
+                    <span className="text-tedx-red">TED</span><sup className="text-tedx-red text-xs">x</sup>{" "}
+                    <span className="text-white">KPRCAS</span>
+                  </span>
+                  <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-4 h-3 bg-gray-600 rounded-sm z-20" />
+                </div>
+                <div className="h-3 bg-gray-800 border-x-2 border-gray-600" />
+                <div className="flex justify-between px-3 -mb-1 relative">
+                  <div className="flex gap-1">
+                    <div className="w-6 h-6 md:w-7 md:h-7 rounded-full bg-gray-900 border-[3px] border-gray-500 flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-yellow-600" /></div>
+                    <div className="w-6 h-6 md:w-7 md:h-7 rounded-full bg-gray-900 border-[3px] border-gray-500 flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-yellow-600" /></div>
+                  </div>
+                  <div className="flex gap-1">
+                    <div className="w-6 h-6 md:w-7 md:h-7 rounded-full bg-gray-900 border-[3px] border-gray-500 flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-yellow-600" /></div>
+                    <div className="w-6 h-6 md:w-7 md:h-7 rounded-full bg-gray-900 border-[3px] border-gray-500 flex items-center justify-center"><div className="w-2 h-2 rounded-full bg-yellow-600" /></div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-
-          {/* Bottom film border */}
-          <div className="absolute bottom-5 left-0 right-0 h-[2px] bg-gray-700 z-10" />
-          {/* Bottom sprocket holes */}
-          <div className="absolute bottom-0 left-0 right-0 h-5 bg-black z-10 flex items-center">
-            <div className="marquee-sprocket whitespace-nowrap flex">
-              {Array(40).fill(null).map((_, i) => (
-                <div key={`sb-${i}`} className="w-4 h-3 bg-gray-800 border border-gray-700 rounded-sm mx-3 flex-shrink-0" />
-              ))}
-              {Array(40).fill(null).map((_, i) => (
-                <div key={`sb2-${i}`} className="w-4 h-3 bg-gray-800 border border-gray-700 rounded-sm mx-3 flex-shrink-0" />
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

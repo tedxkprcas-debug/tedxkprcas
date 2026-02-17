@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import LoadingScreen from "@/components/LoadingScreen";
-import AnimatedBackground from "@/components/AnimatedBackground";
+import GeometricBackground from "@/components/GeometricBackground";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
@@ -24,7 +24,7 @@ const Index = () => {
 
   return (
     <div className="bg-background min-h-screen relative">
-      <AnimatedBackground variant="hero" particleCount={15} />
+      <GeometricBackground />
       <CursorParticles />
       <Navbar />
       <HeroSection />
