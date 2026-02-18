@@ -221,8 +221,6 @@ const GeometricBackground = () => {
 
   const animate = useCallback(
     (ctx: CanvasRenderingContext2D, width: number, height: number) => {
-      const mobile = mobileRef.current;
-
       const render = (timestamp: number) => {
         const deltaTime = (timestamp - timeRef.current) / 1000;
         timeRef.current = timestamp;
@@ -231,27 +229,27 @@ const GeometricBackground = () => {
         ctx.fillStyle = "rgba(5, 2, 2, 1)";
         ctx.fillRect(0, 0, width, height);
 
-        // Subtle radial gradient — skip on mobile
-        if (!mobile) {
-          const gradient = ctx.createRadialGradient(
-            width * 0.5,
-            height * 0.4,
-            0,
-            width * 0.5,
-            height * 0.4,
-            width * 0.8
-          );
-          gradient.addColorStop(0, "rgba(40, 5, 5, 0.3)");
-          gradient.addColorStop(0.5, "rgba(15, 2, 2, 0.2)");
-          gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
-          ctx.fillStyle = gradient;
-          ctx.fillRect(0, 0, width, height);
-        }
+        // Subtle radial gradient overlay
+        const gradient = ctx.createRadialGradient(
+          width * 0.5,
+          height * 0.4,
+          0,
+          width * 0.5,
+          height * 0.4,
+          width * 0.8
+        );
+        gradient.addColorStop(0, "rgba(40, 5, 5, 0.3)");
+        gradient.addColorStop(0.5, "rgba(15, 2, 2, 0.2)");
+        gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
 
         // Update and draw cubes
         cubesRef.current.forEach((cube, i) => {
+          // Update rotation
           cube.rotation += cube.rotationSpeed * deltaTime * 0.3;
 
+          // Update glow (pulsing)
           cube.glowIntensity += cube.glowDirection * deltaTime * 0.4;
           if (cube.glowIntensity > 1) {
             cube.glowIntensity = 1;
@@ -261,6 +259,7 @@ const GeometricBackground = () => {
             cube.glowDirection = 1;
           }
 
+          // Float animation
           const floatY =
             Math.sin(timestamp * 0.001 * cube.floatSpeed + cube.floatOffset) *
             (8 + cube.depth * 12);
@@ -271,47 +270,62 @@ const GeometricBackground = () => {
           const drawX = cube.x + floatX;
           const drawY = cube.y + floatY;
 
+          // Alternate between cubes and hexagons
           if (i % 3 === 0) {
-            drawHexagon(ctx, drawX, drawY, cube.size, cube.rotation, cube.baseAlpha, cube.glowIntensity, cube.hue);
+            drawHexagon(
+              ctx,
+              drawX,
+              drawY,
+              cube.size,
+              cube.rotation,
+              cube.baseAlpha,
+              cube.glowIntensity,
+              cube.hue
+            );
           } else {
-            drawCube3D(ctx, drawX, drawY, cube.size, cube.rotation, cube.baseAlpha, cube.glowIntensity, cube.hue);
+            drawCube3D(
+              ctx,
+              drawX,
+              drawY,
+              cube.size,
+              cube.rotation,
+              cube.baseAlpha,
+              cube.glowIntensity,
+              cube.hue
+            );
           }
         });
 
-        // Connecting lines — skip on mobile (O(n²) is expensive)
-        if (!mobile) {
-          ctx.save();
-          cubesRef.current.forEach((cube, i) => {
-            for (let j = i + 1; j < cubesRef.current.length; j++) {
-              const other = cubesRef.current[j];
-              const dx = cube.x - other.x;
-              const dy = cube.y - other.y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
+        // Draw connecting lines between nearby cubes (subtle grid effect)
+        ctx.save();
+        cubesRef.current.forEach((cube, i) => {
+          for (let j = i + 1; j < cubesRef.current.length; j++) {
+            const other = cubesRef.current[j];
+            const dx = cube.x - other.x;
+            const dy = cube.y - other.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-              if (dist < 200) {
-                const lineAlpha = (1 - dist / 200) * 0.08 * cube.glowIntensity;
-                ctx.beginPath();
-                ctx.moveTo(cube.x, cube.y);
-                ctx.lineTo(other.x, other.y);
-                ctx.strokeStyle = `hsla(0, 100%, 50%, ${lineAlpha})`;
-                ctx.lineWidth = 0.5;
-                ctx.stroke();
-              }
+            if (dist < 200) {
+              const lineAlpha = (1 - dist / 200) * 0.08 * cube.glowIntensity;
+              ctx.beginPath();
+              ctx.moveTo(cube.x, cube.y);
+              ctx.lineTo(other.x, other.y);
+              ctx.strokeStyle = `hsla(0, 100%, 50%, ${lineAlpha})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
             }
-          });
-          ctx.restore();
-        }
-
-        // Scan lines — skip on mobile
-        if (!mobile) {
-          ctx.save();
-          ctx.globalAlpha = 0.03;
-          for (let y = 0; y < height; y += 3) {
-            ctx.fillStyle = "#000";
-            ctx.fillRect(0, y, width, 1);
           }
-          ctx.restore();
+        });
+        ctx.restore();
+
+        // Subtle scan line effect
+        ctx.save();
+        ctx.globalAlpha = 0.03;
+        for (let y = 0; y < height; y += 3) {
+          ctx.fillStyle = "#000";
+          ctx.fillRect(0, y, width, 1);
         }
+        ctx.restore();
 
         // Vignette
         const vignette = ctx.createRadialGradient(
@@ -343,11 +357,7 @@ const GeometricBackground = () => {
     if (!ctx) return;
 
     const resize = () => {
-      mobileRef.current = isMobile();
-      // Cap DPR on mobile to reduce canvas pixel count
-      const dpr = mobileRef.current
-        ? Math.min(window.devicePixelRatio || 1, 1.5)
-        : window.devicePixelRatio || 1;
+      const dpr = window.devicePixelRatio || 1;
       const width = window.innerWidth;
       const height = window.innerHeight;
 
