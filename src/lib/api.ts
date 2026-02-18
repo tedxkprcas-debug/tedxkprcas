@@ -7,6 +7,7 @@ import {
   AboutInfo,
   Event,
   GalleryImage,
+  TeamMember,
 } from "./supabase";
 
 // ==================== PARTICIPANTS ====================
@@ -436,6 +437,64 @@ export const galleryService = {
   async delete(id: string) {
     const { error } = await supabase
       .from("gallery")
+      .delete()
+      .eq("id", id);
+
+    if (error) throw error;
+  },
+};
+
+// ==================== TEAM MEMBERS ====================
+
+export const teamService = {
+  async getAll() {
+    const { data, error } = await supabase
+      .from("team_members")
+      .select("*")
+      .eq("is_active", true)
+      .order("order", { ascending: true });
+
+    if (error) throw error;
+    return data as TeamMember[];
+  },
+
+  async getById(id: string) {
+    const { data, error } = await supabase
+      .from("team_members")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+    return data as TeamMember;
+  },
+
+  async create(member: Omit<TeamMember, "id" | "created_at" | "updated_at">) {
+    const { data, error } = await supabase
+      .from("team_members")
+      .insert([member])
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as TeamMember;
+  },
+
+  async update(id: string, member: Partial<TeamMember>) {
+    const { data, error } = await supabase
+      .from("team_members")
+      .update(member)
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as TeamMember;
+  },
+
+  async delete(id: string) {
+    const { error } = await supabase
+      .from("team_members")
       .delete()
       .eq("id", id);
 

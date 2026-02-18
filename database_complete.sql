@@ -2,7 +2,7 @@
 -- KPR CAS SPARK - COMPLETE DATABASE SCHEMA
 -- TEDx Event Management System
 -- ============================================================================
--- Last Updated: February 17, 2026
+-- Last Updated: February 18, 2026
 --
 -- This single SQL file contains everything you need:
 -- 1. Table creation
@@ -148,6 +148,40 @@ CREATE POLICY "gallery_delete" ON gallery FOR DELETE USING (true);
 ALTER PUBLICATION supabase_realtime ADD TABLE gallery;
 
 
+-- ==================== TEAM MEMBERS TABLE ====================
+-- Stores team members information
+DROP TABLE IF EXISTS team_members CASCADE;
+
+CREATE TABLE team_members (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  role TEXT NOT NULL,
+  photo TEXT NOT NULL DEFAULT '',
+  description TEXT,
+  "order" INTEGER DEFAULT 0,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes
+CREATE INDEX IF NOT EXISTS idx_team_members_order ON team_members("order");
+CREATE INDEX IF NOT EXISTS idx_team_members_is_active ON team_members(is_active);
+CREATE INDEX IF NOT EXISTS idx_team_members_created_at ON team_members(created_at);
+
+-- RLS
+ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
+
+-- Policies
+CREATE POLICY "team_members_select" ON team_members FOR SELECT USING (true);
+CREATE POLICY "team_members_insert" ON team_members FOR INSERT WITH CHECK (true);
+CREATE POLICY "team_members_update" ON team_members FOR UPDATE USING (true) WITH CHECK (true);
+CREATE POLICY "team_members_delete" ON team_members FOR DELETE USING (true);
+
+-- Enable realtime
+ALTER PUBLICATION supabase_realtime ADD TABLE team_members;
+
+
 -- ============================================================================
 -- STEP 3: CREATE INDEXES FOR PERFORMANCE
 -- ============================================================================
@@ -275,7 +309,7 @@ CREATE POLICY "events_delete" ON events FOR DELETE USING (true);
 -- DONE! DATABASE SETUP COMPLETE
 -- ============================================================================
 --
--- Tables created: 7
+-- Tables created: 8
 --   - participants (event registrations)
 --   - speakers (speaker information)
 --   - certificates (certificate templates)
@@ -283,6 +317,7 @@ CREATE POLICY "events_delete" ON events FOR DELETE USING (true);
 --   - about_info (about section content)
 --   - events (event information)
 --   - gallery (event photos)
+--   - team_members (team member profiles)
 --
 -- All tables have:
 --   ✅ Primary key (UUID)

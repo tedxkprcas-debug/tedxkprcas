@@ -9,6 +9,7 @@ import {
   aboutService,
   eventService,
   galleryService,
+  teamService,
 } from "@/lib/api";
 import type {
   Participant,
@@ -18,6 +19,7 @@ import type {
   AboutInfo,
   Event,
   GalleryImage,
+  TeamMember,
 } from "@/lib/supabase";
 
 // ==================== PARTICIPANTS HOOKS ====================
@@ -478,6 +480,95 @@ export function useDeleteGalleryImage() {
     },
     onError: (error) => {
       console.error("❌ Failed to delete gallery image:", error);
+    },
+  });
+}
+
+// ==================== TEAM MEMBERS HOOKS ====================
+
+export function useTeamMembers() {
+  const queryClient = useQueryClient();
+  const subscriptionRef = useRef<any>(null);
+
+  const query = useQuery({
+    queryKey: ["team_members"],
+    queryFn: () => teamService.getAll(),
+    staleTime: 0,
+  });
+
+  useEffect(() => {
+    if (subscriptionRef.current) return;
+
+    console.log("📡 Setting up team members real-time subscription...");
+    subscriptionRef.current = supabase
+      .channel("team-members-channel")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "team_members",
+        },
+        (payload: any) => {
+          console.log("🔄 Team members updated from database:", payload);
+          queryClient.invalidateQueries({ queryKey: ["team_members"] });
+        }
+      )
+      .subscribe((status: string) => {
+        console.log("📡 Team members subscription status:", status);
+      });
+
+    return () => {
+      if (subscriptionRef.current) {
+        subscriptionRef.current.unsubscribe();
+        subscriptionRef.current = null;
+      }
+    };
+  }, [queryClient]);
+
+  return query;
+}
+
+export function useCreateTeamMember() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: Omit<TeamMember, "id" | "created_at" | "updated_at">) =>
+      teamService.create(data),
+    onSuccess: () => {
+      console.log("✅ Team member created successfully");
+      queryClient.invalidateQueries({ queryKey: ["team_members"] });
+    },
+    onError: (error) => {
+      console.error("❌ Failed to create team member:", error);
+    },
+  });
+}
+
+export function useUpdateTeamMember() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<TeamMember> }) =>
+      teamService.update(id, data),
+    onSuccess: () => {
+      console.log("✅ Team member updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["team_members"] });
+    },
+    onError: (error) => {
+      console.error("❌ Failed to update team member:", error);
+    },
+  });
+}
+
+export function useDeleteTeamMember() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => teamService.delete(id),
+    onSuccess: () => {
+      console.log("✅ Team member deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["team_members"] });
+    },
+    onError: (error) => {
+      console.error("❌ Failed to delete team member:", error);
     },
   });
 }

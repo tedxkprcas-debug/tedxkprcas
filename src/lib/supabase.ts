@@ -110,3 +110,15 @@ export type GalleryImage = {
   updated_at?: string;
 };
 
+export type TeamMember = {
+  id?: string;
+  name: string;
+  role: string;
+  photo: string;
+  description?: string;
+  order: number;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+};
+

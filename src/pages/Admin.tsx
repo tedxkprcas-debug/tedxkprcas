@@ -1,9 +1,10 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send, CheckCircle, Shield, Trash2, Filter, Users,
   Calendar, ChevronDown, Search, X, Mail, Palette, Plus, Edit2,
   MessageSquare, Phone, MapPin, Link as LinkIcon, Upload, Eye, Image,
+  UserPlus, Video,
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -41,6 +42,10 @@ import {
   useCreateGalleryImage,
   useUpdateGalleryImage,
   useDeleteGalleryImage,
+  useTeamMembers,
+  useCreateTeamMember,
+  useUpdateTeamMember,
+  useDeleteTeamMember,
 } from "@/hooks/use-database";
 
 // Type definitions
@@ -57,7 +62,7 @@ type Participant = {
 
 
 const AdminPage = () => {
-  const [tab, setTab] = useState<"participants" | "speakers" | "certificates" | "about" | "contact" | "gallery">("participants");
+  const [tab, setTab] = useState<"participants" | "speakers" | "certificates" | "about" | "contact" | "gallery" | "team">("participants");
 
   // Toast/Notification state
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
@@ -93,6 +98,12 @@ const AdminPage = () => {
   const { mutate: updateGalleryImage } = useUpdateGalleryImage();
   const { mutate: deleteGalleryImage } = useDeleteGalleryImage();
 
+  // Database hooks for team members
+  const { data: teamMembers = [], isLoading: teamLoading } = useTeamMembers();
+  const { mutate: createTeamMember } = useCreateTeamMember();
+  const { mutate: updateTeamMember } = useUpdateTeamMember();
+  const { mutate: deleteTeamMember } = useDeleteTeamMember();
+
   // Certificate management state
   const [showCertificateDesigner, setShowCertificateDesigner] = useState(false);
   const [certificateTitle, setCertificateTitle] = useState("Certificate of Participation");
@@ -127,6 +138,24 @@ const AdminPage = () => {
   const [showGalleryForm, setShowGalleryForm] = useState(false);
   const [editingGalleryItem, setEditingGalleryItem] = useState<any>(null);
   const [galleryFormData, setGalleryFormData] = useState({ title: "", description: "", image: "" });
+  const [galleryVideoUrl, setGalleryVideoUrl] = useState("");
+
+  // Load gallery video URL from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("tedx_gallery_video");
+    if (saved) setGalleryVideoUrl(saved);
+  }, []);
+
+  const saveGalleryVideoUrl = (url: string) => {
+    setGalleryVideoUrl(url);
+    localStorage.setItem("tedx_gallery_video", url);
+    showNotification("success", "Gallery video URL saved!");
+  };
+
+  // Team UI state
+  const [showTeamForm, setShowTeamForm] = useState(false);
+  const [editingTeamMember, setEditingTeamMember] = useState<any>(null);
+  const [teamFormData, setTeamFormData] = useState({ name: "", role: "", photo: "", description: "" });
 
   // Certificate & Import state
   const [showCertificatePreview, setShowCertificatePreview] = useState(false);
@@ -387,6 +416,87 @@ const AdminPage = () => {
     reader.readAsDataURL(file);
   };
 
+  // Team member functions
+  const addTeamMember = () => {
+    setEditingTeamMember(null);
+    setTeamFormData({ name: "", role: "", photo: "", description: "" });
+    setShowTeamForm(true);
+  };
+
+  const editTeamMemberItem = (member: any) => {
+    setEditingTeamMember(member);
+    setTeamFormData({
+      name: member.name,
+      role: member.role,
+      photo: member.photo || "",
+      description: member.description || "",
+    });
+    setShowTeamForm(true);
+  };
+
+  const saveTeamMember = () => {
+    if (!teamFormData.name || !teamFormData.role) {
+      showNotification("error", "Please fill in name and role");
+      return;
+    }
+
+    if (editingTeamMember && editingTeamMember.id) {
+      updateTeamMember(
+        {
+          id: editingTeamMember.id,
+          data: {
+            name: teamFormData.name,
+            role: teamFormData.role,
+            photo: teamFormData.photo || "",
+            description: teamFormData.description || undefined,
+          },
+        },
+        {
+          onSuccess: () => {
+            showNotification("success", "Team member updated!");
+            setShowTeamForm(false);
+          },
+          onError: (error) => showNotification("error", `Failed: ${error.message}`),
+        }
+      );
+    } else {
+      createTeamMember(
+        {
+          name: teamFormData.name,
+          role: teamFormData.role,
+          photo: teamFormData.photo || "",
+          description: teamFormData.description || undefined,
+          order: teamMembers.length,
+          is_active: true,
+        },
+        {
+          onSuccess: () => {
+            showNotification("success", "Team member added!");
+            setShowTeamForm(false);
+          },
+          onError: (error) => showNotification("error", `Failed: ${error.message}`),
+        }
+      );
+    }
+  };
+
+  const handleDeleteTeamMember = (id: string) => {
+    deleteTeamMember(id, {
+      onSuccess: () => showNotification("success", "Team member deleted!"),
+      onError: (error) => showNotification("error", `Failed: ${error.message}`),
+    });
+  };
+
+  const handleTeamPhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setTeamFormData((prev) => ({ ...prev, photo: reader.result as string }));
+    };
+    reader.readAsDataURL(file);
+  };
+
   const hasActiveFilters = searchQuery || dateFrom || dateTo;
 
   return (
@@ -468,6 +578,7 @@ const AdminPage = () => {
             { id: "about", label: "About", icon: MessageSquare },
             { id: "contact", label: "Contact", icon: Phone },
             { id: "gallery", label: "Gallery", icon: Image },
+            { id: "team", label: "Team", icon: UserPlus },
           ].map((item) => {
             const Icon = item.icon;
             return (
@@ -1254,6 +1365,38 @@ const AdminPage = () => {
                   </button>
                 </div>
 
+                {/* Gallery Video URL */}
+                <div className="mb-6 p-4 border border-border rounded-xl bg-secondary/30">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Video className="w-5 h-5 text-primary" />
+                    <h3 className="font-medium text-sm">Center Video (plays over gallery rows)</h3>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="url"
+                      value={galleryVideoUrl}
+                      onChange={(e) => setGalleryVideoUrl(e.target.value)}
+                      placeholder="Paste YouTube URL or direct video URL"
+                      className="flex-1 bg-secondary border border-border rounded-lg px-4 py-2 text-sm"
+                    />
+                    <button
+                      onClick={() => saveGalleryVideoUrl(galleryVideoUrl)}
+                      className="bg-green-500/20 hover:bg-green-500/30 text-green-600 font-medium px-4 py-2 rounded-lg text-sm"
+                    >
+                      Save
+                    </button>
+                    {galleryVideoUrl && (
+                      <button
+                        onClick={() => { setGalleryVideoUrl(""); localStorage.removeItem("tedx_gallery_video"); showNotification("success", "Video removed!"); }}
+                        className="bg-red-500/20 hover:bg-red-500/30 text-red-600 font-medium px-3 py-2 rounded-lg text-sm"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">Supports YouTube links or direct .mp4 URLs. The video appears centered over the 3 gallery rows.</p>
+                </div>
+
                 {/* Gallery Form Dialog */}
                 <Dialog open={showGalleryForm} onOpenChange={setShowGalleryForm}>
                   <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
@@ -1385,6 +1528,178 @@ const AdminPage = () => {
                             </button>
                             <button
                               onClick={() => handleDeleteGalleryItem(item.id)}
+                              className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-600 text-xs font-medium py-1.5 rounded-lg flex items-center justify-center gap-1"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            </motion.div>
+          )}
+
+          {tab === "team" && (
+            <motion.div key="team" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+              <motion.div className="border border-border rounded-2xl p-8 bg-card/60 backdrop-blur-sm">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="font-heading text-2xl font-bold">Team Management</h2>
+                  <button
+                    onClick={addTeamMember}
+                    className="bg-primary/20 hover:bg-primary/30 text-primary font-medium px-4 py-2 rounded-lg flex items-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Member
+                  </button>
+                </div>
+
+                {/* Team Form Dialog */}
+                <Dialog open={showTeamForm} onOpenChange={setShowTeamForm}>
+                  <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>{editingTeamMember ? "Edit Team Member" : "Add Team Member"}</DialogTitle>
+                      <DialogDescription>Add team member details including photo, name, role, and description</DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 pt-4">
+                      {/* Photo Upload */}
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Photo</label>
+                        {teamFormData.photo ? (
+                          <div className="relative">
+                            <img
+                              src={teamFormData.photo}
+                              alt="Preview"
+                              className="w-full h-48 object-cover rounded-lg border border-border"
+                            />
+                            <button
+                              onClick={() => setTeamFormData((prev) => ({ ...prev, photo: "" }))}
+                              className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <label className="cursor-pointer flex flex-col items-center justify-center gap-2 border-2 border-dashed border-border rounded-lg p-8 hover:border-primary/50 transition-colors">
+                            <Upload className="w-8 h-8 text-muted-foreground" />
+                            <span className="text-sm text-muted-foreground">Click to upload photo</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleTeamPhotoUpload}
+                              className="hidden"
+                            />
+                          </label>
+                        )}
+                        <p className="text-xs text-muted-foreground mt-1">Or paste a photo URL:</p>
+                        <input
+                          type="url"
+                          value={teamFormData.photo}
+                          onChange={(e) => setTeamFormData((prev) => ({ ...prev, photo: e.target.value }))}
+                          placeholder="https://example.com/photo.jpg"
+                          className="w-full bg-secondary border border-border rounded-lg px-4 py-2 mt-1 text-sm"
+                        />
+                      </div>
+                      {/* Name */}
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Name *</label>
+                        <input
+                          type="text"
+                          value={teamFormData.name}
+                          onChange={(e) => setTeamFormData((prev) => ({ ...prev, name: e.target.value }))}
+                          placeholder="Enter member name"
+                          className="w-full bg-secondary border border-border rounded-lg px-4 py-3"
+                        />
+                      </div>
+                      {/* Role */}
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Role *</label>
+                        <input
+                          type="text"
+                          value={teamFormData.role}
+                          onChange={(e) => setTeamFormData((prev) => ({ ...prev, role: e.target.value }))}
+                          placeholder="Enter role (e.g., Lead Organizer)"
+                          className="w-full bg-secondary border border-border rounded-lg px-4 py-3"
+                        />
+                      </div>
+                      {/* Description */}
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Description</label>
+                        <textarea
+                          value={teamFormData.description}
+                          onChange={(e) => setTeamFormData((prev) => ({ ...prev, description: e.target.value }))}
+                          placeholder="Enter a brief description about this team member"
+                          className="w-full bg-secondary border border-border rounded-lg px-4 py-3 h-24 resize-none"
+                        />
+                      </div>
+                      {/* Actions */}
+                      <div className="flex gap-3 pt-2">
+                        <button
+                          onClick={saveTeamMember}
+                          className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 font-medium py-2.5 rounded-lg"
+                        >
+                          {editingTeamMember ? "Update" : "Add"}
+                        </button>
+                        <button
+                          onClick={() => setShowTeamForm(false)}
+                          className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground font-medium py-2.5 rounded-lg"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+
+                {/* Team Members List */}
+                {teamLoading ? (
+                  <div className="text-center py-12">
+                    <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-muted-foreground">Loading team members...</p>
+                  </div>
+                ) : teamMembers.length === 0 ? (
+                  <div className="text-center py-12">
+                    <UserPlus className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground">No team members yet. Add your first one!</p>
+                  </div>
+                ) : (
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {teamMembers.map((member: any) => (
+                      <motion.div
+                        key={member.id}
+                        layout
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="border border-border rounded-xl overflow-hidden bg-card hover:border-primary/30 transition-colors group"
+                      >
+                        {member.photo && (
+                          <div className="relative h-40 overflow-hidden">
+                            <img
+                              src={member.photo}
+                              alt={member.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                        )}
+                        <div className="p-4">
+                          <h3 className="font-bold text-sm truncate">{member.name}</h3>
+                          <p className="text-xs text-primary mt-0.5">{member.role}</p>
+                          {member.description && (
+                            <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{member.description}</p>
+                          )}
+                          <div className="flex gap-2 mt-3">
+                            <button
+                              onClick={() => editTeamMemberItem(member)}
+                              className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 text-xs font-medium py-1.5 rounded-lg flex items-center justify-center gap-1"
+                            >
+                              <Edit2 className="w-3 h-3" />
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteTeamMember(member.id)}
                               className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-600 text-xs font-medium py-1.5 rounded-lg flex items-center justify-center gap-1"
                             >
                               <Trash2 className="w-3 h-3" />

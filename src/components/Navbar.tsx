@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Menu, X, Lock } from "lucide-react";
 
@@ -8,15 +8,17 @@ const navItems = [
   { label: "About", href: "#about" },
   { label: "Speakers", href: "#speakers" },
   { label: "Gallery", href: "/gallery" },
+  { label: "Team", href: "/team" },
   { label: "Contact", href: "#contact" },
 ];
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [registrationLink, setRegistrationLink] = useState("https://forms.gle/example");
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Get registration link from localStorage (set by admin)
     const savedContact = localStorage.getItem("tedx_contact");
     if (savedContact) {
       try {
@@ -27,6 +29,58 @@ const Navbar = () => {
       }
     }
   }, []);
+
+  // Handle hash link clicks – if not on home page, navigate to "/" first then scroll
+  const handleHashClick = useCallback(
+    (e: React.MouseEvent, href: string) => {
+      e.preventDefault();
+      setOpen(false);
+      const sectionId = href.replace("#", "");
+
+      if (location.pathname !== "/") {
+        // Navigate to home, then scroll after render
+        navigate("/");
+        setTimeout(() => {
+          const el = document.getElementById(sectionId);
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      } else {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }
+    },
+    [location.pathname, navigate]
+  );
+
+  const renderNavLink = (item: { label: string; href: string }, mobile = false) => {
+    const className = mobile
+      ? "block py-2 text-muted-foreground hover:text-foreground transition-colors"
+      : "text-sm text-muted-foreground hover:text-foreground transition-colors font-medium";
+
+    if (item.href.startsWith("/")) {
+      return (
+        <Link
+          key={item.label}
+          to={item.href}
+          onClick={() => setOpen(false)}
+          className={className}
+        >
+          {item.label}
+        </Link>
+      );
+    }
+
+    return (
+      <a
+        key={item.label}
+        href={item.href}
+        onClick={(e) => handleHashClick(e, item.href)}
+        className={className}
+      >
+        {item.label}
+      </a>
+    );
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-40 bg-background/90 backdrop-blur-md border-b border-border">
@@ -39,32 +93,7 @@ const Navbar = () => {
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-6">
-          {navItems.map((item) => (
-            item.href.startsWith('/') ? (
-              <Link
-                key={item.label}
-                to={item.href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors font-medium"
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <a
-                key={item.label}
-                href={item.href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors font-medium"
-              >
-                {item.label}
-              </a>
-            )
-          ))}
-          {/*<Link*/}
-          {/*  to="/admin"*/}
-          {/*  className="text-sm text-muted-foreground hover:text-primary transition-colors font-medium flex items-center gap-1"*/}
-          {/*>*/}
-          {/*  <Lock className="w-4 h-4" />*/}
-          {/*  Admin*/}
-          {/*</Link>*/}
+          {navItems.map((item) => renderNavLink(item))}
           <a
             href={registrationLink}
             target="_blank"
@@ -88,27 +117,7 @@ const Navbar = () => {
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden bg-background border-b border-border px-4 pb-4"
         >
-          {navItems.map((item) => (
-            item.href.startsWith('/') ? (
-              <Link
-                key={item.label}
-                to={item.href}
-                onClick={() => setOpen(false)}
-                className="block py-2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {item.label}
-              </Link>
-            ) : (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="block py-2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {item.label}
-              </a>
-            )
-          ))}
+          {navItems.map((item) => renderNavLink(item, true))}
           <Link
             to="/admin"
             onClick={() => setOpen(false)}
