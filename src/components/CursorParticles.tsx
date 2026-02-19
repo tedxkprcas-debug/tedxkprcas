@@ -17,6 +17,8 @@ const CursorParticles = () => {
   const mouse = useRef({ x: 0, y: 0 });
   const animationId = useRef<number>(0);
   const lastSpawn = useRef(0);
+  const scrollingRef = useRef(false);
+  const scrollTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
   // Disable on touch / mobile devices — no cursor to show particles for
   const isTouchDevice =
@@ -66,7 +68,20 @@ const CursorParticles = () => {
     };
     window.addEventListener("mousemove", onMouseMove);
 
+    /* Pause while scrolling to free main thread */
+    const onScroll = () => {
+      scrollingRef.current = true;
+      if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
+      scrollTimerRef.current = setTimeout(() => { scrollingRef.current = false; }, 150);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
     const animate = () => {
+      if (scrollingRef.current) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        animationId.current = requestAnimationFrame(animate);
+        return;
+      }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       particles.current = particles.current.filter((p) => {
@@ -103,6 +118,8 @@ const CursorParticles = () => {
     return () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("scroll", onScroll);
+      if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
       cancelAnimationFrame(animationId.current);
     };
   }, [spawnParticles, isTouchDevice]);
@@ -114,7 +131,6 @@ const CursorParticles = () => {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-[9999]"
-      style={{ mixBlendMode: "screen" }}
     />
   );
 };

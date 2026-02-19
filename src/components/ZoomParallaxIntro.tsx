@@ -50,7 +50,7 @@ const ZoomParallaxIntro = () => {
   }, []);
 
   return (
-    <section className="relative z-10 bg-black">
+    <section className="relative z-10">
       <ZoomParallax images={images} />
     </section>
   );

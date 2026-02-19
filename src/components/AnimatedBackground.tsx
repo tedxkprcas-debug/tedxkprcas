@@ -33,31 +33,19 @@ const AnimatedBackground = ({ variant = "default", particleCount = 8 }: Animated
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-      {/* Floating orbs — skip on mobile */}
+      {/* Floating orbs — simplified (no blur for perf) */}
       {!isMobile && variant !== "grid" &&
-        [...Array(3)].map((_, i) => (
-          <motion.div
+        [...Array(2)].map((_, i) => (
+          <div
             key={`orb-${i}`}
-            className={`absolute rounded-full blur-3xl ${
-              i % 2 === 0 ? "bg-tedx-red/[0.04]" : "bg-foreground/[0.02]"
+            className={`absolute rounded-full ${
+              i % 2 === 0 ? "bg-tedx-red/[0.03]" : "bg-foreground/[0.015]"
             }`}
             style={{
               width: 250 + i * 100,
               height: 250 + i * 100,
-              left: `${15 + i * 25}%`,
-              top: `${10 + i * 20}%`,
-            }}
-            animate={{
-              x: [0, 40, -30, 0],
-              y: [0, -35, 20, 0],
-              scale: [1, 1.15, 0.9, 1],
-              opacity: [0.5, 0.8, 0.4, 0.5],
-            }}
-            transition={{
-              duration: 12 + i * 4,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 2,
+              left: `${15 + i * 30}%`,
+              top: `${10 + i * 25}%`,
             }}
           />
         ))}

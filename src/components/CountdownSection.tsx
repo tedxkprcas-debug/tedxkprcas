@@ -126,8 +126,7 @@ const CountdownSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          whileHover={{ boxShadow: "0 0 40px hsl(0 84% 50% / 0.2)" }}
-          className="border border-tedx-red rounded-xl p-4 sm:p-8 md:p-12 inline-block bg-card/30 backdrop-blur-sm transition-shadow"
+          className="border border-tedx-red rounded-xl p-4 sm:p-8 md:p-12 inline-block bg-card/50"
         >
           <div className="flex items-center gap-1 sm:gap-4 md:gap-8 font-heading text-2xl sm:text-5xl md:text-8xl font-black">
             {[
@@ -143,14 +142,9 @@ const CountdownSection = () => {
                   whileHover={{ scale: 1.1 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <motion.span
-                    key={item.val}
-                    initial={{ y: -10, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    className="text-foreground"
-                  >
+                  <span className="text-foreground">
                     {pad(item.val)}
-                  </motion.span>
+                  </span>
                   <span className="text-sm md:text-base font-body font-normal text-muted-foreground mt-2">
                     {item.label}
                   </span>
