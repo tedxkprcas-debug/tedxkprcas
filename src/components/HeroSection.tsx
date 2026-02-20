@@ -145,7 +145,7 @@ function HeroSection() {
           <span className="font-heading text-6xl sm:text-8xl md:text-[10rem] font-black text-tedx-red leading-none">
             TED
           </span>
-          <sup className="font-heading text-2xl sm:text-4xl md:text-5xl font-black text-tedx-red relative -top-6 sm:-top-10 md:-top-16">
+          <sup className="font-heading text-4xl sm:text-6xl md:text-7xl font-black text-tedx-red relative -top-20 sm:-top-15 md:-top-23">
             x
           </sup>
         </motion.div>

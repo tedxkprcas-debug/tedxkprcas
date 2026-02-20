@@ -5,8 +5,8 @@ import AnimatedBackground from "./AnimatedBackground";
 import { useAboutInfo } from "@/hooks/use-database";
 
 
-/* ── Cinematic 3D DNA Helix (Canvas) ── */
-const DNAAnimation = () => {
+/* ── Cinematic 3D Rotating Globe (Canvas) ── */
+const GlobeAnimation = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
 
@@ -26,206 +26,191 @@ const DNAAnimation = () => {
     const time = performance.now() * 0.001;
     ctx.clearRect(0, 0, w, h);
 
-    // Diagonal helix from bottom-left toward top-right
-    const seg = 400;
-    const turns = 3.5;
-    const tubeR = 10;
+    const cx = w / 2;
+    const cy = h / 2;
+    const radius = Math.min(w, h) * 0.35;
 
-    // Start/end points define the diagonal axis
-    const x0 = w * 0.12, y0 = h * 0.92;
-    const x1 = w * 0.88, y1 = h * 0.08;
-    const amp = w * 0.13; // amplitude perpendicular to axis
-
-    // Axis direction and perpendicular
-    const dx = x1 - x0, dy = y1 - y0;
-    const axisLen = Math.sqrt(dx * dx + dy * dy);
-    const ax = dx / axisLen, ay = dy / axisLen;
-    // perpendicular (rotated 90°)
-    const px = -ay, py = ax;
-
-    interface Pt { x: number; y: number; z: number; t: number }
-    const L: Pt[] = [];
-    const R: Pt[] = [];
-
-    for (let i = 0; i <= seg; i++) {
-      const t = i / seg;
-      const baseX = x0 + dx * t;
-      const baseY = y0 + dy * t;
-      const angle = t * Math.PI * 2 * turns + time * 0.6;
-      const sinA = Math.sin(angle);
-      const cosA = Math.cos(angle);
-
-      L.push({
-        x: baseX + amp * sinA * px,
-        y: baseY + amp * sinA * py,
-        z: cosA,
-        t
-      });
-      R.push({
-        x: baseX - amp * sinA * px,
-        y: baseY - amp * sinA * py,
-        z: -cosA,
-        t
-      });
-    }
-
-    // Depth-of-field: fade edges (near t=0 and t=1)
-    const dofAlpha = (t: number) => {
-      const fadeIn = Math.min(1, t / 0.15);
-      const fadeOut = Math.min(1, (1 - t) / 0.15);
-      return fadeIn * fadeOut;
-    };
-
-    // Draw strand with volumetric shading
-    const drawStrand = (pts: Pt[], front: boolean) => {
-      for (let i = 0; i < pts.length - 1; i++) {
-        const p = pts[i], n = pts[i + 1];
-        if (front !== (p.z > 0)) continue;
-        const d = (p.z + 1) / 2; // depth 0=back, 1=front
-        const dof = dofAlpha(p.t);
-        const r = tubeR * (0.4 + 0.6 * d);
-
-        // Base color: dark crimson (back) → bright red (front)
-        const cr = Math.round(40 + 200 * d);
-        const cg = Math.round(5 + 20 * d);
-        const cb = Math.round(8 + 15 * d);
-
-        // Outer glow (subsurface-like)
-        if (d > 0.3) {
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(n.x, n.y);
-          ctx.strokeStyle = `rgba(255,40,20,${0.08 * d * dof})`;
-          ctx.lineWidth = r * 4.5;
-          ctx.lineCap = "round";
-          ctx.stroke();
-        }
-
-        // Main tube body
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(n.x, n.y);
-        ctx.strokeStyle = `rgba(${cr},${cg},${cb},${dof})`;
-        ctx.lineWidth = r * 2;
-        ctx.lineCap = "round";
-        ctx.stroke();
-
-        // Darker edge (bottom of tube for volume)
-        ctx.beginPath();
-        ctx.moveTo(p.x + px * r * 0.4, p.y + py * r * 0.4);
-        ctx.lineTo(n.x + px * r * 0.4, n.y + py * r * 0.4);
-        ctx.strokeStyle = `rgba(${Math.round(cr * 0.4)},${Math.round(cg * 0.3)},${Math.round(cb * 0.3)},${0.5 * dof})`;
-        ctx.lineWidth = r * 0.9;
-        ctx.lineCap = "round";
-        ctx.stroke();
-
-        // Specular highlight (top of tube)
-        if (d > 0.55) {
-          const hl = (d - 0.55) / 0.45;
-          ctx.beginPath();
-          ctx.moveTo(p.x - px * r * 0.35, p.y - py * r * 0.35);
-          ctx.lineTo(n.x - px * r * 0.35, n.y - py * r * 0.35);
-          ctx.strokeStyle = `rgba(255,${Math.round(100 + 120 * hl)},${Math.round(60 + 80 * hl)},${hl * 0.45 * dof})`;
-          ctx.lineWidth = r * 0.6;
-          ctx.lineCap = "round";
-          ctx.stroke();
-        }
-
-        // Hot glow emission spots
-        if (d > 0.8 && i % 12 === 0) {
-          const glowR = r * 2.5;
-          const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowR);
-          grd.addColorStop(0, `rgba(255,100,50,${0.35 * dof})`);
-          grd.addColorStop(0.4, `rgba(255,40,20,${0.12 * dof})`);
-          grd.addColorStop(1, "rgba(255,20,10,0)");
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, glowR, 0, Math.PI * 2);
-          ctx.fillStyle = grd;
-          ctx.fill();
-        }
-      }
-    };
-
-    // Draw rungs (base pairs) with 3D shading
-    const drawRungs = (behind: boolean) => {
-      const spacing = Math.floor(seg / (turns * 5));
-      for (let i = spacing; i < L.length - spacing; i += spacing) {
-        const lp = L[i], rp = R[i];
-        const avgZ = (lp.z + rp.z) / 2;
-        if (behind && avgZ > 0) continue;
-        if (!behind && avgZ <= 0) continue;
-
-        const d = (avgZ + 1) / 2;
-        const dof = dofAlpha(lp.t);
-        const rw = 2 + 4 * d;
-
-        // Rung color: dark → medium red
-        const cr = Math.round(50 + 120 * d);
-        const cg = Math.round(3 + 12 * d);
-        const cb = Math.round(5 + 10 * d);
-
-        // Rung glow
-        if (d > 0.4) {
-          ctx.beginPath();
-          ctx.moveTo(lp.x, lp.y);
-          ctx.lineTo(rp.x, rp.y);
-          ctx.strokeStyle = `rgba(255,30,20,${0.06 * d * dof})`;
-          ctx.lineWidth = rw * 3;
-          ctx.lineCap = "round";
-          ctx.stroke();
-        }
-
-        const mx = (lp.x + rp.x) / 2;
-        const my = (lp.y + rp.y) / 2;
-        const gapX = (rp.x - lp.x) * 0.03;
-        const gapY = (rp.y - lp.y) * 0.03;
-
-        ctx.lineCap = "round";
-        // left half
-        ctx.beginPath();
-        ctx.moveTo(lp.x, lp.y);
-        ctx.lineTo(mx - gapX, my - gapY);
-        ctx.strokeStyle = `rgba(${cr},${cg},${cb},${dof})`;
-        ctx.lineWidth = rw;
-        ctx.stroke();
-        // right half (slightly different shade)
-        ctx.beginPath();
-        ctx.moveTo(mx + gapX, my + gapY);
-        ctx.lineTo(rp.x, rp.y);
-        ctx.strokeStyle = `rgba(${Math.min(255, cr + 20)},${cg + 3},${cb},${dof})`;
-        ctx.lineWidth = rw;
-        ctx.stroke();
-
-        // Rung highlight
-        if (d > 0.6) {
-          const hl = (d - 0.6) / 0.4;
-          ctx.beginPath();
-          ctx.moveTo(lp.x, lp.y);
-          ctx.lineTo(rp.x, rp.y);
-          ctx.strokeStyle = `rgba(255,120,80,${hl * 0.15 * dof})`;
-          ctx.lineWidth = rw * 0.5;
-          ctx.stroke();
-        }
-      }
-    };
-
-    // Render layers: back → back rungs → front → front rungs
-    drawStrand(L, false);
-    drawStrand(R, false);
-    drawRungs(true);
-    drawStrand(L, true);
-    drawStrand(R, true);
-    drawRungs(false);
-
-    // Atmospheric glow around the helix center
-    const cx = w / 2, cy = h / 2;
-    const glowSize = Math.max(w, h) * 0.45;
-    const ambientGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowSize);
-    ambientGlow.addColorStop(0, "rgba(180,20,20,0.07)");
-    ambientGlow.addColorStop(0.5, "rgba(120,10,10,0.03)");
+    // Ambient glow behind globe
+    const ambientGlow = ctx.createRadialGradient(cx, cy, radius * 0.2, cx, cy, radius * 1.6);
+    ambientGlow.addColorStop(0, "rgba(220,30,30,0.08)");
+    ambientGlow.addColorStop(0.5, "rgba(150,15,15,0.03)");
     ambientGlow.addColorStop(1, "rgba(80,5,5,0)");
     ctx.fillStyle = ambientGlow;
     ctx.fillRect(0, 0, w, h);
+
+    // Globe outline glow
+    const glowGrad = ctx.createRadialGradient(cx, cy, radius * 0.85, cx, cy, radius * 1.15);
+    glowGrad.addColorStop(0, "rgba(239,68,68,0.15)");
+    glowGrad.addColorStop(0.5, "rgba(239,68,68,0.05)");
+    glowGrad.addColorStop(1, "rgba(239,68,68,0)");
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius * 1.15, 0, Math.PI * 2);
+    ctx.fillStyle = glowGrad;
+    ctx.fill();
+
+    // Globe sphere fill
+    const sphereGrad = ctx.createRadialGradient(cx - radius * 0.25, cy - radius * 0.25, 0, cx, cy, radius);
+    sphereGrad.addColorStop(0, "rgba(40,5,5,0.6)");
+    sphereGrad.addColorStop(0.7, "rgba(20,2,2,0.8)");
+    sphereGrad.addColorStop(1, "rgba(10,1,1,0.9)");
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.fillStyle = sphereGrad;
+    ctx.fill();
+
+    // Clip to globe for grid lines
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.clip();
+
+    const rotY = time * 0.3; // Rotation speed
+    const tilt = 0.4; // Axial tilt
+
+    // Longitude lines (meridians)
+    const lonCount = 18;
+    for (let i = 0; i < lonCount; i++) {
+      const angle = (i / lonCount) * Math.PI * 2 + rotY;
+      ctx.beginPath();
+      for (let j = 0; j <= 60; j++) {
+        const lat = (j / 60) * Math.PI - Math.PI / 2;
+        const x3d = Math.cos(lat) * Math.sin(angle);
+        const y3d = Math.sin(lat) * Math.cos(tilt) - Math.cos(lat) * Math.cos(angle) * Math.sin(tilt);
+        const z3d = Math.sin(lat) * Math.sin(tilt) + Math.cos(lat) * Math.cos(angle) * Math.cos(tilt);
+
+        const px = cx + x3d * radius;
+        const py = cy - y3d * radius;
+        const depth = (z3d + 1) / 2;
+
+        if (j === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.strokeStyle = `rgba(239,68,68,${0.08 + Math.sin(time + i) * 0.03})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Latitude lines (parallels)
+    const latCount = 12;
+    for (let i = 1; i < latCount; i++) {
+      const lat = (i / latCount) * Math.PI - Math.PI / 2;
+      ctx.beginPath();
+      for (let j = 0; j <= 80; j++) {
+        const angle = (j / 80) * Math.PI * 2;
+        const x3d = Math.cos(lat) * Math.sin(angle + rotY);
+        const y3d = Math.sin(lat) * Math.cos(tilt) - Math.cos(lat) * Math.cos(angle + rotY) * Math.sin(tilt);
+
+        const px = cx + x3d * radius;
+        const py = cy - y3d * radius;
+
+        if (j === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.strokeStyle = `rgba(239,68,68,${0.06 + 0.02 * Math.abs(Math.sin(lat))})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Glowing dots at intersections (cities/nodes)
+    const dotCount = 30;
+    for (let i = 0; i < dotCount; i++) {
+      const lat = ((i * 7.3 + 2) % 170 - 85) * (Math.PI / 180);
+      const lon = ((i * 13.7 + 5) % 360) * (Math.PI / 180) + rotY;
+
+      const x3d = Math.cos(lat) * Math.sin(lon);
+      const y3d = Math.sin(lat) * Math.cos(tilt) - Math.cos(lat) * Math.cos(lon) * Math.sin(tilt);
+      const z3d = Math.sin(lat) * Math.sin(tilt) + Math.cos(lat) * Math.cos(lon) * Math.cos(tilt);
+
+      if (z3d < -0.1) continue; // Behind the globe
+
+      const px = cx + x3d * radius;
+      const py = cy - y3d * radius;
+      const depth = (z3d + 1) / 2;
+      const dotR = 1.5 + 2.5 * depth;
+
+      // Dot glow
+      const dotGlow = ctx.createRadialGradient(px, py, 0, px, py, dotR * 4);
+      dotGlow.addColorStop(0, `rgba(255,80,60,${0.5 * depth})`);
+      dotGlow.addColorStop(0.5, `rgba(255,40,30,${0.15 * depth})`);
+      dotGlow.addColorStop(1, "rgba(255,20,10,0)");
+      ctx.beginPath();
+      ctx.arc(px, py, dotR * 4, 0, Math.PI * 2);
+      ctx.fillStyle = dotGlow;
+      ctx.fill();
+
+      // Dot core
+      ctx.beginPath();
+      ctx.arc(px, py, dotR, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,${Math.round(120 + 100 * depth)},${Math.round(80 + 80 * depth)},${0.7 + 0.3 * depth})`;
+      ctx.fill();
+    }
+
+    // Connection arcs between some dots
+    for (let i = 0; i < 8; i++) {
+      const idx1 = (i * 3) % dotCount;
+      const idx2 = (i * 3 + 7) % dotCount;
+
+      const lat1 = ((idx1 * 7.3 + 2) % 170 - 85) * (Math.PI / 180);
+      const lon1 = ((idx1 * 13.7 + 5) % 360) * (Math.PI / 180) + rotY;
+      const lat2 = ((idx2 * 7.3 + 2) % 170 - 85) * (Math.PI / 180);
+      const lon2 = ((idx2 * 13.7 + 5) % 360) * (Math.PI / 180) + rotY;
+
+      const z1 = Math.sin(lat1) * Math.sin(tilt) + Math.cos(lat1) * Math.cos(lon1) * Math.cos(tilt);
+      const z2 = Math.sin(lat2) * Math.sin(tilt) + Math.cos(lat2) * Math.cos(lon2) * Math.cos(tilt);
+
+      if (z1 < 0 || z2 < 0) continue;
+
+      const x1 = cx + Math.cos(lat1) * Math.sin(lon1) * radius;
+      const y1 = cy - (Math.sin(lat1) * Math.cos(tilt) - Math.cos(lat1) * Math.cos(lon1) * Math.sin(tilt)) * radius;
+      const x2 = cx + Math.cos(lat2) * Math.sin(lon2) * radius;
+      const y2 = cy - (Math.sin(lat2) * Math.cos(tilt) - Math.cos(lat2) * Math.cos(lon2) * Math.sin(tilt)) * radius;
+
+      const midX = (x1 + x2) / 2;
+      const midY = (y1 + y2) / 2;
+      const dist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+      const arcHeight = dist * 0.3;
+      const ctrlX = midX;
+      const ctrlY = midY - arcHeight;
+
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.quadraticCurveTo(ctrlX, ctrlY, x2, y2);
+      ctx.strokeStyle = `rgba(239,68,68,${0.12 + Math.sin(time * 2 + i) * 0.06})`;
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      // Traveling pulse along arc
+      const t = ((time * 0.5 + i * 0.3) % 1);
+      const pulseX = (1 - t) * (1 - t) * x1 + 2 * (1 - t) * t * ctrlX + t * t * x2;
+      const pulseY = (1 - t) * (1 - t) * y1 + 2 * (1 - t) * t * ctrlY + t * t * y2;
+      const pulseGlow = ctx.createRadialGradient(pulseX, pulseY, 0, pulseX, pulseY, 6);
+      pulseGlow.addColorStop(0, "rgba(255,120,80,0.8)");
+      pulseGlow.addColorStop(0.5, "rgba(255,60,40,0.3)");
+      pulseGlow.addColorStop(1, "rgba(255,30,20,0)");
+      ctx.beginPath();
+      ctx.arc(pulseX, pulseY, 6, 0, Math.PI * 2);
+      ctx.fillStyle = pulseGlow;
+      ctx.fill();
+    }
+
+    ctx.restore();
+
+    // Globe rim highlight
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.strokeStyle = "rgba(239,68,68,0.2)";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Top specular shine
+    const shineGrad = ctx.createRadialGradient(cx - radius * 0.2, cy - radius * 0.3, 0, cx, cy, radius);
+    shineGrad.addColorStop(0, "rgba(255,255,255,0.06)");
+    shineGrad.addColorStop(0.3, "rgba(255,255,255,0.02)");
+    shineGrad.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.fillStyle = shineGrad;
+    ctx.fill();
 
     animRef.current = requestAnimationFrame(draw);
   }, []);
@@ -236,7 +221,7 @@ const DNAAnimation = () => {
   }, [draw]);
 
   return (
-    <div className="relative w-full h-[350px] md:h-[420px] flex items-center justify-center">
+    <div className="relative w-full h-[450px] md:h-[550px] lg:h-[620px] flex items-center justify-center">
       <canvas ref={canvasRef} className="w-full h-full" />
     </div>
   );
@@ -299,7 +284,7 @@ const AboutSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <DNAAnimation />
+            <GlobeAnimation />
           </motion.div>
         </div>
       </div>
