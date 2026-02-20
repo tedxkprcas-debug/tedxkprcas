@@ -1,87 +1,246 @@
 import { motion } from "framer-motion";
 import { AlertCircle } from "lucide-react";
+import { useRef, useEffect, useCallback } from "react";
 import AnimatedBackground from "./AnimatedBackground";
 import { useAboutInfo } from "@/hooks/use-database";
 
-/* ── Animation: Orbiting Rings (About section right side) ── */
-const OrbitingRingsAnimation = () => (
-  <div className="relative w-full h-[350px] md:h-[420px] flex items-center justify-center">
-    {/* Central pulsing core */}
-    <motion.div
-      className="absolute w-16 h-16 rounded-full bg-tedx-red/20 border-2 border-tedx-red/60"
-      animate={{ scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}
-      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-    />
-    <motion.div
-      className="absolute w-6 h-6 rounded-full bg-tedx-red/80"
-      animate={{ scale: [1, 1.2, 1] }}
-      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-    />
 
-    {/* Ring 1 */}
-    <motion.div
-      className="absolute w-40 h-40 md:w-52 md:h-52 rounded-full border border-tedx-red/30"
-      animate={{ rotate: 360 }}
-      transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-    >
-      <motion.div
-        className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-tedx-red shadow-[0_0_15px_rgba(239,68,68,0.8)]"
-        animate={{ scale: [1, 1.4, 1] }}
-        transition={{ duration: 1.5, repeat: Infinity }}
-      />
-    </motion.div>
+/* ── Cinematic 3D DNA Helix (Canvas) ── */
+const DNAAnimation = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animRef = useRef<number>(0);
 
-    {/* Ring 2 */}
-    <motion.div
-      className="absolute w-60 h-60 md:w-80 md:h-80 rounded-full border border-red-500/20"
-      style={{ rotateX: "60deg" }}
-      animate={{ rotate: -360 }}
-      transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-    >
-      <motion.div
-        className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-red-400 shadow-[0_0_12px_rgba(248,113,113,0.7)]"
-      />
-      <motion.div
-        className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-red-400 shadow-[0_0_12px_rgba(248,113,113,0.7)]"
-      />
-    </motion.div>
+  const draw = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    {/* Ring 3 */}
-    <motion.div
-      className="absolute w-72 h-72 md:w-96 md:h-96 rounded-full border border-red-800/15"
-      style={{ rotateY: "60deg" }}
-      animate={{ rotate: 360 }}
-      transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
-    >
-      <motion.div
-        className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-red-300/60 shadow-[0_0_8px_rgba(252,165,165,0.5)]"
-      />
-    </motion.div>
+    const dpr = window.devicePixelRatio || 1;
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.scale(dpr, dpr);
 
-    {/* Floating particles — fewer on mobile */}
-    {[...Array(typeof window !== "undefined" && (window.innerWidth < 768 || "ontouchstart" in window) ? 3 : 6)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="absolute w-1.5 h-1.5 rounded-full bg-tedx-red/40"
-        style={{
-          left: `${20 + Math.random() * 60}%`,
-          top: `${20 + Math.random() * 60}%`,
-        }}
-        animate={{
-          y: [0, -20, 0, 20, 0],
-          x: [0, 10, 0, -10, 0],
-          opacity: [0.2, 0.8, 0.2],
-        }}
-        transition={{
-          duration: 3 + i * 0.5,
-          repeat: Infinity,
-          delay: i * 0.4,
-          ease: "easeInOut",
-        }}
-      />
-    ))}
-  </div>
-);
+    const time = performance.now() * 0.001;
+    ctx.clearRect(0, 0, w, h);
+
+    // Diagonal helix from bottom-left toward top-right
+    const seg = 400;
+    const turns = 3.5;
+    const tubeR = 10;
+
+    // Start/end points define the diagonal axis
+    const x0 = w * 0.12, y0 = h * 0.92;
+    const x1 = w * 0.88, y1 = h * 0.08;
+    const amp = w * 0.13; // amplitude perpendicular to axis
+
+    // Axis direction and perpendicular
+    const dx = x1 - x0, dy = y1 - y0;
+    const axisLen = Math.sqrt(dx * dx + dy * dy);
+    const ax = dx / axisLen, ay = dy / axisLen;
+    // perpendicular (rotated 90°)
+    const px = -ay, py = ax;
+
+    interface Pt { x: number; y: number; z: number; t: number }
+    const L: Pt[] = [];
+    const R: Pt[] = [];
+
+    for (let i = 0; i <= seg; i++) {
+      const t = i / seg;
+      const baseX = x0 + dx * t;
+      const baseY = y0 + dy * t;
+      const angle = t * Math.PI * 2 * turns + time * 0.6;
+      const sinA = Math.sin(angle);
+      const cosA = Math.cos(angle);
+
+      L.push({
+        x: baseX + amp * sinA * px,
+        y: baseY + amp * sinA * py,
+        z: cosA,
+        t
+      });
+      R.push({
+        x: baseX - amp * sinA * px,
+        y: baseY - amp * sinA * py,
+        z: -cosA,
+        t
+      });
+    }
+
+    // Depth-of-field: fade edges (near t=0 and t=1)
+    const dofAlpha = (t: number) => {
+      const fadeIn = Math.min(1, t / 0.15);
+      const fadeOut = Math.min(1, (1 - t) / 0.15);
+      return fadeIn * fadeOut;
+    };
+
+    // Draw strand with volumetric shading
+    const drawStrand = (pts: Pt[], front: boolean) => {
+      for (let i = 0; i < pts.length - 1; i++) {
+        const p = pts[i], n = pts[i + 1];
+        if (front !== (p.z > 0)) continue;
+        const d = (p.z + 1) / 2; // depth 0=back, 1=front
+        const dof = dofAlpha(p.t);
+        const r = tubeR * (0.4 + 0.6 * d);
+
+        // Base color: dark crimson (back) → bright red (front)
+        const cr = Math.round(40 + 200 * d);
+        const cg = Math.round(5 + 20 * d);
+        const cb = Math.round(8 + 15 * d);
+
+        // Outer glow (subsurface-like)
+        if (d > 0.3) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(n.x, n.y);
+          ctx.strokeStyle = `rgba(255,40,20,${0.08 * d * dof})`;
+          ctx.lineWidth = r * 4.5;
+          ctx.lineCap = "round";
+          ctx.stroke();
+        }
+
+        // Main tube body
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(n.x, n.y);
+        ctx.strokeStyle = `rgba(${cr},${cg},${cb},${dof})`;
+        ctx.lineWidth = r * 2;
+        ctx.lineCap = "round";
+        ctx.stroke();
+
+        // Darker edge (bottom of tube for volume)
+        ctx.beginPath();
+        ctx.moveTo(p.x + px * r * 0.4, p.y + py * r * 0.4);
+        ctx.lineTo(n.x + px * r * 0.4, n.y + py * r * 0.4);
+        ctx.strokeStyle = `rgba(${Math.round(cr * 0.4)},${Math.round(cg * 0.3)},${Math.round(cb * 0.3)},${0.5 * dof})`;
+        ctx.lineWidth = r * 0.9;
+        ctx.lineCap = "round";
+        ctx.stroke();
+
+        // Specular highlight (top of tube)
+        if (d > 0.55) {
+          const hl = (d - 0.55) / 0.45;
+          ctx.beginPath();
+          ctx.moveTo(p.x - px * r * 0.35, p.y - py * r * 0.35);
+          ctx.lineTo(n.x - px * r * 0.35, n.y - py * r * 0.35);
+          ctx.strokeStyle = `rgba(255,${Math.round(100 + 120 * hl)},${Math.round(60 + 80 * hl)},${hl * 0.45 * dof})`;
+          ctx.lineWidth = r * 0.6;
+          ctx.lineCap = "round";
+          ctx.stroke();
+        }
+
+        // Hot glow emission spots
+        if (d > 0.8 && i % 12 === 0) {
+          const glowR = r * 2.5;
+          const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowR);
+          grd.addColorStop(0, `rgba(255,100,50,${0.35 * dof})`);
+          grd.addColorStop(0.4, `rgba(255,40,20,${0.12 * dof})`);
+          grd.addColorStop(1, "rgba(255,20,10,0)");
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, glowR, 0, Math.PI * 2);
+          ctx.fillStyle = grd;
+          ctx.fill();
+        }
+      }
+    };
+
+    // Draw rungs (base pairs) with 3D shading
+    const drawRungs = (behind: boolean) => {
+      const spacing = Math.floor(seg / (turns * 5));
+      for (let i = spacing; i < L.length - spacing; i += spacing) {
+        const lp = L[i], rp = R[i];
+        const avgZ = (lp.z + rp.z) / 2;
+        if (behind && avgZ > 0) continue;
+        if (!behind && avgZ <= 0) continue;
+
+        const d = (avgZ + 1) / 2;
+        const dof = dofAlpha(lp.t);
+        const rw = 2 + 4 * d;
+
+        // Rung color: dark → medium red
+        const cr = Math.round(50 + 120 * d);
+        const cg = Math.round(3 + 12 * d);
+        const cb = Math.round(5 + 10 * d);
+
+        // Rung glow
+        if (d > 0.4) {
+          ctx.beginPath();
+          ctx.moveTo(lp.x, lp.y);
+          ctx.lineTo(rp.x, rp.y);
+          ctx.strokeStyle = `rgba(255,30,20,${0.06 * d * dof})`;
+          ctx.lineWidth = rw * 3;
+          ctx.lineCap = "round";
+          ctx.stroke();
+        }
+
+        const mx = (lp.x + rp.x) / 2;
+        const my = (lp.y + rp.y) / 2;
+        const gapX = (rp.x - lp.x) * 0.03;
+        const gapY = (rp.y - lp.y) * 0.03;
+
+        ctx.lineCap = "round";
+        // left half
+        ctx.beginPath();
+        ctx.moveTo(lp.x, lp.y);
+        ctx.lineTo(mx - gapX, my - gapY);
+        ctx.strokeStyle = `rgba(${cr},${cg},${cb},${dof})`;
+        ctx.lineWidth = rw;
+        ctx.stroke();
+        // right half (slightly different shade)
+        ctx.beginPath();
+        ctx.moveTo(mx + gapX, my + gapY);
+        ctx.lineTo(rp.x, rp.y);
+        ctx.strokeStyle = `rgba(${Math.min(255, cr + 20)},${cg + 3},${cb},${dof})`;
+        ctx.lineWidth = rw;
+        ctx.stroke();
+
+        // Rung highlight
+        if (d > 0.6) {
+          const hl = (d - 0.6) / 0.4;
+          ctx.beginPath();
+          ctx.moveTo(lp.x, lp.y);
+          ctx.lineTo(rp.x, rp.y);
+          ctx.strokeStyle = `rgba(255,120,80,${hl * 0.15 * dof})`;
+          ctx.lineWidth = rw * 0.5;
+          ctx.stroke();
+        }
+      }
+    };
+
+    // Render layers: back → back rungs → front → front rungs
+    drawStrand(L, false);
+    drawStrand(R, false);
+    drawRungs(true);
+    drawStrand(L, true);
+    drawStrand(R, true);
+    drawRungs(false);
+
+    // Atmospheric glow around the helix center
+    const cx = w / 2, cy = h / 2;
+    const glowSize = Math.max(w, h) * 0.45;
+    const ambientGlow = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowSize);
+    ambientGlow.addColorStop(0, "rgba(180,20,20,0.07)");
+    ambientGlow.addColorStop(0.5, "rgba(120,10,10,0.03)");
+    ambientGlow.addColorStop(1, "rgba(80,5,5,0)");
+    ctx.fillStyle = ambientGlow;
+    ctx.fillRect(0, 0, w, h);
+
+    animRef.current = requestAnimationFrame(draw);
+  }, []);
+
+  useEffect(() => {
+    animRef.current = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(animRef.current);
+  }, [draw]);
+
+  return (
+    <div className="relative w-full h-[350px] md:h-[420px] flex items-center justify-center">
+      <canvas ref={canvasRef} className="w-full h-full" />
+    </div>
+  );
+};
 
 const AboutSection = () => {
   const { data: aboutData, isLoading, isError, error } = useAboutInfo();
@@ -133,14 +292,14 @@ const AboutSection = () => {
             )}
           </motion.div>
 
-          {/* Right side: Orbiting Rings Animation */}
+          {/* Right side: DNA Animation */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <OrbitingRingsAnimation />
+            <DNAAnimation />
           </motion.div>
         </div>
       </div>
