@@ -78,9 +78,8 @@ const SponsorsSection = () => {
         </motion.div>
       </div>
 
-      {/* Two rows scrolling in opposite directions */}
+      {/* Single row scrolling */}
       <MarqueeRow sponsors={sponsors} />
-      <MarqueeRow reverse sponsors={sponsors} />
     </section>
   );
 };

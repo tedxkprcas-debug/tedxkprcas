@@ -23,7 +23,7 @@ const AnimatedBackground = ({ variant = "default", particleCount = 8 }: Animated
   const actualCount = isMobile ? Math.max(2, Math.floor(particleCount / 2)) : particleCount;
 
   const particles: FloatingParticle[] = Array.from({ length: actualCount }, (_, i) => ({
-    size: 4 + Math.random() * 6,
+    size: 6 + Math.random() * 12,
     x: `${Math.random() * 100}%`,
     y: `${Math.random() * 100}%`,
     duration: 10 + Math.random() * 15,
@@ -42,8 +42,8 @@ const AnimatedBackground = ({ variant = "default", particleCount = 8 }: Animated
               i % 2 === 0 ? "bg-tedx-red/[0.03]" : "bg-foreground/[0.015]"
             }`}
             style={{
-              width: 250 + i * 100,
-              height: 250 + i * 100,
+              width: 350 + i * 150,
+              height: 350 + i * 150,
               left: `${15 + i * 30}%`,
               top: `${10 + i * 25}%`,
             }}
@@ -107,7 +107,7 @@ const AnimatedBackground = ({ variant = "default", particleCount = 8 }: Animated
       {/* Accent variant pulsing ring */}
       {variant === "accent" && (
         <motion.div
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full border border-tedx-red/10"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full border border-tedx-red/10"
           animate={{
             scale: [1, 1.5, 1],
             opacity: [0.15, 0, 0.15],
