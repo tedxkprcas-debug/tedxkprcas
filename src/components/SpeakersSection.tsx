@@ -17,7 +17,7 @@ const SpeakersSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black uppercase mb-3 sm:mb-4"
+          className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black uppercase mb-3 sm:mb-4"
         >
           Our <span className="text-tedx-red">Speakers</span>
         </motion.h2>

@@ -284,7 +284,7 @@ const AboutSection = () => {
             transition={{ duration: 0.6 }}
           >
             <motion.h2
-              className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-black text-foreground uppercase mb-3 sm:mb-4 md:mb-6 lg:mb-8"
+              className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-black text-foreground uppercase mb-3 sm:mb-4 md:mb-6 lg:mb-8"
               whileInView={{ opacity: [0, 1], y: [30, 0] }}
               viewport={{ once: true }}
             >

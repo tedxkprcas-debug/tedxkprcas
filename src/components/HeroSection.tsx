@@ -109,10 +109,10 @@ function HeroSection() {
           className="flex flex-col items-center select-none mb-2 sm:mb-3"
         >
           <div className="flex items-start justify-center">
-            <span className="font-heading text-[4rem] sm:text-7xl md:text-[8rem] lg:text-[10rem] xl:text-[12rem] font-bold text-tedx-red leading-none tracking-[0em]">
+            <span className="font-heading text-[3.5rem] sm:text-6xl md:text-[7rem] lg:text-[11rem] xl:text-[14rem] 2xl:text-[18rem] font-bold text-tedx-red leading-none tracking-[0em]">
               TED
             </span>
-            <sup className="font-heading text-[1.8rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-tedx-red relative -top-2 sm:-top-4 md:-top-8 lg:-top-12 xl:-top-16 tracking-[0em]">
+            <sup className="font-heading text-[1.5rem] sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold text-tedx-red relative -top-0.5 sm:-top-1 md:-top-2 lg:-top-2 xl:-top-3 2xl:-top-4 tracking-[0em]">
               x
             </sup>
           </div>
@@ -120,7 +120,7 @@ function HeroSection() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
-            className="font-heading text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-none tracking-[0.05em] text-center"
+            className="font-heading text-[1.75rem] sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold text-white leading-none tracking-[0.05em] text-center"
           >
             KPRCAS
           </motion.h1>

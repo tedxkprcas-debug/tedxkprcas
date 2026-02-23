@@ -71,7 +71,7 @@ const SponsorsSection = () => {
           <span className="text-tedx-red font-heading text-sm tracking-[0.3em] uppercase block mb-3">
             Our Partners
           </span>
-          <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-3 sm:mb-4">
+          <h2 className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl font-black text-foreground mb-3 sm:mb-4">
             Sponsors
           </h2>
           <div className="w-16 h-1 bg-tedx-red mx-auto rounded-full" />
