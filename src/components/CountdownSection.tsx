@@ -6,14 +6,32 @@ import CountdownCounter from "./ui/counter-loader";
 
 const DEFAULT_TARGET = new Date("2025-12-31T00:00:00");
 
+/** Reactive mobile / tablet detection */
+const useBreakpoint = () => {
+  const getSize = () => {
+    if (typeof window === "undefined") return "sm";
+    const w = window.innerWidth;
+    if (w < 640) return "sm";
+    if (w < 768) return "md";
+    if (w < 1024) return "lg";
+    return "xl";
+  };
+  const [bp, setBp] = useState(getSize);
+  useEffect(() => {
+    const onResize = () => setBp(getSize());
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  return bp;
+};
+
 const CountdownSection = () => {
   const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [registrationLink, setRegistrationLink] = useState("https://forms.gle/example");
   const [targetDate, setTargetDate] = useState<Date>(DEFAULT_TARGET);
-
-  const mobile =
-    typeof window !== "undefined" &&
-    (window.innerWidth < 768 || "ontouchstart" in window);
+  const bp = useBreakpoint();
+  const mobile = bp === "sm";
+  const counterSize = bp === "sm" ? 7 : bp === "md" ? 12 : bp === "lg" ? 16 : 18;
 
   // Load countdown date from localStorage (set by admin)
   useEffect(() => {
@@ -64,12 +82,12 @@ const CountdownSection = () => {
   const pad = (n: number) => String(n).padStart(2, "0");
 
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="py-10 sm:py-14 md:py-20 lg:py-24 relative overflow-hidden">
       <AnimatedBackground variant="accent" particleCount={8} />
 
       <div className="container mx-auto px-4 relative z-10">
         {/* ── Three Feature Cards Above Timer ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 max-w-5xl mx-auto mb-6 sm:mb-10 md:mb-16">
           {/* Card 1: Speaker Image */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -77,7 +95,7 @@ const CountdownSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             whileHover={{ scale: 1.03, y: -5 }}
-            className="rounded-2xl overflow-hidden border border-white/10 aspect-[4/5] bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm"
+            className="rounded-2xl overflow-hidden border border-white/10 aspect-[4/3] sm:aspect-[3/4] md:aspect-[4/5] bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm"
           >
             <img
               src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=400&h=500&fit=crop&crop=faces"
@@ -93,7 +111,7 @@ const CountdownSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
             whileHover={{ scale: 1.03, y: -5 }}
-            className="rounded-2xl overflow-hidden border border-white/10 aspect-[4/5] bg-white flex items-center justify-center"
+            className="rounded-2xl overflow-hidden border border-white/10 aspect-[4/3] sm:aspect-[3/4] md:aspect-[4/5] bg-white flex items-center justify-center"
           >
             <img
               src="https://images.unsplash.com/photo-1597873618537-64a04bae4a27?w=400&h=500&fit=crop"
@@ -108,32 +126,32 @@ const CountdownSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-4 sm:col-span-2 md:col-span-1"
           >
             {/* Book Tickets Button */}
             <motion.a
               href={registrationLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-tedx-red hover:bg-tedx-dark-red text-white font-heading font-black text-xl md:text-2xl px-8 py-4 rounded-2xl flex items-center justify-center gap-3 transition-colors"
+              className="bg-tedx-red hover:bg-tedx-dark-red text-white font-heading font-black text-base sm:text-lg md:text-2xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 rounded-2xl flex items-center justify-center gap-2 sm:gap-3 transition-colors"
               whileHover={{ scale: 1.05, boxShadow: "0 0 30px hsl(0 84% 50% / 0.5)" }}
               whileTap={{ scale: 0.95 }}
             >
-              BOOK TICKETS <ArrowUpRight className="w-6 h-6" />
+              BOOK TICKETS <ArrowUpRight className="w-5 h-5 sm:w-6 sm:h-6" />
             </motion.a>
 
             {/* Date Card */}
             <motion.div
               whileHover={{ scale: 1.03, y: -3 }}
-              className="flex-1 rounded-2xl bg-black border border-white/10 flex items-center justify-center p-6 md:p-8"
+              className="flex-1 min-h-[120px] sm:min-h-[140px] rounded-2xl bg-black border border-white/10 flex items-center justify-center p-3 sm:p-5 md:p-8"
             >
-              <div className="flex items-center gap-3 md:gap-4">
+                <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
                 <div className="text-center">
-                  <span className="font-heading text-4xl sm:text-6xl md:text-8xl font-black text-tedx-red leading-none block">23</span>
-                  <span className="font-heading text-2xl sm:text-4xl md:text-6xl font-black text-tedx-red leading-none block -mt-1">APR</span>
+                  <span className="font-heading text-4xl sm:text-4xl md:text-6xl lg:text-7xl font-black text-tedx-red leading-none block">23</span>
+                  <span className="font-heading text-2xl sm:text-2xl md:text-4xl lg:text-5xl font-black text-tedx-red leading-none block -mt-1">APR</span>
                 </div>
-                <div className="w-[3px] h-16 sm:h-20 md:h-28 bg-white/30 rounded-full" />
-                <div className="font-heading text-3xl sm:text-5xl md:text-7xl font-black text-white leading-none" style={{ writingMode: "vertical-lr" }}>
+                <div className="w-[2px] sm:w-[3px] h-12 sm:h-16 md:h-20 lg:h-28 bg-white/30 rounded-full" />
+                <div className="font-heading text-3xl sm:text-3xl md:text-5xl lg:text-6xl font-black text-white leading-none" style={{ writingMode: "vertical-lr" }}>
                   2026
                 </div>
               </div>
@@ -147,43 +165,21 @@ const CountdownSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="border border-tedx-red rounded-xl p-3 sm:p-6 md:p-8 inline-block bg-card/50 backdrop-blur-sm"
+          className="border border-tedx-red rounded-xl p-2 sm:p-3 md:p-6 lg:p-8 inline-block bg-card/50 backdrop-blur-sm max-w-full"
         >
-          {/* Mobile: smaller blocks, Desktop: larger */}
-          <div className="block sm:hidden">
-            <CountdownCounter
-              days={time.days}
-              hours={time.hours}
-              minutes={time.minutes}
-              seconds={time.seconds}
-              color="#e82b2b"
-              size={8}
-            />
-          </div>
-          <div className="hidden sm:block md:hidden">
-            <CountdownCounter
-              days={time.days}
-              hours={time.hours}
-              minutes={time.minutes}
-              seconds={time.seconds}
-              color="#e82b2b"
-              size={14}
-            />
-          </div>
-          <div className="hidden md:block">
-            <CountdownCounter
-              days={time.days}
-              hours={time.hours}
-              minutes={time.minutes}
-              seconds={time.seconds}
-              color="#e82b2b"
-              size={18}
-            />
-          </div>
+          {/* Single CountdownCounter - sized reactively */}
+          <CountdownCounter
+            days={time.days}
+            hours={time.hours}
+            minutes={time.minutes}
+            seconds={time.seconds}
+            color="#e82b2b"
+            size={counterSize}
+          />
         </motion.div>
 
         {/* Film Roll Marquee */}
-        <div className="mt-12 relative">
+        <div className="mt-8 sm:mt-10 md:mt-12 relative">
           <div className="relative bg-gradient-to-r from-gray-950 via-gray-900 to-gray-950 py-0 overflow-hidden">
             {/* Top sprocket holes */}
             <div className="absolute top-0 left-0 right-0 h-5 bg-black z-10 flex items-center">
@@ -203,17 +199,17 @@ const CountdownSection = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-red-950/40 via-transparent to-red-950/40 pointer-events-none z-[1]" />
               <div className="marquee whitespace-nowrap relative z-[2]" style={{ willChange: 'transform' }}>
                 {Array(mobile ? 4 : 8).fill(null).map((_, i) => (
-                  <span key={i} className="font-heading text-4xl md:text-6xl font-black mx-8 drop-shadow-[0_0_10px_rgba(239,68,68,0.4)]">
+                    <span key={i} className="font-heading text-3xl sm:text-4xl md:text-6xl font-black mx-4 sm:mx-8 drop-shadow-[0_0_10px_rgba(239,68,68,0.4)]">
                     {i % 2 === 0 ? (
                       <span className="text-stroke-red">HURRY UP!</span>
                     ) : (
                       <span>HURRY <span className="text-tedx-red">UP!</span></span>
                     )}
-                    <span className="mx-2 text-gray-600">|</span>
+                    <span className="mx-1 sm:mx-2 text-gray-600">|</span>
                   </span>
                 ))}
                 {Array(mobile ? 4 : 8).fill(null).map((_, i) => (
-                  <span key={`d-${i}`} className="font-heading text-4xl md:text-6xl font-black mx-8 drop-shadow-[0_0_10px_rgba(239,68,68,0.4)]">
+                  <span key={`d-${i}`} className="font-heading text-3xl sm:text-4xl md:text-6xl font-black mx-4 sm:mx-8 drop-shadow-[0_0_10px_rgba(239,68,68,0.4)]">
                     {i % 2 === 0 ? (
                       <span className="text-stroke-red">HURRY UP!</span>
                     ) : (

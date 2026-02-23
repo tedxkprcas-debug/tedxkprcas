@@ -34,17 +34,17 @@ const MarqueeRow = ({
             <button
               key={`${copyIdx}-${img.id ?? imgIdx}`}
               onClick={() => onSelect(img)}
-              className="relative flex-shrink-0 h-44 sm:h-52 md:h-60 lg:h-64 aspect-[4/3] rounded-xl overflow-hidden group focus:outline-none"
+              className="relative flex-shrink-0 h-36 sm:h-44 md:h-56 lg:h-64 aspect-[4/3] rounded-lg sm:rounded-xl overflow-hidden group focus:outline-none"
             >
               <img
                 src={img.image}
                 alt={img.title}
                 loading="lazy"
-                className="w-full h-full object-cover transition-all duration-500 grayscale group-hover:grayscale-0 group-hover:scale-110"
+                className="w-full h-full object-cover transition-all duration-500 sm:grayscale sm:group-hover:grayscale-0 group-hover:scale-110 group-active:scale-105"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
-              <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent p-3">
-                <p className="text-white text-sm font-medium truncate">
+              <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 group-active:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent p-2 sm:p-3">
+                <p className="text-white text-xs sm:text-sm font-medium truncate">
                   {img.title}
                 </p>
               </div>
@@ -108,19 +108,19 @@ const GallerySection = () => {
     embedUrl.includes("youtube.com") || embedUrl.includes("vimeo.com");
 
   return (
-    <section id="gallery" className="relative z-10 py-20">
+    <section id="gallery" className="relative z-10 py-10 sm:py-14 md:py-20">
       {/* Header */}
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-6 sm:mb-8 md:mb-12"
         >
-          <h2 className="font-heading text-4xl md:text-6xl font-black uppercase mb-4">
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase mb-2 sm:mb-4">
             <span className="text-tedx-red">Gallery</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">
             Explore memorable moments from TED<sup>x</sup> KPRCAS events
           </p>
         </motion.div>
@@ -218,7 +218,7 @@ const GallerySection = () => {
               }}
               className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
             >
-              <div className="relative w-[55%] sm:w-[50%] md:w-[45%] lg:w-[40%] aspect-video rounded-2xl overflow-hidden shadow-2xl border-2 border-white/15 pointer-events-auto bg-black">
+              <div className="relative w-[90%] sm:w-[70%] md:w-[55%] lg:w-[42%] xl:w-[38%] aspect-video rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl border-2 border-white/15 pointer-events-auto bg-black">
                 <div className="absolute -inset-4 bg-tedx-red/10 blur-3xl rounded-3xl -z-10" />
 
                 {isVideoEmbed ? (
@@ -255,7 +255,7 @@ const GallerySection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 sm:p-4"
             onClick={() => setSelectedImage(null)}
           >
             <motion.div
@@ -263,7 +263,7 @@ const GallerySection = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.85, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative max-w-4xl w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10"
+              className="relative max-w-4xl w-full rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl border border-white/10"
               onClick={(e) => e.stopPropagation()}
             >
               <img
@@ -271,14 +271,14 @@ const GallerySection = () => {
                 alt={selectedImage.title}
                 className="w-full max-h-[80vh] object-contain bg-black"
               />
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 to-transparent p-6">
-                <p className="text-white text-xl font-bold">
+              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 to-transparent p-3 sm:p-4 md:p-6">
+                <p className="text-white text-base sm:text-lg md:text-xl font-bold">
                   {selectedImage.title}
                 </p>
               </div>
               <button
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 transition-colors"
+                className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-black/60 hover:bg-black/80 text-white rounded-full p-1.5 sm:p-2 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>

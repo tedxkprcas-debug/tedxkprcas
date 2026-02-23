@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Lock } from "lucide-react";
 
 const navItems = [
@@ -17,6 +17,16 @@ const Navbar = () => {
   const [registrationLink, setRegistrationLink] = useState("https://forms.gle/example");
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
 
   useEffect(() => {
     const savedContact = localStorage.getItem("tedx_contact");
@@ -54,8 +64,8 @@ const Navbar = () => {
 
   const renderNavLink = (item: { label: string; href: string }, mobile = false) => {
     const className = mobile
-      ? "block py-2 text-muted-foreground hover:text-foreground transition-colors"
-      : "text-sm text-muted-foreground hover:text-foreground transition-colors font-medium";
+      ? "block py-3.5 text-lg text-muted-foreground hover:text-foreground transition-colors active:text-foreground"
+      : "text-sm text-muted-foreground hover:text-foreground transition-colors font-medium lg:text-base";
 
     if (item.href.startsWith("/")) {
       return (
@@ -83,45 +93,48 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-40 bg-background/90 backdrop-blur-md border-b border-border">
-      <div className="container mx-auto flex items-center justify-between h-16 px-4">
+    <nav className="fixed top-0 left-0 right-0 z-40 bg-background/90 backdrop-blur-md border-b border-border safe-area-top">
+      <div className="container mx-auto flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4">
         <Link to="/" className="flex items-baseline gap-0.5">
-          <span className="font-heading text-xl font-black text-tedx-red">TED</span>
-          <sup className="font-heading text-sm font-black text-tedx-red">x</sup>
-          <span className="font-heading text-xl font-bold text-foreground ml-1">KPRCAS</span>
+          <span className="font-heading text-lg sm:text-xl font-bold text-tedx-red tracking-[0em]">TED</span>
+          <sup className="font-heading text-xs sm:text-sm font-bold text-tedx-red tracking-[0em]">x</sup>
+          <span className="font-heading text-lg sm:text-xl font-bold text-foreground ml-0.5 tracking-[0em]">KPRCAS</span>
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-4 lg:gap-6">
           {navItems.map((item) => renderNavLink(item))}
           <a
             href={registrationLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-tedx-red text-foreground font-heading font-bold text-sm px-5 py-2 rounded hover:bg-tedx-dark-red transition-colors"
+            className="bg-tedx-red text-foreground font-heading font-bold text-sm px-4 lg:px-5 py-2 rounded hover:bg-tedx-dark-red transition-colors whitespace-nowrap"
           >
             Register
           </a>
         </div>
 
         {/* Mobile toggle */}
-        <button className="md:hidden text-foreground" onClick={() => setOpen(!open)}>
+        <button className="md:hidden text-foreground p-2 -mr-1 active:opacity-70" onClick={() => setOpen(!open)}>
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
       {/* Mobile menu */}
-      {open && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="md:hidden bg-background border-b border-border px-4 pb-4"
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden bg-background/95 backdrop-blur-md border-b border-border px-4 py-2 pb-4 max-h-[calc(100vh-3.5rem)] overflow-y-auto safe-area-bottom"
         >
           {navItems.map((item) => renderNavLink(item, true))}
           <Link
             to="/admin"
             onClick={() => setOpen(false)}
-            className="block py-2 text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+            className="flex items-center gap-2 py-3 text-muted-foreground hover:text-primary transition-colors active:text-primary"
           >
             <Lock className="w-4 h-4" />
             Admin
@@ -130,12 +143,13 @@ const Navbar = () => {
             href={registrationLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="block mt-2 bg-tedx-red text-foreground font-heading font-bold text-sm px-5 py-2 rounded text-center"
+            className="block mt-3 bg-tedx-red text-foreground font-heading font-bold text-base px-5 py-3.5 rounded text-center active:bg-tedx-dark-red"
           >
             Register
           </a>
         </motion.div>
       )}
+      </AnimatePresence>
     </nav>
   );
 };

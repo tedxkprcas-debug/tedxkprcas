@@ -100,15 +100,15 @@ const PairWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 
   .pair-digits {
     display: flex;
-    gap: 8px;
+    gap: 4px;
   }
 
   .pair-label {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -173,7 +173,7 @@ const CountdownWrapper = styled.div<{ $color: string; $size: number }>`
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: 16px;
+  gap: 8px;
 
   .separator-col {
     display: flex;

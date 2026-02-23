@@ -1,18 +1,42 @@
 import { motion } from "framer-motion";
 import { AlertCircle } from "lucide-react";
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 import AnimatedBackground from "./AnimatedBackground";
 import { useAboutInfo } from "@/hooks/use-database";
+
+/** Reactive mobile detection hook */
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" && (window.innerWidth < 768 || "ontouchstart" in window)
+  );
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768 || "ontouchstart" in window);
+    window.addEventListener("resize", check);
+    window.addEventListener("orientationchange", check);
+    return () => {
+      window.removeEventListener("resize", check);
+      window.removeEventListener("orientationchange", check);
+    };
+  }, []);
+  return isMobile;
+};
 
 
 /* ── Cinematic 3D Rotating Globe (Canvas) ── */
 const GlobeAnimation = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
+  const isVisibleRef = useRef(true);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    // Skip drawing if canvas is not visible
+    if (!isVisibleRef.current) {
+      animRef.current = requestAnimationFrame(draw);
+      return;
+    }
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -217,11 +241,24 @@ const GlobeAnimation = () => {
 
   useEffect(() => {
     animRef.current = requestAnimationFrame(draw);
+    // IntersectionObserver to pause globe when off-screen (saves battery on mobile)
+    const container = containerRef.current;
+    if (container) {
+      const observer = new IntersectionObserver(
+        ([entry]) => { isVisibleRef.current = entry.isIntersecting; },
+        { threshold: 0.1 }
+      );
+      observer.observe(container);
+      return () => {
+        cancelAnimationFrame(animRef.current);
+        observer.disconnect();
+      };
+    }
     return () => cancelAnimationFrame(animRef.current);
   }, [draw]);
 
   return (
-    <div className="relative w-full h-[450px] md:h-[550px] lg:h-[620px] flex items-center justify-center">
+    <div ref={containerRef} className="relative w-full h-[260px] sm:h-[300px] md:h-[450px] lg:h-[550px] xl:h-[620px] flex items-center justify-center">
       <canvas ref={canvasRef} className="w-full h-full" />
     </div>
   );
@@ -229,20 +266,17 @@ const GlobeAnimation = () => {
 
 const AboutSection = () => {
   const { data: aboutData, isLoading, isError, error } = useAboutInfo();
-
-  const mobile =
-    typeof window !== "undefined" &&
-    (window.innerWidth < 768 || "ontouchstart" in window);
+  const mobile = useIsMobile();
 
   const content = aboutData?.content || "TEDx KPRCAS is a locally organised independently run event. Rooted in the spirit of TED's mission, it brings together thought leaders, innovators, and changemakers to share ideas worth spreading. At KPR College of Arts Science and Research, we celebrate the power of storytelling, innovation, and community building through extraordinary talks and experiences.";
 
   return (
-    <section id="about" className="py-24 relative overflow-hidden">
+    <section id="about" className="py-10 sm:py-14 md:py-20 lg:py-24 relative overflow-hidden">
       <AnimatedBackground variant="default" particleCount={6} />
 
       <div className="container mx-auto px-4 relative z-10">
         {/* ── About Row: Text left, Orbiting Rings right ── */}
-        <div className="grid md:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12 lg:gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -250,7 +284,7 @@ const AboutSection = () => {
             transition={{ duration: 0.6 }}
           >
             <motion.h2
-              className="font-heading text-4xl sm:text-5xl md:text-7xl font-black text-foreground uppercase mb-8"
+              className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-black text-foreground uppercase mb-3 sm:mb-4 md:mb-6 lg:mb-8"
               whileInView={{ opacity: [0, 1], y: [30, 0] }}
               viewport={{ once: true }}
             >
@@ -271,7 +305,7 @@ const AboutSection = () => {
                 <div className="h-4 bg-muted rounded animate-pulse w-4/6"></div>
               </div>
             ) : (
-              <p className="text-muted-foreground leading-relaxed text-lg">
+              <p className="text-muted-foreground leading-relaxed text-sm sm:text-sm md:text-base lg:text-lg">
                 {content}
               </p>
             )}
@@ -290,7 +324,7 @@ const AboutSection = () => {
       </div>
 
       {/* Train Marquee */}
-      <div className="mt-20 relative overflow-hidden pb-4">
+      <div className="mt-8 sm:mt-12 md:mt-16 lg:mt-20 relative overflow-hidden pb-4">
         {/* Rail tracks */}
         <div className="absolute bottom-3 left-0 right-0 z-0">
           <div className="h-[3px] bg-gray-500 mb-[6px]" />
@@ -302,13 +336,14 @@ const AboutSection = () => {
           </div>
         </div>
 
-        {/* Train carriages */}
+        {/* Train carriages — tripled for seamless -33.333% loop */}
         <div className="marquee whitespace-nowrap flex items-end relative z-10" style={{ willChange: 'transform' }}>
-          {Array(mobile ? 8 : 16).fill(null).map((_, i) => (
-            <div key={i} className="inline-flex flex-shrink-0 items-end mx-1">
+          {Array(mobile ? 6 : 12).fill(null).flatMap((_, i) =>
+            [0, 1, 2].map((copy) => (
+              <div key={`${copy}-${i}`} className="inline-flex flex-shrink-0 items-end mx-1">
               <div className="relative">
-                <div className="relative rounded-t-xl border-2 px-6 md:px-10 py-4 md:py-6 bg-gradient-to-b from-gray-800 to-gray-950 border-gray-600">
-                  <span className="font-heading text-2xl md:text-3xl font-black">
+                <div className="relative rounded-t-xl border-2 px-4 sm:px-6 md:px-10 py-3 sm:py-4 md:py-6 bg-gradient-to-b from-gray-800 to-gray-950 border-gray-600">
+                  <span className="font-heading text-xl sm:text-2xl md:text-3xl font-black">
                     <span className="text-tedx-red">TED</span><sup className="text-tedx-red text-xs">x</sup>{" "}
                     <span className="text-white">KPRCAS</span>
                   </span>
@@ -326,8 +361,9 @@ const AboutSection = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </section>

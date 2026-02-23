@@ -15,18 +15,18 @@ const Team = () => {
       <GeometricBackground />
       <Navbar />
 
-      <div className="relative z-10 py-24">
+      <div className="relative z-10 py-16 sm:py-20 md:py-24">
         <div className="container mx-auto px-4">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-16"
+            className="text-center mb-8 sm:mb-12 md:mb-16"
           >
-            <h1 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4">
+            <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black uppercase mb-3 sm:mb-4">
               Our <span className="text-tedx-red">Team</span>
             </h1>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            <p className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
               Meet the passionate individuals behind TED<sup>x</sup> KPRCAS
             </p>
           </motion.div>

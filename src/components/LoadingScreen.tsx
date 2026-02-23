@@ -114,25 +114,25 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
           {phase >= 1 && (
             <>
               <motion.div
-                className="absolute top-8 left-8 w-16 h-16 border-t-2 border-l-2 border-tedx-red/40"
+                className="absolute top-4 left-4 sm:top-8 sm:left-8 w-10 h-10 sm:w-16 sm:h-16 border-t-2 border-l-2 border-tedx-red/40"
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               />
               <motion.div
-                className="absolute top-8 right-8 w-16 h-16 border-t-2 border-r-2 border-tedx-red/40"
+                className="absolute top-4 right-4 sm:top-8 sm:right-8 w-10 h-10 sm:w-16 sm:h-16 border-t-2 border-r-2 border-tedx-red/40"
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
               />
               <motion.div
-                className="absolute bottom-8 left-8 w-16 h-16 border-b-2 border-l-2 border-tedx-red/40"
+                className="absolute bottom-8 left-4 sm:left-8 w-10 h-10 sm:w-16 sm:h-16 border-b-2 border-l-2 border-tedx-red/40"
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
               />
               <motion.div
-                className="absolute bottom-8 right-8 w-16 h-16 border-b-2 border-r-2 border-tedx-red/40"
+                className="absolute bottom-8 right-4 sm:right-8 w-10 h-10 sm:w-16 sm:h-16 border-b-2 border-r-2 border-tedx-red/40"
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
@@ -147,7 +147,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
                 {"TED".split("").map((char, i) => (
                   <motion.span
                     key={`outline-${i}`}
-                    className="font-heading text-5xl sm:text-7xl md:text-[10rem] lg:text-[13rem] font-black"
+                    className="font-heading text-6xl sm:text-7xl md:text-[8rem] lg:text-[10rem] xl:text-[13rem] font-bold tracking-[0em]"
                     style={{
                       WebkitTextStroke: "2px hsl(var(--tedx-red))",
                       color: "transparent",
@@ -160,7 +160,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
                   </motion.span>
                 ))}
                 <motion.span
-                  className="font-heading text-2xl sm:text-4xl md:text-[5rem] lg:text-[7rem] font-black"
+                  className="font-heading text-3xl sm:text-4xl md:text-[4rem] lg:text-[5rem] xl:text-[7rem] font-black"
                   style={{
                     WebkitTextStroke: "2px hsl(var(--tedx-red))",
                     color: "transparent",
@@ -192,7 +192,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
                   {"TED".split("").map((char, i) => (
                     <motion.span
                       key={`filled-${i}`}
-                      className="font-heading text-5xl sm:text-7xl md:text-[10rem] lg:text-[13rem] font-black"
+                      className="font-heading text-6xl sm:text-7xl md:text-[8rem] lg:text-[10rem] xl:text-[13rem] font-bold tracking-[0em]"
                       style={{ WebkitTextStroke: "2px hsl(var(--tedx-red))" }}
                       initial={{ color: "transparent" }}
                       animate={{ color: "hsl(var(--tedx-red))" }}
@@ -202,7 +202,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
                     </motion.span>
                   ))}
                   <motion.span
-                    className="font-heading text-2xl sm:text-4xl md:text-[5rem] lg:text-[7rem] font-black text-tedx-red"
+                    className="font-heading text-3xl sm:text-4xl md:text-[4rem] lg:text-[5rem] xl:text-[7rem] font-bold text-tedx-red tracking-[0em]"
                     initial={{ color: "transparent" }}
                     animate={{ color: "hsl(var(--tedx-red))" }}
                     transition={{ duration: 0.3, delay: 0.3 }}
@@ -215,7 +215,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
                 {phase === 2 && (
                   <>
                     <motion.span
-                      className="absolute font-heading text-5xl sm:text-7xl md:text-[10rem] lg:text-[13rem] font-black text-tedx-red/30"
+                      className="absolute font-heading text-6xl sm:text-7xl md:text-[8rem] lg:text-[10rem] xl:text-[13rem] font-bold text-tedx-red/30 tracking-[0em]"
                       initial={{ x: 0 }}
                       animate={{ x: [0, 5, -3, 0], opacity: [0, 0.5, 0.3, 0] }}
                       transition={{ duration: 0.4 }}
@@ -224,7 +224,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
                       TED
                     </motion.span>
                     <motion.span
-                      className="absolute font-heading text-5xl sm:text-7xl md:text-[10rem] lg:text-[13rem] font-black"
+                      className="absolute font-heading text-6xl sm:text-7xl md:text-[8rem] lg:text-[10rem] xl:text-[13rem] font-bold tracking-[0em]"
                       initial={{ x: 0 }}
                       animate={{ x: [0, -4, 6, 0], opacity: [0, 0.3, 0.2, 0] }}
                       transition={{ duration: 0.5, delay: 0.1 }}
@@ -247,8 +247,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
                 {"KPRCAS".split("").map((char, i) => (
                   <motion.span
                     key={`kpr-${i}`}
-                    className="font-heading text-3xl sm:text-5xl md:text-[7rem] lg:text-[9rem] font-black tracking-wider text-foreground"
-                    initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                    className="font-heading text-4xl sm:text-5xl md:text-[5rem] lg:text-[6rem] xl:text-[9rem] font-bold text-foreground tracking-[0em]"
                     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                     transition={{
                       duration: 0.5,
@@ -265,7 +264,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
             {/* Phase 4: Tagline */}
             {phase >= 4 && (
               <motion.p
-                className="text-muted-foreground font-heading text-lg md:text-2xl tracking-[0.3em] uppercase mt-4"
+                className="text-muted-foreground font-heading text-sm sm:text-lg md:text-2xl tracking-[0.2em] sm:tracking-[0.3em] uppercase mt-3 sm:mt-4"
                 initial={{ opacity: 0, letterSpacing: "0.6em" }}
                 animate={{ opacity: 1, letterSpacing: "0.3em" }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
@@ -277,7 +276,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
             {/* Phase 4: Progress bar */}
             {phase >= 4 && (
               <motion.div
-                className="mt-8 w-48 h-[2px] bg-muted rounded-full overflow-hidden"
+                className="mt-8 w-32 sm:w-40 md:w-48 lg:w-56 h-[2px] bg-muted rounded-full overflow-hidden"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
@@ -297,7 +296,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="absolute bottom-12 flex flex-col items-center gap-3"
+              className="absolute bottom-8 sm:bottom-12 flex flex-col items-center gap-2 sm:gap-3"
             >
               <motion.span
                 className="text-muted-foreground text-xs tracking-[0.2em] uppercase"

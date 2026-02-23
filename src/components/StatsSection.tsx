@@ -34,26 +34,26 @@ const stats = [
 
 const StatsSection = () => {
   return (
-    <section className="py-16 sm:py-24 relative overflow-hidden">
+    <section className="py-10 sm:py-14 md:py-20 lg:py-24 relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12 sm:mb-16"
+          className="text-center mb-8 sm:mb-12 md:mb-16"
         >
           <span className="text-tedx-red font-heading text-sm tracking-[0.3em] uppercase block mb-3">
             Quick Snapshot
           </span>
-          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-black text-foreground mb-4">
+          <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-3 sm:mb-4">
             By The Numbers
           </h2>
           <div className="w-16 h-1 bg-tedx-red mx-auto rounded-full" />
         </motion.div>
 
         {/* Stats Cards Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 min-[400px]:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -62,9 +62,9 @@ const StatsSection = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
               whileHover={{ y: -6, scale: 1.02 }}
-              className="group relative rounded-2xl border border-white/[0.06] bg-card/50 backdrop-blur-sm
-                         p-5 sm:p-6 md:p-8 overflow-hidden cursor-default transition-colors
-                         hover:border-tedx-red/30"
+              className="group relative rounded-2xl border border-white/[0.06] bg-card/50
+                         p-4 sm:p-5 md:p-6 lg:p-8 overflow-hidden cursor-default transition-colors
+                         hover:border-tedx-red/30 active:border-tedx-red/30"
             >
               {/* Background gradient */}
               <div
@@ -81,14 +81,14 @@ const StatsSection = () => {
 
               {/* Number */}
               <motion.span
-                className="relative z-10 font-heading text-3xl sm:text-4xl md:text-5xl font-black text-tedx-red block mb-1"
+                className="relative z-10 font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-tedx-red block mb-1"
                 whileHover={{ scale: 1.05 }}
               >
                 {stat.number}
               </motion.span>
 
               {/* Label */}
-              <span className="relative z-10 font-heading text-base sm:text-lg font-bold text-foreground block mb-2">
+              <span className="relative z-10 font-heading text-sm sm:text-base md:text-lg font-bold text-foreground block mb-1 sm:mb-2">
                 {stat.label}
               </span>
 

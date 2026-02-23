@@ -15,15 +15,15 @@ const fallbackSponsors = [
 
 const SponsorCard = ({ sponsor }: { sponsor: { name: string; logo: string } }) => (
   <div
-    className="flex-shrink-0 flex items-center justify-center w-[140px] h-[60px] sm:w-[180px] sm:h-[70px] md:w-[200px] md:h-[80px]
-               mx-3 sm:mx-5 rounded-xl border border-white/5 bg-white/[0.03] backdrop-blur-sm
+    className="flex-shrink-0 flex items-center justify-center w-[120px] h-[50px] sm:w-[160px] sm:h-[65px] md:w-[200px] md:h-[80px]
+               mx-2 sm:mx-4 md:mx-5 rounded-lg sm:rounded-xl border border-white/5 bg-white/[0.03]
                hover:border-tedx-red/30 hover:bg-white/[0.06] transition-all duration-300
-               grayscale hover:grayscale-0"
+               sm:grayscale sm:hover:grayscale-0"
   >
     <img
       src={sponsor.logo}
       alt={sponsor.name}
-      className="max-h-[40px] sm:max-h-[50px] max-w-[120px] sm:max-w-[150px] object-contain opacity-60 hover:opacity-100 transition-opacity"
+      className="max-h-[32px] sm:max-h-[45px] md:max-h-[50px] max-w-[100px] sm:max-w-[130px] md:max-w-[150px] object-contain sm:opacity-60 sm:hover:opacity-100 transition-opacity"
       loading="lazy"
     />
   </div>
@@ -60,8 +60,8 @@ const SponsorsSection = () => {
     : fallbackSponsors;
 
   return (
-    <section id="sponsors" className="py-16 sm:py-24 relative overflow-hidden">
-      <div className="container mx-auto px-4 relative z-10 mb-10">
+    <section id="sponsors" className="py-10 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden">
+      <div className="container mx-auto px-4 relative z-10 mb-6 sm:mb-8 md:mb-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -71,7 +71,7 @@ const SponsorsSection = () => {
           <span className="text-tedx-red font-heading text-sm tracking-[0.3em] uppercase block mb-3">
             Our Partners
           </span>
-          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-black text-foreground mb-4">
+          <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-3 sm:mb-4">
             Sponsors
           </h2>
           <div className="w-16 h-1 bg-tedx-red mx-auto rounded-full" />

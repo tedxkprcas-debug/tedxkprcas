@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -15,7 +15,7 @@
     --popover: 0 0% 5%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 0 84% 50%;
+    --primary: 351 100% 46%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 10%;
@@ -24,41 +24,46 @@
     --muted: 0 0% 12%;
     --muted-foreground: 0 0% 60%;
 
-    --accent: 0 84% 50%;
+    --accent: 351 100% 46%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 350 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 0 0% 15%;
     --input: 0 0% 15%;
-    --ring: 0 84% 50%;
+    --ring: 351 100% 46%;
 
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 5%;
     --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 0 84% 50%;
+    --sidebar-primary: 351 100% 46%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 12%;
     --sidebar-accent-foreground: 0 0% 90%;
     --sidebar-border: 0 0% 15%;
-    --sidebar-ring: 0 84% 50%;
+    --sidebar-ring: 351 100% 46%;
 
-    --tedx-red: 0 84% 50%;
-    --tedx-dark-red: 0 70% 35%;
-    --tedx-glow: 0 100% 50%;
+    /* TED Official Branding */
+    --tedx-red: 351 100% 46%; /* #EB0028 - Official TED Red */
+    --tedx-dark-red: 351 80% 32%;
+    --tedx-glow: 351 100% 50%;
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+    -webkit-tap-highlight-color: transparent;
   }
 
   html,
   body {
     overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    background-color: #000000; /* Pure Black #000000 - Official TED Black */
   }
 
   body {
@@ -67,6 +72,14 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
+  }
+
+  /* iOS safe areas */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 }
 
@@ -100,12 +113,22 @@
 
 @keyframes marquee {
   from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  to { transform: translateX(-33.333%); }
 }
 
 .marquee-sprocket {
   animation: marquee 30s linear infinite;
   will-change: transform;
+}
+
+/* Respect prefers-reduced-motion globally */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @keyframes pulse-glow {
