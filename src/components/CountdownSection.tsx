@@ -173,7 +173,7 @@ const CountdownSection = () => {
             hours={time.hours}
             minutes={time.minutes}
             seconds={time.seconds}
-            color="#e82b2b"
+            color="#ffffff"
             size={counterSize}
           />
         </motion.div>
