@@ -34,6 +34,43 @@ const SponsorCard = ({ sponsor }: { sponsor: { name: string; logo: string } }) =
   </div>
 );
 
+/* ── Train car with TEDxKPRCAS logo ── */
+const TrainCar = () => (
+  <div className="flex-shrink-0 relative mx-1 sm:mx-2">
+    {/* Train car body */}
+    <div className="bg-gradient-to-b from-[#1a2a4a] to-[#0f1829] border border-white/10 rounded-lg px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-5 shadow-lg">
+      <div className="flex items-center gap-1">
+        <span className="font-heading font-bold text-tedx-red text-base sm:text-lg md:text-xl">TED</span>
+        <sup className="font-heading font-bold text-tedx-red text-[10px] sm:text-xs -mt-2">x</sup>
+        <span className="font-heading font-bold text-white text-base sm:text-lg md:text-xl ml-1">KPRCAS</span>
+      </div>
+    </div>
+    {/* Wheels */}
+    <div className="absolute -bottom-3 left-3 flex gap-1">
+      <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-yellow-500/80 border-2 border-yellow-600" />
+      <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-yellow-500/80 border-2 border-yellow-600" />
+    </div>
+    <div className="absolute -bottom-3 right-3 flex gap-1">
+      <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-yellow-500/80 border-2 border-yellow-600" />
+      <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-yellow-500/80 border-2 border-yellow-600" />
+    </div>
+  </div>
+);
+
+/* ── Train track ── */
+const TrainTrack = () => (
+  <div className="relative w-full h-4 mt-4">
+    {/* Rail */}
+    <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-600" />
+    {/* Sleepers */}
+    <div className="flex justify-between px-4">
+      {Array.from({ length: 40 }).map((_, i) => (
+        <div key={i} className="w-1 h-3 bg-gray-700 rounded-sm" />
+      ))}
+    </div>
+  </div>
+);
+
 const MarqueeRow = ({ reverse = false, sponsors }: { reverse?: boolean; sponsors: { name: string; logo: string }[] }) => {
   // Triple the items for a seamless loop
   const items = [...sponsors, ...sponsors, ...sponsors];
@@ -56,11 +93,39 @@ const MarqueeRow = ({ reverse = false, sponsors }: { reverse?: boolean; sponsors
   );
 };
 
+/* ── Train Marquee (TEDxKPRCAS train) ── */
+const TrainMarquee = () => {
+  const cars = Array.from({ length: 10 });
+  const items = [...cars, ...cars, ...cars];
+
+  return (
+    <div className="relative overflow-hidden py-6">
+      {/* Edge fades */}
+      <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+
+      {/* Train cars */}
+      <div
+        className="flex w-max animate-marquee"
+        style={{ ["--marquee-speed" as string]: "30s" }}
+      >
+        {items.map((_, i) => (
+          <TrainCar key={i} />
+        ))}
+      </div>
+
+      {/* Track */}
+      <TrainTrack />
+    </div>
+  );
+};
+
 const SponsorsSection = () => {
   const { data: dbSponsors = [] } = useSponsors();
 
-  // Use DB sponsors if available, otherwise use fallback
-  const sponsors = dbSponsors.length > 0
+  // Use DB sponsors if available, otherwise show train
+  const hasSponsors = dbSponsors.length > 0;
+  const sponsors = hasSponsors
     ? dbSponsors.map((s: any) => ({ name: s.name, logo: s.logo }))
     : fallbackSponsors;
 
@@ -83,8 +148,12 @@ const SponsorsSection = () => {
         </motion.div>
       </div>
 
-      {/* Single row scrolling */}
-      <MarqueeRow sponsors={sponsors} />
+      {/* Show train animation when no sponsors, otherwise show sponsor marquee */}
+      {!hasSponsors ? (
+        <TrainMarquee />
+      ) : (
+        <MarqueeRow sponsors={sponsors} />
+      )}
     </section>
   );
 };

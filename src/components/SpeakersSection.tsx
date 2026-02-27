@@ -28,7 +28,7 @@ const SpeakersSection = () => {
           transition={{ delay: 0.2 }}
           className="text-muted-foreground text-sm sm:text-base md:text-lg mb-8 sm:mb-12 md:mb-16"
         >
-          Stay tuned for our incredible lineup of speakers.
+          
         </motion.p>
 
         {isError ? (
@@ -66,21 +66,66 @@ const SpeakersSection = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center py-20"
+            className="text-center py-16 sm:py-20"
           >
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="mb-6"
+            {/* Animated card container */}
+            <motion.div 
+              className="relative inline-block bg-gradient-to-br from-secondary/80 to-background border border-tedx-red/20 rounded-2xl px-8 sm:px-16 py-10 sm:py-14 shadow-2xl shadow-tedx-red/5"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
             >
-              <div className="text-6xl mb-4">🎤</div>
+              {/* Glowing corners */}
+              <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-tedx-red rounded-tl-2xl" />
+              <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-tedx-red rounded-tr-2xl" />
+              <div className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-tedx-red rounded-bl-2xl" />
+              <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-tedx-red rounded-br-2xl" />
+              
+              {/* Animated question marks */}
+              <div className="flex justify-center gap-4 mb-6">
+                {[0, 1, 2].map((i) => (
+                  <motion.div
+                    key={i}
+                    animate={{ 
+                      y: [0, -15, 0],
+                      rotateZ: [0, 10, -10, 0]
+                    }}
+                    transition={{ 
+                      duration: 2,
+                      repeat: Infinity,
+                      delay: i * 0.3
+                    }}
+                    className="w-16 h-16 sm:w-20 sm:h-20 bg-tedx-red/10 rounded-full flex items-center justify-center border border-tedx-red/30"
+                  >
+                    <span className="text-3xl sm:text-4xl font-bold text-tedx-red">?</span>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Main text */}
+              <motion.h3
+                animate={{ opacity: [0.7, 1, 0.7] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3"
+              >
+                To Be <span className="text-tedx-red">Revealed</span>
+              </motion.h3>
+              
+              <p className="text-muted-foreground text-base sm:text-lg">
+                Our incredible speakers will be announced soon
+              </p>
+
+              {/* Decorative dots */}
+              <div className="flex justify-center gap-2 mt-6">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <motion.div
+                    key={i}
+                    animate={{ scale: [1, 1.5, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2 }}
+                    className="w-2 h-2 rounded-full bg-tedx-red/60"
+                  />
+                ))}
+              </div>
             </motion.div>
-            <p className="text-muted-foreground text-xl font-medium">
-              Speaker details coming soon!
-            </p>
-            <p className="text-muted-foreground text-sm mt-2">
-              Check back later for our confirmed speakers
-            </p>
           </motion.div>
         ) : (
           <motion.div

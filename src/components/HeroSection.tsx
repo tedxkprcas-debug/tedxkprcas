@@ -101,29 +101,18 @@ function HeroSection() {
         className="absolute inset-0 z-10 flex flex-col items-center justify-center px-4 sm:px-6"
         style={{ willChange: "transform, opacity", transform: "translate3d(0,0,0)" }}
       >
-        {/* TEDx KPRCAS - Following TED Official Branding Guidelines */}
+        {/* TEDx KPRCAS Logo */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4, duration: 0.8, type: "spring" }}
           className="flex flex-col items-center select-none mb-2 sm:mb-3"
         >
-          <div className="flex items-start justify-center">
-            <span className="font-heading text-[3.5rem] sm:text-6xl md:text-[7rem] lg:text-[11rem] xl:text-[14rem] 2xl:text-[18rem] font-bold text-tedx-red leading-none tracking-[0em]">
-              TED
-            </span>
-            <sup className="font-heading text-[1.5rem] sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold text-tedx-red relative -top-0.5 sm:-top-1 md:-top-2 lg:-top-2 xl:-top-3 2xl:-top-4 tracking-[0em]">
-              x
-            </sup>
-          </div>
-          <motion.h1
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
-            className="font-heading text-[1.75rem] sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold text-white leading-none tracking-[0.05em] text-center"
-          >
-            KPRCAS
-          </motion.h1>
+          <img 
+            src="/logo.png" 
+            alt="TEDx KPRCAS" 
+            className="h-24 sm:h-32 md:h-48 lg:h-64 xl:h-80 2xl:h-96 w-auto object-contain"
+          />
         </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -131,8 +120,9 @@ function HeroSection() {
           transition={{ delay: 0.8, duration: 0.6 }}
           className="border border-tedx-red/40 rounded-full px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 mb-4 sm:mb-6"
         >
-          <span className="text-tedx-red text-[11px] sm:text-xs md:text-sm lg:text-base tracking-[0.05em] uppercase leading-relaxed font-medium">
-            x = Independently organised TED event
+          <span className="text-sm sm:text-base md:text-lg lg:text-xl tracking-[0.05em] uppercase leading-relaxed">
+            <span className="text-tedx-red font-bold">x</span>
+            <span className="text-white font-normal"> = Independently organised TED event</span>
           </span>
         </motion.div>
       </div>
