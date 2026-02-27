@@ -13,6 +13,7 @@ import CursorParticles from "@/components/CursorParticles";
 import ScrollReveal from "@/components/ScrollReveal";
 import GallerySection from "@/components/GallerySection";
 import SponsorsSection from "@/components/SponsorsSection";
+import ThemeSection from "@/components/ThemeSection";
 
 const Index = () => {
   const [loading, setLoading] = useState(true);
@@ -33,6 +34,9 @@ const Index = () => {
       <HeroSection />
       <ScrollReveal direction="up" delay={0.1}>
         <CountdownSection />
+      </ScrollReveal>
+      <ScrollReveal direction="up" delay={0.1}>
+        <ThemeSection />
       </ScrollReveal>
       <ScrollReveal direction="up">
         <AboutSection />
