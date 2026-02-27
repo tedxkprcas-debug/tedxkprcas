@@ -8,7 +8,6 @@ const ContactSection = () => {
 
   // Use database email if available, otherwise show default
   const email = contactData?.email || "tedxkprcas@gmail.com";
-  const phone = contactData?.phone || "+91-XXXX-XXXX-XX";
 
   return (
     <section id="contact" className="py-10 sm:py-14 md:py-20 lg:py-24 bg-secondary/30 relative overflow-hidden">
@@ -73,13 +72,6 @@ const ContactSection = () => {
                     whileHover={{ scale: 1.05 }}
                   >
                     {email}
-                  </motion.a>
-                  <motion.a
-                    href={`tel:${phone}`}
-                    className="text-tedx-red font-heading text-sm sm:text-base md:text-lg hover:underline block"
-                    whileHover={{ scale: 1.05 }}
-                  >
-                    {phone}
                   </motion.a>
                 </>
               )}
