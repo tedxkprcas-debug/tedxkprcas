@@ -3,8 +3,10 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import AnimatedBackground from "./AnimatedBackground";
 import CountdownCounter from "./ui/counter-loader";
+import { useCurrentEvent, useContactInfo } from "@/hooks/use-database";
 
-const DEFAULT_TARGET = new Date("2025-12-31T00:00:00");
+const DEFAULT_TARGET = new Date("2026-04-10T09:00:00");
+const DEFAULT_REGISTRATION = "https://forms.gle/example";
 
 /** Reactive mobile / tablet detection */
 const useBreakpoint = () => {
@@ -27,14 +29,27 @@ const useBreakpoint = () => {
 
 const CountdownSection = () => {
   const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [registrationLink, setRegistrationLink] = useState("https://forms.gle/example");
+  const [registrationLink, setRegistrationLink] = useState(DEFAULT_REGISTRATION);
   const [targetDate, setTargetDate] = useState<Date>(DEFAULT_TARGET);
   const bp = useBreakpoint();
   const mobile = bp === "sm";
   const counterSize = bp === "sm" ? 7 : bp === "md" ? 12 : bp === "lg" ? 16 : 18;
 
-  // Load countdown date from localStorage (set by admin)
+  // Fetch event date and contact info from database
+  const { data: currentEvent } = useCurrentEvent();
+  const { data: contactInfo } = useContactInfo();
+
+  // Update target date when event data is fetched from database
   useEffect(() => {
+    if (currentEvent?.date) {
+      const dbDate = new Date(currentEvent.date);
+      if (!isNaN(dbDate.getTime())) {
+        setTargetDate(dbDate);
+        return;
+      }
+    }
+    
+    // Fallback to localStorage if no database event
     const saved = localStorage.getItem("tedx_event_countdown");
     if (saved) {
       const parsed = new Date(saved);
@@ -50,7 +65,26 @@ const CountdownSection = () => {
     };
     window.addEventListener("storage", onStorage);
     return () => window.removeEventListener("storage", onStorage);
-  }, []);
+  }, [currentEvent]);
+
+  // Update registration link from database or localStorage
+  useEffect(() => {
+    if (contactInfo?.registrationLink) {
+      setRegistrationLink(contactInfo.registrationLink);
+      return;
+    }
+
+    // Fallback to localStorage
+    const savedContact = localStorage.getItem("tedx_contact");
+    if (savedContact) {
+      try {
+        const contactData = JSON.parse(savedContact);
+        setRegistrationLink(contactData.registrationLink || DEFAULT_REGISTRATION);
+      } catch (e) {
+        console.error("Error parsing contact data:", e);
+      }
+    }
+  }, [contactInfo]);
 
   useEffect(() => {
     const update = () => {
@@ -66,18 +100,6 @@ const CountdownSection = () => {
     const id = setInterval(update, 1000);
     return () => clearInterval(id);
   }, [targetDate]);
-
-  useEffect(() => {
-    const savedContact = localStorage.getItem("tedx_contact");
-    if (savedContact) {
-      try {
-        const contactData = JSON.parse(savedContact);
-        setRegistrationLink(contactData.registrationLink || "https://forms.gle/example");
-      } catch (e) {
-        console.error("Error parsing contact data:", e);
-      }
-    }
-  }, []);
 
   const pad = (n: number) => String(n).padStart(2, "0");
 
