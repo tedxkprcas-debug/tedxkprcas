@@ -39,11 +39,11 @@ const TrainCar = () => (
   <div className="flex-shrink-0 relative mx-1 sm:mx-2">
     {/* Train car body */}
     <div className="bg-gradient-to-b from-[#1a2a4a] to-[#0f1829] border border-white/10 rounded-lg px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-5 shadow-lg">
-      <div className="flex items-center gap-1">
-        <span className="font-heading font-bold text-tedx-red text-base sm:text-lg md:text-xl">TED</span>
-        <sup className="font-heading font-bold text-tedx-red text-[10px] sm:text-xs -mt-2">x</sup>
-        <span className="font-heading font-bold text-white text-base sm:text-lg md:text-xl ml-1">KPRCAS</span>
-      </div>
+      <img 
+        src="/logo.png" 
+        alt="TEDx KPRCAS" 
+        className="h-6 sm:h-8 md:h-10 w-auto object-contain"
+      />
     </div>
     {/* Wheels */}
     <div className="absolute -bottom-3 left-3 flex gap-1">
