@@ -10,7 +10,7 @@ const stats = [
     color: "from-tedx-red/20 to-tedx-red/5",
   },
   {
-    number: "25+",
+    number: "7+",
     label: "Speakers",
     description: "Thought leaders sharing transformative stories",
     icon: Mic2,

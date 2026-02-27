@@ -42,13 +42,16 @@ const CountdownSection = () => {
   // Update target date when event data is fetched from database
   useEffect(() => {
     if (currentEvent?.date) {
+      console.log("📅 Event date from database:", currentEvent.date);
       const dbDate = new Date(currentEvent.date);
+      console.log("📅 Parsed date:", dbDate.toString());
       if (!isNaN(dbDate.getTime())) {
         setTargetDate(dbDate);
         return;
       }
     }
     
+    console.log("📅 Using default date:", DEFAULT_TARGET.toString());
     // Fallback to localStorage if no database event
     const saved = localStorage.getItem("tedx_event_countdown");
     if (saved) {
@@ -133,12 +136,12 @@ const CountdownSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
             whileHover={{ scale: 1.03, y: -5 }}
-            className="rounded-2xl overflow-hidden border border-white/10 aspect-[4/3] sm:aspect-[3/4] md:aspect-[4/5] bg-white flex items-center justify-center"
+            className="rounded-2xl overflow-hidden border border-white/10 aspect-[4/3] sm:aspect-[3/4] md:aspect-[4/5] bg-gradient-to-b from-gray-800/50 to-gray-900/50 backdrop-blur-sm"
           >
             <img
-              src="https://images.unsplash.com/photo-1597873618537-64a04bae4a27?w=400&h=500&fit=crop"
+              src="/bg/kprcas.jpg"
               alt="TEDx Theme"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
             />
           </motion.div>
 
