@@ -69,7 +69,7 @@ const ThemeSection = () => {
               className="absolute top-1/2 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent -z-10"
             />
 
-            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-black uppercase leading-tight">
+            <h2 className="font-body text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl 2xl:text-9xl uppercase leading-tight">
               <span className="text-white">The </span>
               <motion.span
                 className="relative inline-block"

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 const Footer = () => {
   return (
-    <footer className="border-t border-border py-6 sm:py-8 relative overflow-hidden safe-area-bottom">
+    <footer className="border-t border-border py-6 sm:py-8 relative overflow-hidden safe-area-bottom bg-black">
       <motion.div
         className="absolute inset-0 bg-gradient-to-t from-tedx-red/[0.03] to-transparent pointer-events-none"
       />
@@ -11,12 +11,12 @@ const Footer = () => {
           className="flex items-center justify-center gap-1 mb-1.5 sm:mb-2"
           whileHover={{ scale: 1.05 }}
         >
-          <span className="text-muted-foreground text-sm sm:text-base">©</span>
-          <span className="font-heading font-bold text-tedx-red text-sm sm:text-base tracking-[0em]">TED</span>
-          <sup className="font-heading font-bold text-tedx-red text-[10px] sm:text-xs tracking-[0em]">x</sup>
-          <span className="font-heading font-bold text-foreground ml-1 text-sm sm:text-base tracking-[0em]">KPRCAS</span>
+          <span className="text-white text-sm sm:text-base">©</span>
+          <span className="font-heading text-white text-sm sm:text-base tracking-[0em]">TED</span>
+          <sup className="font-heading text-white text-[10px] sm:text-xs tracking-[0em]">x</sup>
+          <span className="font-heading text-white ml-1 text-sm sm:text-base tracking-[0em]">KPRCAS</span>
         </motion.div>
-        <p className="text-muted-foreground text-xs sm:text-sm">
+        <p className="text-white text-xs sm:text-sm">
           This independent TED<sup>x</sup> event is operated under license from TED.
         </p>
       </div>
