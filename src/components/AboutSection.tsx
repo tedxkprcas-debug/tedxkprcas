@@ -284,7 +284,7 @@ const AboutSection = () => {
             transition={{ duration: 0.6 }}
           >
             <motion.h2
-              className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-black text-foreground uppercase mb-3 sm:mb-4 md:mb-6 lg:mb-8"
+              className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-foreground uppercase mb-3 sm:mb-4 md:mb-6 lg:mb-8"
               whileInView={{ opacity: [0, 1], y: [30, 0] }}
               viewport={{ once: true }}
             >
@@ -294,7 +294,7 @@ const AboutSection = () => {
               <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
                 <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <p className="text-red-500 font-medium text-sm">Error loading about information</p>
+                  <p className="text-red-500 text-sm">Error loading about information</p>
                   <p className="text-muted-foreground text-xs mt-1">{error?.message || "Unable to load content at this time."}</p>
                 </div>
               </div>

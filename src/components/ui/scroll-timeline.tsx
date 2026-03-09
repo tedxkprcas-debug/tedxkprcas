@@ -225,7 +225,7 @@ export const ScrollTimeline = ({
       )}
     >
       <div className="text-center py-16 px-4">
-        <h2 className="text-3xl md:text-5xl font-bold mb-4">{title}</h2>
+        <h2 className="text-3xl md:text-5xl mb-4">{title}</h2>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           {subtitle}
         </p>
@@ -381,7 +381,7 @@ export const ScrollTimeline = ({
                             )}
                             <span
                               className={cn(
-                                "text-sm font-bold",
+                                "text-sm",
                                 event.color
                                   ? `text-${event.color}`
                                   : "text-primary"
@@ -391,15 +391,15 @@ export const ScrollTimeline = ({
                             </span>
                           </div>
                         ) : (
-                          <p className="text-lg font-bold text-primary mb-2">
+                          <p className="text-lg text-primary mb-2">
                             {event.year}
                           </p>
                         )}
-                        <h3 className="text-xl font-bold mb-1">
+                        <h3 className="text-xl mb-1">
                           {event.title}
                         </h3>
                         {event.subtitle && (
-                          <p className="text-muted-foreground font-medium mb-2">
+                          <p className="text-muted-foreground mb-2">
                             {event.subtitle}
                           </p>
                         )}

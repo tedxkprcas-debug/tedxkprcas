@@ -33,10 +33,10 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <ScrollReveal direction="up" delay={0.1}>
-        <CountdownSection />
+        <ThemeSection />
       </ScrollReveal>
       <ScrollReveal direction="up" delay={0.1}>
-        <ThemeSection />
+        <CountdownSection />
       </ScrollReveal>
       <ScrollReveal direction="up">
         <AboutSection />

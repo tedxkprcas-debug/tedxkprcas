@@ -17,7 +17,7 @@ const SpeakersSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black uppercase mb-3 sm:mb-4"
+          className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-8xl uppercase mb-3 sm:mb-4"
         >
           Our <span className="text-tedx-red">Speakers</span>
         </motion.h2>
@@ -40,7 +40,7 @@ const SpeakersSection = () => {
           >
             <div className="flex items-center justify-center gap-3 mb-4">
               <AlertCircle className="w-6 h-6 text-tedx-red" />
-              <p className="text-tedx-red text-lg font-medium">Error loading speakers</p>
+              <p className="text-tedx-red text-lg">Error loading speakers</p>
             </div>
             <p className="text-muted-foreground text-sm">
               {error?.message || "Unable to load speaker information at this time."}
@@ -96,7 +96,7 @@ const SpeakersSection = () => {
                     }}
                     className="w-16 h-16 sm:w-20 sm:h-20 bg-tedx-red/10 rounded-full flex items-center justify-center border border-tedx-red/30"
                   >
-                    <span className="text-3xl sm:text-4xl font-bold text-tedx-red">?</span>
+                    <span className="text-3xl sm:text-4xl text-tedx-red">?</span>
                   </motion.div>
                 ))}
               </div>
@@ -105,7 +105,7 @@ const SpeakersSection = () => {
               <motion.h3
                 animate={{ opacity: [0.7, 1, 0.7] }}
                 transition={{ duration: 2, repeat: Infinity }}
-                className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3"
+                className="text-2xl sm:text-3xl md:text-4xl text-white mb-3"
               >
                 To Be <span className="text-tedx-red">Revealed</span>
               </motion.h3>

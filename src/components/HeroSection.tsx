@@ -90,7 +90,7 @@ function HeroSection() {
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-black/75" />
         {/* Subtle red glow (no blur → no paint cost) */}
         <div className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[260px] sm:w-[400px] md:w-[500px] lg:w-[600px] h-[130px] sm:h-[200px] md:h-[250px] lg:h-[300px] bg-tedx-red/[0.06] rounded-full opacity-60" />
       </div>
@@ -121,7 +121,7 @@ function HeroSection() {
           className="border border-tedx-red/40 rounded-full px-4 sm:px-5 md:px-6 py-1.5 sm:py-2 mb-4 sm:mb-6"
         >
           <span className="text-sm sm:text-base md:text-lg lg:text-xl tracking-[0.05em] uppercase leading-relaxed">
-            <span className="text-tedx-red font-bold">x</span>
+            <span className="text-tedx-red">x</span>
             <span className="text-white font-normal"> = Independently organised TED event</span>
           </span>
         </motion.div>

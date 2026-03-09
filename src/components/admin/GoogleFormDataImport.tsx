@@ -133,7 +133,7 @@ Ahmed Hassan,ahmed@example.com,+91-9876543212,KPR College,2026-02-03,registered`
         <div className="flex gap-3">
           <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
           <div className="text-sm text-blue-900/80">
-            <p className="font-medium mb-2">How to import participant data:</p>
+            <p className="mb-2">How to import participant data:</p>
             <ol className="list-decimal list-inside space-y-1 text-xs">
               <li>Export your Google Form responses as CSV</li>
               <li>Download our template to check the format</li>
@@ -148,7 +148,7 @@ Ahmed Hassan,ahmed@example.com,+91-9876543212,KPR College,2026-02-03,registered`
       {/* Download Template Button */}
       <button
         onClick={downloadTemplate}
-        className="w-full bg-secondary hover:bg-secondary/80 text-foreground font-medium px-4 py-3 rounded-lg flex items-center justify-center gap-2 transition-colors"
+        className="w-full bg-secondary hover:bg-secondary/80 text-foreground px-4 py-3 rounded-lg flex items-center justify-center gap-2 transition-colors"
       >
         <Download className="w-4 h-4" />
         Download CSV Template
@@ -199,7 +199,7 @@ Ahmed Hassan,ahmed@example.com,+91-9876543212,KPR College,2026-02-03,registered`
       {/* Preview */}
       {preview.length > 0 && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <h3 className="font-medium mb-3">Preview ({preview.length} participants)</h3>
+          <h3 className="mb-3">Preview ({preview.length} participants)</h3>
           <div className="max-h-64 overflow-y-auto border border-border rounded-lg">
             <table className="w-full text-sm">
               <thead className="bg-secondary/50 sticky top-0">
@@ -232,13 +232,13 @@ Ahmed Hassan,ahmed@example.com,+91-9876543212,KPR College,2026-02-03,registered`
         <button
           onClick={handleImport}
           disabled={preview.length === 0 || importing}
-          className="flex-1 bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground font-medium py-2.5 rounded-lg transition-colors"
+          className="flex-1 bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed text-primary-foreground py-2.5 rounded-lg transition-colors"
         >
           {importing ? "Importing..." : `Import (${preview.length})`}
         </button>
         <button
           onClick={onClose}
-          className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground font-medium py-2.5 rounded-lg transition-colors"
+          className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground py-2.5 rounded-lg transition-colors"
         >
           Cancel
         </button>

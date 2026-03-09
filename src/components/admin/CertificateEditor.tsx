@@ -88,7 +88,7 @@ const CertificateEditor = ({ open, onClose, onSave, config: initialConfig }: Pro
           <div className="flex items-center justify-between p-6 border-b border-border sticky top-0 bg-card z-10 rounded-t-2xl">
             <div className="flex items-center gap-3">
               <Palette className="w-5 h-5 text-primary" />
-              <h2 className="font-heading text-xl font-bold text-foreground">Certificate Editor</h2>
+              <h2 className="font-heading text-xl text-foreground">Certificate Editor</h2>
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -122,28 +122,28 @@ const CertificateEditor = ({ open, onClose, onSave, config: initialConfig }: Pro
                       "w-full max-w-2xl aspect-[1.414/1] bg-white rounded-lg p-8 md:p-12 flex flex-col items-center justify-between text-center",
                       activeBorder.border
                     )}
-                    style={{ fontFamily: "Georgia, serif" }}
+                    style={{ fontFamily: "'Inter', sans-serif" }}
                   >
                     <div className="space-y-1">
                       <p className="text-xs uppercase tracking-[0.3em] text-gray-400">presents</p>
                     </div>
                     <div className="space-y-4 max-w-md">
                       <h3
-                        className="text-2xl md:text-3xl font-bold"
+                        className="text-2xl md:text-3xl"
                         style={{ color: activeColor.color }}
                       >
                         {config.title}
                       </h3>
                       <p className="text-sm text-gray-500">{config.subtitle}</p>
                       <div className="py-2">
-                        <p className="text-lg md:text-xl font-semibold text-gray-800">John Doe</p>
+                        <p className="text-lg md:text-xl text-gray-800">John Doe</p>
                       </div>
                       <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
                         {config.bodyText.replace("{name}", "John Doe")}
                       </p>
                     </div>
                     <div className="space-y-1 pt-4 border-t border-gray-200 w-40">
-                      <p className="text-sm font-semibold text-gray-700">{config.signerName}</p>
+                      <p className="text-sm text-gray-700">{config.signerName}</p>
                       <p className="text-xs text-gray-500">{config.signerTitle}</p>
                     </div>
                   </div>
@@ -159,7 +159,7 @@ const CertificateEditor = ({ open, onClose, onSave, config: initialConfig }: Pro
                 >
                   {/* Content */}
                   <div className="space-y-4">
-                    <h3 className="text-sm font-heading font-bold text-foreground flex items-center gap-2">
+                    <h3 className="text-sm font-heading text-foreground flex items-center gap-2">
                       <Type className="w-4 h-4 text-primary" /> Content
                     </h3>
                     <div className="grid gap-4 md:grid-cols-2">
@@ -213,7 +213,7 @@ const CertificateEditor = ({ open, onClose, onSave, config: initialConfig }: Pro
 
                   {/* Design */}
                   <div className="space-y-4">
-                    <h3 className="text-sm font-heading font-bold text-foreground flex items-center gap-2">
+                    <h3 className="text-sm font-heading text-foreground flex items-center gap-2">
                       <Image className="w-4 h-4 text-primary" /> Design
                     </h3>
 
@@ -228,7 +228,7 @@ const CertificateEditor = ({ open, onClose, onSave, config: initialConfig }: Pro
                             whileTap={{ scale: 0.97 }}
                             onClick={() => update("borderStyle", style.id)}
                             className={cn(
-                              "h-20 rounded-lg bg-white flex items-center justify-center text-xs font-medium text-gray-600 transition-all",
+                              "h-20 rounded-lg bg-white flex items-center justify-center text-xs text-gray-600 transition-all",
                               style.border,
                               config.borderStyle === style.id
                                 ? "ring-2 ring-primary ring-offset-2 ring-offset-card"

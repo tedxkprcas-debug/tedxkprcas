@@ -21,13 +21,19 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: [
-          "Helvetica Neue",
-          "Helvetica",
-          "Arial",
-          "sans-serif",
-        ],
+        heading: ["Inter", "sans-serif"],
         body: ["Inter", "sans-serif"],
+      },
+      fontWeight: {
+        thin: "400",
+        extralight: "400",
+        light: "400",
+        normal: "400",
+        medium: "400",
+        semibold: "400",
+        bold: "400",
+        extrabold: "400",
+        black: "400",
       },
       colors: {
         border: "hsl(var(--border))",

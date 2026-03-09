@@ -23,7 +23,7 @@ const Team = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-8 sm:mb-12 md:mb-16"
           >
-            <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black uppercase mb-3 sm:mb-4">
+            <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-8xl uppercase mb-3 sm:mb-4">
               Our <span className="text-tedx-red">Team</span>
             </h1>
             <p className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
@@ -40,7 +40,7 @@ const Team = () => {
             >
               <div className="flex items-center justify-center gap-3 mb-4">
                 <AlertCircle className="w-6 h-6 text-tedx-red" />
-                <p className="text-tedx-red text-lg font-medium">Error loading team</p>
+                <p className="text-tedx-red text-lg">Error loading team</p>
               </div>
               <p className="text-muted-foreground text-sm">
                 {error?.message || "Unable to load team members at this time."}

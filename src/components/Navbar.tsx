@@ -65,7 +65,7 @@ const Navbar = () => {
   const renderNavLink = (item: { label: string; href: string }, mobile = false) => {
     const className = mobile
       ? "block py-3.5 text-lg text-muted-foreground hover:text-foreground transition-colors active:text-foreground"
-      : "text-sm text-muted-foreground hover:text-foreground transition-colors font-medium lg:text-base";
+      : "text-sm text-muted-foreground hover:text-foreground transition-colors lg:text-base";
 
     if (item.href.startsWith("/")) {
       return (
@@ -106,7 +106,7 @@ const Navbar = () => {
             href={registrationLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-tedx-red text-foreground font-heading font-bold text-sm px-4 lg:px-5 py-2 rounded hover:bg-tedx-dark-red transition-colors whitespace-nowrap"
+            className="bg-tedx-red text-foreground font-heading text-sm px-4 lg:px-5 py-2 rounded hover:bg-tedx-dark-red transition-colors whitespace-nowrap"
           >
             Register
           </a>
@@ -141,7 +141,7 @@ const Navbar = () => {
             href={registrationLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="block mt-3 bg-tedx-red text-foreground font-heading font-bold text-base px-5 py-3.5 rounded text-center active:bg-tedx-dark-red"
+            className="block mt-3 bg-tedx-red text-foreground font-heading text-base px-5 py-3.5 rounded text-center active:bg-tedx-dark-red"
           >
             Register
           </a>

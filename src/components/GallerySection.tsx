@@ -44,7 +44,7 @@ const MarqueeRow = ({
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
               <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 group-active:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent p-2 sm:p-3">
-                <p className="text-white text-xs sm:text-sm font-medium truncate">
+                <p className="text-white text-xs sm:text-sm truncate">
                   {img.title}
                 </p>
               </div>
@@ -117,7 +117,7 @@ const GallerySection = () => {
           viewport={{ once: true }}
           className="text-center mb-6 sm:mb-8 md:mb-12"
         >
-          <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-black uppercase mb-2 sm:mb-4">
+          <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl uppercase mb-2 sm:mb-4">
             <span className="text-tedx-red">Gallery</span>
           </h2>
           <p className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">
@@ -137,7 +137,7 @@ const GallerySection = () => {
           >
             <div className="flex items-center justify-center gap-3 mb-4">
               <AlertCircle className="w-6 h-6 text-tedx-red" />
-              <p className="text-tedx-red text-lg font-medium">
+              <p className="text-tedx-red text-lg">
                 Error loading gallery
               </p>
             </div>
@@ -207,7 +207,7 @@ const GallerySection = () => {
               <motion.h3
                 animate={{ opacity: [0.7, 1, 0.7] }}
                 transition={{ duration: 2, repeat: Infinity }}
-                className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3"
+                className="text-2xl sm:text-3xl md:text-4xl text-white mb-3"
               >
                 To Be <span className="text-tedx-red">Revealed</span>
               </motion.h3>
@@ -327,7 +327,7 @@ const GallerySection = () => {
                 className="w-full max-h-[80vh] object-contain bg-black"
               />
               <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 to-transparent p-3 sm:p-4 md:p-6">
-                <p className="text-white text-base sm:text-lg md:text-xl font-bold">
+                <p className="text-white text-base sm:text-lg md:text-xl">
                   {selectedImage.title}
                 </p>
               </div>

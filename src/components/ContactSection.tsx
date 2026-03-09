@@ -22,8 +22,8 @@ const ContactSection = () => {
             whileHover={{ borderColor: "hsl(0 84% 50% / 0.5)" }}
             className="border border-border rounded-xl p-5 sm:p-6 md:p-8 text-center bg-card/50 backdrop-blur-sm transition-colors"
           >
-            <h3 className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-tedx-red uppercase mb-2">Connect</h3>
-            <p className="font-heading text-lg sm:text-xl font-bold text-foreground uppercase mb-4 sm:mb-6 md:mb-8">With Us On</p>
+            <h3 className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-4xl text-tedx-red uppercase mb-2">Connect</h3>
+            <p className="font-heading text-lg sm:text-xl text-foreground uppercase mb-4 sm:mb-6 md:mb-8">With Us On</p>
             <div className="flex justify-center gap-4 sm:gap-6">
               {[Instagram, Mail, Linkedin].map((Icon, i) => (
                 <motion.a
@@ -47,15 +47,15 @@ const ContactSection = () => {
             whileHover={{ borderColor: "hsl(0 84% 50% / 0.5)" }}
             className="bg-card/50 border border-border rounded-xl p-5 sm:p-6 md:p-8 text-center backdrop-blur-sm transition-colors"
           >
-            <h3 className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-tedx-red uppercase mb-2">Questions?</h3>
-            <p className="font-heading text-base sm:text-lg font-bold text-foreground uppercase mb-4 sm:mb-6">We're Here To Help!</p>
+            <h3 className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-4xl text-tedx-red uppercase mb-2">Questions?</h3>
+            <p className="font-heading text-base sm:text-lg text-foreground uppercase mb-4 sm:mb-6">We're Here To Help!</p>
             <div className="space-y-4 text-muted-foreground">
               <p className="font-heading text-base sm:text-lg uppercase">Contact Us</p>
               {isError ? (
                 <div className="flex items-start gap-2 p-3 bg-red-500/10 border border-red-500/30 rounded">
                   <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
                   <div className="flex-1 text-left">
-                    <p className="text-red-500 font-medium text-xs">Error loading contact info</p>
+                    <p className="text-red-500 text-xs">Error loading contact info</p>
                     <p className="text-muted-foreground text-xs mt-1">{error?.message || "Unable to load contact information."}</p>
                   </div>
                 </div>

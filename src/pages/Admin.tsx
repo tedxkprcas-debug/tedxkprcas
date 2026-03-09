@@ -621,7 +621,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
             ) : (
               <X className="w-5 h-5" />
             )}
-            <span className="font-medium">{notification.message}</span>
+            <span className="">{notification.message}</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -657,7 +657,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
               <motion.div animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 3, repeat: Infinity }}>
                 <Shield className="w-8 h-8 text-primary" />
               </motion.div>
-              <h1 className="font-heading text-4xl md:text-5xl font-black">
+              <h1 className="font-heading text-4xl md:text-5xl">
                 <span className="text-primary">TED</span>
                 <sup className="text-primary text-2xl">x</sup>{" "}
                 <span className="text-foreground">Admin CMS</span>
@@ -668,7 +668,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onLogout}
-                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors"
+                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
               >
                 Logout
               </motion.button>
@@ -700,7 +700,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                 key={item.id}
                 onClick={() => setTab(item.id as typeof tab)}
                 className={cn(
-                  "px-6 py-2.5 rounded-lg font-medium text-sm whitespace-nowrap transition-all flex items-center gap-2",
+                  "px-6 py-2.5 rounded-lg text-sm whitespace-nowrap transition-all flex items-center gap-2",
                   tab === item.id
                     ? "bg-primary text-primary-foreground shadow-lg"
                     : "bg-card border border-border hover:border-primary/50 hover:bg-card/80"
@@ -720,7 +720,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
               {/* Filters */}
               <motion.div className="border border-border rounded-2xl p-6 mb-6 bg-card/60 backdrop-blur-sm">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="font-heading text-lg font-bold flex items-center gap-2">
+                  <h2 className="font-heading text-lg flex items-center gap-2">
                     <Filter className="w-4 h-4 text-primary" /> Filters
                   </h2>
                   {hasActiveFilters && (
@@ -786,7 +786,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
               <div className="flex justify-between items-center mb-6 gap-4 flex-wrap">
                 <div className="text-sm text-muted-foreground">
                   {filtered.length} participant{filtered.length !== 1 ? "s" : ""} found
-                  {selected.size > 0 && <span className="text-primary font-medium ml-2">· {selected.size} selected</span>}
+                  {selected.size > 0 && <span className="text-primary ml-2">· {selected.size} selected</span>}
                 </div>
 
                 <div className="flex gap-3 flex-wrap">
@@ -794,7 +794,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                     onClick={() => setShowGoogleFormImport(true)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="bg-purple-600 hover:bg-purple-700 text-white font-medium px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm transition-colors"
+                    className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm transition-colors"
                   >
                     <Upload className="w-4 h-4" />
                     Import Google Form
@@ -804,7 +804,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                     onClick={() => setShowCertificatePreview(true)}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="bg-amber-600 hover:bg-amber-700 text-white font-medium px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm transition-colors"
+                    className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm transition-colors"
                   >
                     <Eye className="w-4 h-4" />
                     Preview Certificate
@@ -814,7 +814,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                     onClick={addParticipant}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm transition-colors"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm transition-colors"
                   >
                     <Plus className="w-4 h-4" />
                     Add Participant
@@ -825,7 +825,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                     disabled={sending || selected.size === 0}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Send className="w-4 h-4" />
                     Send Certs ({selected.size})
@@ -847,11 +847,11 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                             className="rounded"
                           />
                         </th>
-                        <th className="px-4 py-3 text-left font-medium">Name</th>
-                        <th className="px-4 py-3 text-left font-medium">Email</th>
-                        <th className="px-4 py-3 text-left font-medium">Date</th>
-                        <th className="px-4 py-3 text-left font-medium">Status</th>
-                        <th className="px-4 py-3 text-center font-medium">Actions</th>
+                        <th className="px-4 py-3 text-left">Name</th>
+                        <th className="px-4 py-3 text-left">Email</th>
+                        <th className="px-4 py-3 text-left">Date</th>
+                        <th className="px-4 py-3 text-left">Status</th>
+                        <th className="px-4 py-3 text-center">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
@@ -876,7 +876,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                           <td className="px-4 py-3 text-muted-foreground">{format(new Date(p.date), "MMM dd")}</td>
                           <td className="px-4 py-3">
                             <span className={cn(
-                              "px-2.5 py-1 rounded-full text-xs font-medium",
+                              "px-2.5 py-1 rounded-full text-xs",
                               p.certSent ? "bg-green-500/20 text-green-700" : "bg-yellow-500/20 text-yellow-700"
                             )}>
                               {p.certSent ? "Sent" : "Pending"}
@@ -912,7 +912,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                   </DialogHeader>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2">Name</label>
+                      <label className="block text-sm mb-2">Name</label>
                       <input
                         type="text"
                         value={formData.name}
@@ -922,7 +922,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Email</label>
+                      <label className="block text-sm mb-2">Email</label>
                       <input
                         type="email"
                         value={formData.email}
@@ -934,13 +934,13 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                     <div className="flex gap-3 pt-4">
                       <button
                         onClick={saveParticipant}
-                        className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2 rounded-lg transition-colors"
+                        className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground py-2 rounded-lg transition-colors"
                       >
                         Save
                       </button>
                       <button
                         onClick={() => setShowParticipantForm(false)}
-                        className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground font-medium py-2 rounded-lg transition-colors"
+                        className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground py-2 rounded-lg transition-colors"
                       >
                         Cancel
                       </button>
@@ -958,7 +958,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                   onClick={addSpeaker}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm"
                   disabled={isCreating}
                 >
                   <Plus className="w-4 h-4" />
@@ -981,7 +981,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                   <p className="text-muted-foreground mb-4">No speakers added yet.</p>
                   <button
                     onClick={addSpeaker}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-4 py-2.5 rounded-lg inline-flex items-center gap-2 text-sm"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2.5 rounded-lg inline-flex items-center gap-2 text-sm"
                   >
                     <Plus className="w-4 h-4" />
                     Add First Speaker
@@ -1003,15 +1003,15 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <span className="text-4xl font-bold text-primary/30">{speaker.name.charAt(0)}</span>
+                          <span className="text-4xl text-primary/30">{speaker.name.charAt(0)}</span>
                         )}
                       </div>
-                      <h3 className="font-heading text-lg font-bold mb-1">{speaker.name}</h3>
+                      <h3 className="font-heading text-lg mb-1">{speaker.name}</h3>
                       <p className="text-sm text-primary mb-4">{speaker.role}</p>
                       <div className="flex gap-2">
                         <button
                           onClick={() => editSpeaker(speaker)}
-                          className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 font-medium py-2 rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
+                          className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 py-2 rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
                           disabled={isUpdating}
                         >
                           <Edit2 className="w-4 h-4" />
@@ -1019,7 +1019,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                         </button>
                         <button
                           onClick={() => handleDeleteSpeaker(speaker.id)}
-                          className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-600 font-medium py-2 rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
+                          className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-600 py-2 rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
                           disabled={isDeleting}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -1052,7 +1052,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
             <motion.div key="certificates" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
               <motion.div className="border border-border rounded-2xl p-8 bg-card/60 backdrop-blur-sm">
                 <div className="flex justify-between items-center mb-8">
-                  <h2 className="font-heading text-2xl font-bold flex items-center gap-2">
+                  <h2 className="font-heading text-2xl flex items-center gap-2">
                     <Palette className="w-6 h-6 text-primary" />
                     Certificate Management
                   </h2>
@@ -1062,11 +1062,11 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                   {/* Certificate Design Options */}
                   <div className="space-y-6">
                     <div className="border border-border rounded-xl p-6 bg-secondary/30">
-                      <h3 className="font-heading text-lg font-bold mb-4">Design Certificate</h3>
+                      <h3 className="font-heading text-lg mb-4">Design Certificate</h3>
 
                       <div className="space-y-4">
                         <div>
-                          <label className="block text-sm font-medium mb-2">Certificate Title</label>
+                          <label className="block text-sm mb-2">Certificate Title</label>
                           <input
                             type="text"
                             value={certificateTitle}
@@ -1077,7 +1077,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">Certificate Text</label>
+                          <label className="block text-sm mb-2">Certificate Text</label>
                           <textarea
                             value={certificateText}
                             onChange={(e) => setCertificateText(e.target.value)}
@@ -1087,7 +1087,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                         </div>
 
                         <div>
-                          <label className="block text-sm font-medium mb-2">Background Color</label>
+                          <label className="block text-sm mb-2">Background Color</label>
                           <select
                             value={certificateBgColor}
                             onChange={(e) => setCertificateBgColor(e.target.value)}
@@ -1104,7 +1104,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
 
                         <button
                           onClick={() => setShowCertificateDesigner(!showCertificateDesigner)}
-                          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors"
                         >
                           <Eye className="w-4 h-4" />
                           {showCertificateDesigner ? "Hide Preview" : "Preview Design"}
@@ -1114,11 +1114,11 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
 
                     {/* Quick Links */}
                     <div className="border border-border rounded-xl p-6 bg-secondary/30">
-                      <h3 className="font-heading text-lg font-bold mb-4">Quick Actions</h3>
+                      <h3 className="font-heading text-lg mb-4">Quick Actions</h3>
                       <div className="space-y-3">
                         <button
                           onClick={() => setShowCertificatePreview(true)}
-                          className="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm"
+                          className="w-full bg-amber-600 hover:bg-amber-700 text-white py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm"
                         >
                           <Eye className="w-4 h-4" />
                           Preview with Participant Name
@@ -1134,7 +1134,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                             a.download = 'certificate_design.csv';
                             a.click();
                           }}
-                          className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm"
+                          className="w-full bg-green-600 hover:bg-green-700 text-white py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm"
                         >
                           <Upload className="w-4 h-4" />
                           Export Design
@@ -1146,7 +1146,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                             setCertificateText("In recognition of your enthusiasm, engagement, and commitment to spreading ideas worth sharing.");
                             setCertificateBgColor("from-amber-50 to-yellow-50");
                           }}
-                          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm"
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm"
                         >
                           <CheckCircle className="w-4 h-4" />
                           Reset to Default
@@ -1166,17 +1166,17 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                         <div className={`bg-gradient-to-br ${certificateBgColor} p-12 rounded-lg shadow-xl border-4 border-double border-amber-900/30`}>
                           <div className="text-center">
                             <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/70 rounded-full flex items-center justify-center shadow-lg mx-auto mb-6">
-                              <span className="text-2xl font-bold text-white">✓</span>
+                              <span className="text-2xl text-white">✓</span>
                             </div>
 
-                            <h1 className="text-3xl font-bold text-amber-900 mb-2 font-serif">
+                            <h1 className="text-3xl text-amber-900 mb-2">
                               {certificateTitle}
                             </h1>
                             <div className="w-20 h-1 bg-gradient-to-r from-primary via-primary to-transparent mx-auto mb-6" />
 
                             <p className="text-amber-900/80 text-sm mb-4">This certificate is proudly presented to</p>
 
-                            <p className="text-3xl font-bold text-primary mb-4 font-serif underline">
+                            <p className="text-3xl text-primary mb-4 underline">
                               Sample Participant
                             </p>
 
@@ -1185,7 +1185,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                             </p>
 
                             <div className="mt-8 pt-6 border-t border-amber-900/20">
-                              <p className="font-semibold text-amber-900 text-sm">Dr. Event Organizer</p>
+                              <p className="text-amber-900 text-sm">Dr. Event Organizer</p>
                               <p className="text-xs text-amber-900/60">Event Organizer</p>
                             </div>
                           </div>
@@ -1203,7 +1203,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
 
                     {/* Info Box */}
                     <div className="border border-border rounded-xl p-6 bg-blue-500/10">
-                      <h4 className="font-medium text-blue-600 mb-2 flex items-center gap-2">
+                      <h4 className="text-blue-600 mb-2 flex items-center gap-2">
                         <CheckCircle className="w-4 h-4" />
                         Certificate Info
                       </h4>
@@ -1225,14 +1225,14 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
             <motion.div key="about" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
               <motion.div className="border border-border rounded-2xl p-8 bg-card/60 backdrop-blur-sm">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="font-heading text-2xl font-bold">About Section</h2>
+                  <h2 className="font-heading text-2xl">About Section</h2>
                   {!editingAbout && (
                     <button
                       onClick={() => {
                         setEditingAbout(true);
                         setAboutFormData(about);
                       }}
-                      className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 font-medium px-4 py-2 rounded-lg flex items-center gap-2"
+                      className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 px-4 py-2 rounded-lg flex items-center gap-2"
                     >
                       <Edit2 className="w-4 h-4" />
                       Edit
@@ -1243,7 +1243,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                 {editingAbout ? (
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2">Title</label>
+                      <label className="block text-sm mb-2">Title</label>
                       <input
                         type="text"
                         value={aboutFormData.title}
@@ -1252,7 +1252,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Description</label>
+                      <label className="block text-sm mb-2">Description</label>
                       <textarea
                         value={aboutFormData.description}
                         onChange={(e) => setAboutFormData({ ...aboutFormData, description: e.target.value })}
@@ -1260,7 +1260,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">Content</label>
+                      <label className="block text-sm mb-2">Content</label>
                       <textarea
                         value={aboutFormData.content}
                         onChange={(e) => setAboutFormData({ ...aboutFormData, content: e.target.value })}
@@ -1277,13 +1277,13 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                           });
                           setEditingAbout(false);
                         }}
-                        className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 font-medium py-2 rounded-lg"
+                        className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 py-2 rounded-lg"
                       >
                         Save
                       </button>
                       <button
                         onClick={() => setEditingAbout(false)}
-                        className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground font-medium py-2 rounded-lg"
+                        className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground py-2 rounded-lg"
                       >
                         Cancel
                       </button>
@@ -1292,15 +1292,15 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                 ) : (
                   <div className="space-y-4">
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-1">Title</h3>
-                      <p className="text-lg font-semibold">{about.title}</p>
+                      <h3 className="text-sm text-muted-foreground mb-1">Title</h3>
+                      <p className="text-lg">{about.title}</p>
                     </div>
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-1">Description</h3>
+                      <h3 className="text-sm text-muted-foreground mb-1">Description</h3>
                       <p className="text-foreground">{about.description}</p>
                     </div>
                     <div>
-                      <h3 className="text-sm font-medium text-muted-foreground mb-1">Content</h3>
+                      <h3 className="text-sm text-muted-foreground mb-1">Content</h3>
                       <p className="text-foreground whitespace-pre-wrap">{about.content}</p>
                     </div>
                   </div>
@@ -1313,14 +1313,14 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
             <motion.div key="contact" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
               <motion.div className="border border-border rounded-2xl p-8 bg-card/60 backdrop-blur-sm">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="font-heading text-2xl font-bold">Contact Information</h2>
+                  <h2 className="font-heading text-2xl">Contact Information</h2>
                   {!editingContact && (
                     <button
                       onClick={() => {
                         setEditingContact(true);
                         setContactFormData(contact);
                       }}
-                      className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 font-medium px-4 py-2 rounded-lg flex items-center gap-2"
+                      className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 px-4 py-2 rounded-lg flex items-center gap-2"
                     >
                       <Edit2 className="w-4 h-4" />
                       Edit
@@ -1331,7 +1331,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                 {editingContact ? (
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                      <label className="block text-sm mb-2 flex items-center gap-2">
                         <Mail className="w-4 h-4" />
                         Email
                       </label>
@@ -1343,7 +1343,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                      <label className="block text-sm mb-2 flex items-center gap-2">
                         <Phone className="w-4 h-4" />
                         Phone
                       </label>
@@ -1355,7 +1355,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                      <label className="block text-sm mb-2 flex items-center gap-2">
                         <MapPin className="w-4 h-4" />
                         Address
                       </label>
@@ -1366,7 +1366,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                      <label className="block text-sm mb-2 flex items-center gap-2">
                         <LinkIcon className="w-4 h-4" />
                         Form Link
                       </label>
@@ -1378,7 +1378,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                      <label className="block text-sm mb-2 flex items-center gap-2">
                         <LinkIcon className="w-4 h-4" />
                         Registration Link (for users to register)
                       </label>
@@ -1394,7 +1394,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       </p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                      <label className="block text-sm mb-2 flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
                         Event Countdown Date & Time
                       </label>
@@ -1407,7 +1407,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       <div className="flex items-center gap-2 mt-2">
                         <button
                           onClick={() => saveCountdownDate(countdownDate)}
-                          className="bg-tedx-red/20 hover:bg-tedx-red/30 text-tedx-red font-medium px-4 py-1.5 rounded-lg text-sm"
+                          className="bg-tedx-red/20 hover:bg-tedx-red/30 text-tedx-red px-4 py-1.5 rounded-lg text-sm"
                         >
                           Set Countdown
                         </button>
@@ -1428,13 +1428,13 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                           });
                           setEditingContact(false);
                         }}
-                        className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 font-medium py-2 rounded-lg"
+                        className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 py-2 rounded-lg"
                       >
                         Save
                       </button>
                       <button
                         onClick={() => setEditingContact(false)}
-                        className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground font-medium py-2 rounded-lg"
+                        className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground py-2 rounded-lg"
                       >
                         Cancel
                       </button>
@@ -1446,28 +1446,28 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       <Mail className="w-5 h-5 text-primary" />
                       <div>
                         <p className="text-xs text-muted-foreground">Email</p>
-                        <p className="font-medium">{contact.email}</p>
+                        <p className="">{contact.email}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3 p-4 bg-secondary/30 rounded-lg">
                       <Phone className="w-5 h-5 text-primary" />
                       <div>
                         <p className="text-xs text-muted-foreground">Phone</p>
-                        <p className="font-medium">{contact.phone}</p>
+                        <p className="">{contact.phone}</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3 p-4 bg-secondary/30 rounded-lg">
                       <MapPin className="w-5 h-5 text-primary mt-0.5" />
                       <div>
                         <p className="text-xs text-muted-foreground">Address</p>
-                        <p className="font-medium">{contact.address}</p>
+                        <p className="">{contact.address}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3 p-4 bg-secondary/30 rounded-lg">
                       <LinkIcon className="w-5 h-5 text-primary" />
                       <div>
                         <p className="text-xs text-muted-foreground">Form Link</p>
-                        <a href={contact.formLink} target="_blank" rel="noopener noreferrer" className="font-medium text-blue-600 hover:underline">
+                        <a href={contact.formLink} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                           View Form
                         </a>
                       </div>
@@ -1476,7 +1476,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       <LinkIcon className="w-5 h-5 text-green-600" />
                       <div>
                         <p className="text-xs text-muted-foreground">Registration Link (Used on website)</p>
-                        <a href={contact.registrationLink} target="_blank" rel="noopener noreferrer" className="font-medium text-green-600 hover:underline break-all text-sm">
+                        <a href={contact.registrationLink} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:underline break-all text-sm">
                           {contact.registrationLink}
                         </a>
                       </div>
@@ -1485,7 +1485,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       <Calendar className="w-5 h-5 text-tedx-red" />
                       <div>
                         <p className="text-xs text-muted-foreground">Event Countdown Date</p>
-                        <p className="font-medium text-tedx-red">
+                        <p className="text-tedx-red">
                           {countdownDate ? new Date(countdownDate).toLocaleString("en-IN", { dateStyle: "full", timeStyle: "short" }) : "Not set — using default"}
                         </p>
                       </div>
@@ -1501,10 +1501,10 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
             <motion.div key="gallery" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
               <motion.div className="border border-border rounded-2xl p-8 bg-card/60 backdrop-blur-sm">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="font-heading text-2xl font-bold">Gallery Management</h2>
+                  <h2 className="font-heading text-2xl">Gallery Management</h2>
                   <button
                     onClick={addGalleryItem}
-                    className="bg-primary/20 hover:bg-primary/30 text-primary font-medium px-4 py-2 rounded-lg flex items-center gap-2"
+                    className="bg-primary/20 hover:bg-primary/30 text-primary px-4 py-2 rounded-lg flex items-center gap-2"
                   >
                     <Plus className="w-4 h-4" />
                     Add Image
@@ -1515,7 +1515,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                 <div className="mb-6 p-4 border border-border rounded-xl bg-secondary/30">
                   <div className="flex items-center gap-2 mb-3">
                     <Video className="w-5 h-5 text-primary" />
-                    <h3 className="font-medium text-sm">Center Video (plays over gallery rows)</h3>
+                    <h3 className="text-sm">Center Video (plays over gallery rows)</h3>
                   </div>
                   <div className="flex gap-2">
                     <input
@@ -1527,14 +1527,14 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                     />
                     <button
                       onClick={() => saveGalleryVideoUrl(galleryVideoUrl)}
-                      className="bg-green-500/20 hover:bg-green-500/30 text-green-600 font-medium px-4 py-2 rounded-lg text-sm"
+                      className="bg-green-500/20 hover:bg-green-500/30 text-green-600 px-4 py-2 rounded-lg text-sm"
                     >
                       Save
                     </button>
                     {galleryVideoUrl && (
                       <button
                         onClick={() => { setGalleryVideoUrl(""); localStorage.removeItem("tedx_gallery_video"); showNotification("success", "Video removed!"); }}
-                        className="bg-red-500/20 hover:bg-red-500/30 text-red-600 font-medium px-3 py-2 rounded-lg text-sm"
+                        className="bg-red-500/20 hover:bg-red-500/30 text-red-600 px-3 py-2 rounded-lg text-sm"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -1553,7 +1553,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                     <div className="space-y-4 pt-4">
                       {/* Image Upload */}
                       <div>
-                        <label className="block text-sm font-medium mb-2">Image *</label>
+                        <label className="block text-sm mb-2">Image *</label>
                         {galleryFormData.image ? (
                           <div className="relative">
                             <img
@@ -1591,7 +1591,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       </div>
                       {/* Title */}
                       <div>
-                        <label className="block text-sm font-medium mb-2">Name *</label>
+                        <label className="block text-sm mb-2">Name *</label>
                         <input
                           type="text"
                           value={galleryFormData.title}
@@ -1602,7 +1602,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       </div>
                       {/* Description */}
                       <div>
-                        <label className="block text-sm font-medium mb-2">Description</label>
+                        <label className="block text-sm mb-2">Description</label>
                         <textarea
                           value={galleryFormData.description}
                           onChange={(e) => setGalleryFormData((prev) => ({ ...prev, description: e.target.value }))}
@@ -1614,13 +1614,13 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       <div className="flex gap-3 pt-2">
                         <button
                           onClick={saveGalleryItem}
-                          className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 font-medium py-2.5 rounded-lg"
+                          className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 py-2.5 rounded-lg"
                         >
                           {editingGalleryItem ? "Update" : "Add"}
                         </button>
                         <button
                           onClick={() => setShowGalleryForm(false)}
-                          className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground font-medium py-2.5 rounded-lg"
+                          className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground py-2.5 rounded-lg"
                         >
                           Cancel
                         </button>
@@ -1660,21 +1660,21 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                           </div>
                         )}
                         <div className="p-4">
-                          <h3 className="font-bold text-sm truncate">{item.title}</h3>
+                          <h3 className="text-sm truncate">{item.title}</h3>
                           {item.description && (
                             <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{item.description}</p>
                           )}
                           <div className="flex gap-2 mt-3">
                             <button
                               onClick={() => editGalleryItem(item)}
-                              className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 text-xs font-medium py-1.5 rounded-lg flex items-center justify-center gap-1"
+                              className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 text-xs py-1.5 rounded-lg flex items-center justify-center gap-1"
                             >
                               <Edit2 className="w-3 h-3" />
                               Edit
                             </button>
                             <button
                               onClick={() => handleDeleteGalleryItem(item.id)}
-                              className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-600 text-xs font-medium py-1.5 rounded-lg flex items-center justify-center gap-1"
+                              className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-600 text-xs py-1.5 rounded-lg flex items-center justify-center gap-1"
                             >
                               <Trash2 className="w-3 h-3" />
                               Delete
@@ -1693,10 +1693,10 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
             <motion.div key="team" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
               <motion.div className="border border-border rounded-2xl p-8 bg-card/60 backdrop-blur-sm">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="font-heading text-2xl font-bold">Team Management</h2>
+                  <h2 className="font-heading text-2xl">Team Management</h2>
                   <button
                     onClick={addTeamMember}
-                    className="bg-primary/20 hover:bg-primary/30 text-primary font-medium px-4 py-2 rounded-lg flex items-center gap-2"
+                    className="bg-primary/20 hover:bg-primary/30 text-primary px-4 py-2 rounded-lg flex items-center gap-2"
                   >
                     <Plus className="w-4 h-4" />
                     Add Member
@@ -1713,7 +1713,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                     <div className="space-y-4 pt-4">
                       {/* Photo Upload */}
                       <div>
-                        <label className="block text-sm font-medium mb-2">Photo</label>
+                        <label className="block text-sm mb-2">Photo</label>
                         {teamFormData.photo ? (
                           <div className="relative">
                             <img
@@ -1751,7 +1751,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       </div>
                       {/* Name */}
                       <div>
-                        <label className="block text-sm font-medium mb-2">Name *</label>
+                        <label className="block text-sm mb-2">Name *</label>
                         <input
                           type="text"
                           value={teamFormData.name}
@@ -1762,7 +1762,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       </div>
                       {/* Role */}
                       <div>
-                        <label className="block text-sm font-medium mb-2">Role *</label>
+                        <label className="block text-sm mb-2">Role *</label>
                         <input
                           type="text"
                           value={teamFormData.role}
@@ -1773,7 +1773,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       </div>
                       {/* Description */}
                       <div>
-                        <label className="block text-sm font-medium mb-2">Description</label>
+                        <label className="block text-sm mb-2">Description</label>
                         <textarea
                           value={teamFormData.description}
                           onChange={(e) => setTeamFormData((prev) => ({ ...prev, description: e.target.value }))}
@@ -1785,13 +1785,13 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       <div className="flex gap-3 pt-2">
                         <button
                           onClick={saveTeamMember}
-                          className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 font-medium py-2.5 rounded-lg"
+                          className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 py-2.5 rounded-lg"
                         >
                           {editingTeamMember ? "Update" : "Add"}
                         </button>
                         <button
                           onClick={() => setShowTeamForm(false)}
-                          className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground font-medium py-2.5 rounded-lg"
+                          className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground py-2.5 rounded-lg"
                         >
                           Cancel
                         </button>
@@ -1831,7 +1831,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                           </div>
                         )}
                         <div className="p-4">
-                          <h3 className="font-bold text-sm truncate">{member.name}</h3>
+                          <h3 className="text-sm truncate">{member.name}</h3>
                           <p className="text-xs text-primary mt-0.5">{member.role}</p>
                           {member.description && (
                             <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{member.description}</p>
@@ -1839,14 +1839,14 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                           <div className="flex gap-2 mt-3">
                             <button
                               onClick={() => editTeamMemberItem(member)}
-                              className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 text-xs font-medium py-1.5 rounded-lg flex items-center justify-center gap-1"
+                              className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 text-xs py-1.5 rounded-lg flex items-center justify-center gap-1"
                             >
                               <Edit2 className="w-3 h-3" />
                               Edit
                             </button>
                             <button
                               onClick={() => handleDeleteTeamMember(member.id)}
-                              className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-600 text-xs font-medium py-1.5 rounded-lg flex items-center justify-center gap-1"
+                              className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-600 text-xs py-1.5 rounded-lg flex items-center justify-center gap-1"
                             >
                               <Trash2 className="w-3 h-3" />
                               Delete
@@ -1866,10 +1866,10 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
             <motion.div key="sponsors" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
               <motion.div className="border border-border rounded-2xl p-8 bg-card/60 backdrop-blur-sm">
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="font-heading text-2xl font-bold">Sponsors Management</h2>
+                  <h2 className="font-heading text-2xl">Sponsors Management</h2>
                   <button
                     onClick={addSponsorItem}
-                    className="bg-primary/20 hover:bg-primary/30 text-primary font-medium px-4 py-2 rounded-lg flex items-center gap-2"
+                    className="bg-primary/20 hover:bg-primary/30 text-primary px-4 py-2 rounded-lg flex items-center gap-2"
                   >
                     <Plus className="w-4 h-4" />
                     Add Sponsor
@@ -1886,7 +1886,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                     <div className="space-y-4 pt-4">
                       {/* Logo Upload */}
                       <div>
-                        <label className="block text-sm font-medium mb-2">Logo</label>
+                        <label className="block text-sm mb-2">Logo</label>
                         {sponsorFormData.logo ? (
                           <div className="relative">
                             <img
@@ -1924,7 +1924,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       </div>
                       {/* Name */}
                       <div>
-                        <label className="block text-sm font-medium mb-2">Sponsor Name *</label>
+                        <label className="block text-sm mb-2">Sponsor Name *</label>
                         <input
                           type="text"
                           value={sponsorFormData.name}
@@ -1937,13 +1937,13 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       <div className="flex gap-3 pt-2">
                         <button
                           onClick={saveSponsorItem}
-                          className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 font-medium py-2.5 rounded-lg"
+                          className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 py-2.5 rounded-lg"
                         >
                           {editingSponsor ? "Update" : "Add"}
                         </button>
                         <button
                           onClick={() => setShowSponsorForm(false)}
-                          className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground font-medium py-2.5 rounded-lg"
+                          className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground py-2.5 rounded-lg"
                         >
                           Cancel
                         </button>
@@ -1983,18 +1983,18 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                           </div>
                         )}
                         <div className="p-4">
-                          <h3 className="font-bold text-sm truncate">{sponsor.name}</h3>
+                          <h3 className="text-sm truncate">{sponsor.name}</h3>
                           <div className="flex gap-2 mt-3">
                             <button
                               onClick={() => editSponsorItem(sponsor)}
-                              className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 text-xs font-medium py-1.5 rounded-lg flex items-center justify-center gap-1"
+                              className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 text-xs py-1.5 rounded-lg flex items-center justify-center gap-1"
                             >
                               <Edit2 className="w-3 h-3" />
                               Edit
                             </button>
                             <button
                               onClick={() => handleDeleteSponsorItem(sponsor.id)}
-                              className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-600 text-xs font-medium py-1.5 rounded-lg flex items-center justify-center gap-1"
+                              className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-600 text-xs py-1.5 rounded-lg flex items-center justify-center gap-1"
                             >
                               <Trash2 className="w-3 h-3" />
                               Delete
@@ -2020,7 +2020,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
             <div className="space-y-6">
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Preview Name</label>
+                  <label className="block text-sm mb-2">Preview Name</label>
                   <input
                     type="text"
                     value={previewParticipantName}
@@ -2031,7 +2031,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                 </div>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Event Name</label>
+                    <label className="block text-sm mb-2">Event Name</label>
                     <input
                       type="text"
                       value={eventName}
@@ -2040,7 +2040,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Event Date</label>
+                    <label className="block text-sm mb-2">Event Date</label>
                     <input
                       type="text"
                       value={eventDate}
@@ -2060,7 +2060,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
               </div>
               <button
                 onClick={() => setShowCertificatePreview(false)}
-                className="w-full bg-secondary hover:bg-secondary/80 text-foreground font-medium py-2.5 rounded-lg"
+                className="w-full bg-secondary hover:bg-secondary/80 text-foreground py-2.5 rounded-lg"
               >
                 Close Preview
               </button>
@@ -2092,7 +2092,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
               className="fixed bottom-8 right-8 bg-card border border-green-500/30 rounded-xl px-6 py-4 flex items-center gap-3 shadow-lg z-50"
             >
               <CheckCircle className="w-5 h-5 text-green-500" />
-              <span className="text-foreground font-medium">Certificates sent successfully!</span>
+              <span className="text-foreground">Certificates sent successfully!</span>
             </motion.div>
           )}
         </AnimatePresence>

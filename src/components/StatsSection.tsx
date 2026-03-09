@@ -46,7 +46,7 @@ const StatsSection = () => {
           <span className="text-tedx-red font-heading text-sm tracking-[0.3em] uppercase block mb-3">
             Quick Snapshot
           </span>
-          <h2 className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl font-black text-foreground mb-3 sm:mb-4">
+          <h2 className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl text-foreground mb-3 sm:mb-4">
             By The Numbers
           </h2>
           <div className="w-16 h-1 bg-tedx-red mx-auto rounded-full" />
@@ -81,14 +81,14 @@ const StatsSection = () => {
 
               {/* Number */}
               <motion.span
-                className="relative z-10 font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl font-black text-tedx-red block mb-1"
+                className="relative z-10 font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl text-tedx-red block mb-1"
                 whileHover={{ scale: 1.05 }}
               >
                 {stat.number}
               </motion.span>
 
               {/* Label */}
-              <span className="relative z-10 font-heading text-sm sm:text-base md:text-lg font-bold text-foreground block mb-1 sm:mb-2">
+              <span className="relative z-10 font-heading text-sm sm:text-base md:text-lg text-foreground block mb-1 sm:mb-2">
                 {stat.label}
               </span>
 

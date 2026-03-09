@@ -46,7 +46,7 @@ const SpeakerFormWithImage = ({ initialData, onSave, onCancel }: SpeakerFormProp
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium mb-2">Speaker Name</label>
+        <label className="block text-sm mb-2">Speaker Name</label>
         <input
           type="text"
           value={formData.name}
@@ -57,7 +57,7 @@ const SpeakerFormWithImage = ({ initialData, onSave, onCancel }: SpeakerFormProp
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-2">Role/Title</label>
+        <label className="block text-sm mb-2">Role/Title</label>
         <input
           type="text"
           value={formData.role}
@@ -68,7 +68,7 @@ const SpeakerFormWithImage = ({ initialData, onSave, onCancel }: SpeakerFormProp
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-2">Description/Bio</label>
+        <label className="block text-sm mb-2">Description/Bio</label>
         <textarea
           value={formData.bio}
           onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
@@ -79,7 +79,7 @@ const SpeakerFormWithImage = ({ initialData, onSave, onCancel }: SpeakerFormProp
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-3">Speaker Image</label>
+        <label className="block text-sm mb-3">Speaker Image</label>
 
         {preview ? (
           <motion.div
@@ -126,13 +126,13 @@ const SpeakerFormWithImage = ({ initialData, onSave, onCancel }: SpeakerFormProp
       <div className="flex gap-3 pt-4">
         <button
           onClick={handleSave}
-          className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2.5 rounded-lg transition-colors"
+          className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground py-2.5 rounded-lg transition-colors"
         >
           Save Speaker
         </button>
         <button
           onClick={onCancel}
-          className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground font-medium py-2.5 rounded-lg transition-colors"
+          className="flex-1 bg-secondary hover:bg-secondary/80 text-foreground py-2.5 rounded-lg transition-colors"
         >
           Cancel
         </button>

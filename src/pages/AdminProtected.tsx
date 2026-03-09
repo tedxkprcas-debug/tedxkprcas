@@ -57,7 +57,7 @@ const AdminProtected = () => {
           <div className="bg-gradient-to-r from-slate-800 to-purple-800 px-6 py-8 text-white">
             <div className="flex items-center justify-center gap-3 mb-2">
               <Lock size={28} />
-              <h1 className="text-2xl font-bold">Admin Access</h1>
+              <h1 className="text-2xl">Admin Access</h1>
             </div>
             <p className="text-center text-slate-300 text-sm">Enter your password to continue</p>
           </div>
@@ -75,7 +75,7 @@ const AdminProtected = () => {
             )}
 
             <div className="space-y-2">
-              <label htmlFor="password" className="block text-sm font-medium text-slate-700">
+              <label htmlFor="password" className="block text-sm text-slate-700">
                 Password
               </label>
               <div className="relative">
@@ -100,7 +100,7 @@ const AdminProtected = () => {
 
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-slate-800 to-purple-800 hover:from-slate-900 hover:to-purple-900 text-white font-semibold py-2 rounded-lg transition-all"
+              className="w-full bg-gradient-to-r from-slate-800 to-purple-800 hover:from-slate-900 hover:to-purple-900 text-white py-2 rounded-lg transition-all"
             >
               Login
             </Button>

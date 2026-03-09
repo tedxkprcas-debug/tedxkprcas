@@ -45,7 +45,7 @@ const MarqueeRow = ({
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
               <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-gradient-to-t from-black/80 to-transparent p-3">
-                <p className="text-white text-sm font-medium truncate">{img.title}</p>
+                <p className="text-white text-sm truncate">{img.title}</p>
               </div>
             </button>
           ))
@@ -110,7 +110,7 @@ const Gallery = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-12"
           >
-            <h1 className="font-heading text-5xl md:text-7xl font-black uppercase mb-4">
+            <h1 className="font-heading text-5xl md:text-7xl uppercase mb-4">
               <span className="text-tedx-red">Gallery</span>
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -129,7 +129,7 @@ const Gallery = () => {
             >
               <div className="flex items-center justify-center gap-3 mb-4">
                 <AlertCircle className="w-6 h-6 text-tedx-red" />
-                <p className="text-tedx-red text-lg font-medium">Error loading gallery</p>
+                <p className="text-tedx-red text-lg">Error loading gallery</p>
               </div>
               <p className="text-muted-foreground text-sm">
                 {error?.message || "Unable to load gallery images at this time."}
@@ -240,7 +240,7 @@ const Gallery = () => {
                 className="w-full max-h-[80vh] object-contain bg-black"
               />
               <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 to-transparent p-6">
-                <p className="text-white text-xl font-bold">{selectedImage.title}</p>
+                <p className="text-white text-xl">{selectedImage.title}</p>
               </div>
               <button
                 onClick={() => setSelectedImage(null)}

@@ -39,12 +39,12 @@ const CertificateTemplate = ({
             {/* Logo/Badge */}
             <div className="flex justify-center mb-6">
               <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/70 rounded-full flex items-center justify-center shadow-lg">
-                <span className="text-2xl font-bold text-white">TED</span>
+                <span className="text-2xl text-white">TED</span>
               </div>
             </div>
 
             {/* Certificate Title */}
-            <h1 className="text-4xl font-bold text-amber-900 mb-2 font-serif">
+            <h1 className="text-4xl text-amber-900 mb-2">
               Certificate of Participation
             </h1>
             <div className="w-24 h-1 bg-gradient-to-r from-primary via-primary to-transparent mx-auto mb-4" />
@@ -61,7 +61,7 @@ const CertificateTemplate = ({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-5xl font-bold text-primary mb-8 font-serif underline decoration-amber-900/30 underline-offset-4"
+              className="text-5xl text-primary mb-8 underline decoration-amber-900/30 underline-offset-4"
             >
               {participantName}
             </motion.h2>
@@ -76,7 +76,7 @@ const CertificateTemplate = ({
               <p className="mb-4">
                 For actively participating in
               </p>
-              <p className="text-2xl font-semibold text-primary mb-4">
+              <p className="text-2xl text-primary mb-4">
                 {eventName}
               </p>
               <p className="text-sm text-amber-900/70 mb-4">
@@ -95,14 +95,14 @@ const CertificateTemplate = ({
               <div className="h-12 mb-2 flex items-end justify-center">
                 <div className="w-24 h-0.5 bg-amber-900/40" />
               </div>
-              <p className="font-semibold text-amber-900">{signerName}</p>
+              <p className="text-amber-900">{signerName}</p>
               <p className="text-xs text-amber-900/60">{signerTitle}</p>
             </div>
 
             {/* Seal/Badge */}
             <div className="flex justify-center items-end">
               <div className="w-20 h-20 rounded-full border-4 border-primary/30 flex items-center justify-center bg-gradient-to-br from-primary/5 to-transparent">
-                <span className="text-xs font-bold text-primary text-center px-2">
+                <span className="text-xs text-primary text-center px-2">
                   Official<br />Seal
                 </span>
               </div>
@@ -113,14 +113,14 @@ const CertificateTemplate = ({
               <div className="h-12 mb-2 flex items-end justify-center">
                 <div className="w-24 h-0.5 bg-amber-900/40" />
               </div>
-              <p className="font-semibold text-amber-900">{eventDate}</p>
+              <p className="text-amber-900">{eventDate}</p>
               <p className="text-xs text-amber-900/60">Date of Issue</p>
             </div>
           </div>
 
           {/* Certificate ID */}
           <div className="text-center mt-8 pt-6 border-t border-amber-900/10">
-            <p className="text-xs text-amber-900/50 font-mono">
+            <p className="text-xs text-amber-900/50">
               Certificate ID: {certificateId}
             </p>
           </div>
