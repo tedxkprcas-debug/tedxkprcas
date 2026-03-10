@@ -251,7 +251,7 @@ const SpeakerCard = ({
                 </motion.p>
                 <motion.p
                   layoutId={layout ? `title-${speaker.name}` : undefined}
-                  className="text-2xl sm:text-3xl md:text-5xl text-white lowercase"
+                  className="text-2xl sm:text-3xl md:text-5xl text-white"
                 >
                   {speaker.name}
                 </motion.p>
@@ -316,7 +316,7 @@ const SpeakerCard = ({
           {/* Speaker Name */}
           <motion.p
             layoutId={layout ? `title-${speaker.name}` : undefined}
-            className="text-white text-lg sm:text-xl md:text-2xl text-center mt-3 sm:mt-5 lowercase px-2 sm:px-3 relative z-10 line-clamp-2"
+            className="text-white text-lg sm:text-xl md:text-2xl text-center mt-3 sm:mt-5 px-2 sm:px-3 relative z-10 line-clamp-2"
           >
             {speaker.name}
           </motion.p>
@@ -324,7 +324,7 @@ const SpeakerCard = ({
           {/* Speaker Role */}
           <motion.p
             layoutId={layout ? `category-${speaker.name}` : undefined}
-            className="text-tedx-red text-sm sm:text-base md:text-lg text-center mt-1.5 sm:mt-2 md:mt-3 lowercase relative z-10 line-clamp-1 px-2"
+            className="text-tedx-red text-sm sm:text-base md:text-lg text-center mt-1.5 sm:mt-2 md:mt-3 relative z-10 line-clamp-1 px-2"
           >
             {speaker.role}
           </motion.p>
