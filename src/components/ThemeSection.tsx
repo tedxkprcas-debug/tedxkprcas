@@ -56,52 +56,84 @@ const ThemeSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="rounded-2xl bg-black border border-white/10 px-6 sm:px-10 md:px-16 py-14 sm:py-20 md:py-28 text-center mb-4 sm:mb-6 relative"
+          className="rounded-2xl bg-black border border-white/10 px-6 sm:px-10 md:px-16 py-14 sm:py-20 md:py-28 text-center mb-4 sm:mb-6 relative overflow-hidden"
         >
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-yellow-500/[0.03] rounded-full blur-3xl pointer-events-none" />
 
           {/* Main content */}
           <div
-            className="relative z-10 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12"
+            className="relative z-10 flex flex-col lg:flex-row items-center justify-end gap-8 lg:gap-12"
           >
 
-            {/* Golden Metallic Title */}
-            <motion.h2
-              initial={{ opacity: 0, scale: 0.85 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative whitespace-nowrap leading-none tracking-[0.08em]"
-              style={{
-                fontFamily: "'Georgia', 'Times New Roman', serif",
-                fontVariant: "small-caps",
-              }}
-            >
-              <span className="inline-flex items-baseline gap-[0.15em] sm:gap-[0.2em]">
-                {["The", "Golden", "Bird"].map((word) => (
-                  <span key={word} className="inline-flex">
-                    {word.split("").map((letter, li) => {
-                      const isFirst = li === 0;
-                      return (
-                        <span
-                          key={`${word}-${li}`}
-                          className={`inline-block ${isFirst ? "text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl" : "text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"}`}
-                          style={{
-                            background: "linear-gradient(180deg, #f5d782 0%, #e8c252 18%, #d4a830 35%, #c49a2a 50%, #b8862a 65%, #d4a830 80%, #f0d068 100%)",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                            backgroundClip: "text",
-                            filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.6)) drop-shadow(0 0 8px rgba(212,168,48,0.3))",
-                          }}
-                        >
-                          {letter}
-                        </span>
-                      );
-                    })}
-                  </span>
+            {/* Animated Golden Arrow Chevrons */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+              <svg className="w-full h-full" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                  <linearGradient id="gold1" x1="0" y1="0" x2="1" y2="0.5">
+                    <stop offset="0%" stopColor="#b8862a" />
+                    <stop offset="50%" stopColor="#f5d782" />
+                    <stop offset="100%" stopColor="#d4a830" />
+                  </linearGradient>
+                  <linearGradient id="gold2" x1="0" y1="0" x2="1" y2="0.3">
+                    <stop offset="0%" stopColor="#c49a2a" />
+                    <stop offset="50%" stopColor="#e8c252" />
+                    <stop offset="100%" stopColor="#b8862a" />
+                  </linearGradient>
+                  <linearGradient id="gold3" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#d4a830" />
+                    <stop offset="60%" stopColor="#f0d068" />
+                    <stop offset="100%" stopColor="#f5d782" />
+                  </linearGradient>
+                  <linearGradient id="gold4" x1="0" y1="0.5" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#8B6914" />
+                    <stop offset="50%" stopColor="#c49a2a" />
+                    <stop offset="100%" stopColor="#e8c252" />
+                  </linearGradient>
+                </defs>
+
+                {/* Large outer arrows - horizontal bars with chevron tips */}
+                {[
+                  { y: 70, h: 32, gold: "url(#gold1)", delay: "0s" },
+                  { y: 112, h: 24, gold: "url(#gold2)", delay: "0.15s" },
+                  { y: 146, h: 20, gold: "url(#gold4)", delay: "0.3s" },
+                  { y: 176, h: 24, gold: "url(#gold3)", delay: "0.15s" },
+                  { y: 210, h: 32, gold: "url(#gold1)", delay: "0s" },
+                ].map((bar, i) => (
+                  <g key={`bar-${i}`} opacity="0.18">
+                    {/* Horizontal bar */}
+                    <rect x="-400" y={bar.y} width="700" height={bar.h} fill={bar.gold}>
+                      <animate attributeName="x" from="-400" to="900" dur="4s" begin={bar.delay} repeatCount="indefinite" />
+                    </rect>
+                  </g>
                 ))}
-              </span>
-            </motion.h2>
+
+                {/* Chevron arrows moving right */}
+                {[
+                  { x: -200, size: 90, gold: "url(#gold3)", opacity: 0.25, dur: "3.5s", delay: "0s" },
+                  { x: -320, size: 75, gold: "url(#gold1)", opacity: 0.2, dur: "3.5s", delay: "0.4s" },
+                  { x: -440, size: 60, gold: "url(#gold2)", opacity: 0.15, dur: "3.5s", delay: "0.8s" },
+                  { x: -560, size: 50, gold: "url(#gold4)", opacity: 0.12, dur: "3.5s", delay: "1.2s" },
+                  { x: -150, size: 80, gold: "url(#gold1)", opacity: 0.22, dur: "4s", delay: "1.8s" },
+                  { x: -350, size: 65, gold: "url(#gold3)", opacity: 0.18, dur: "4s", delay: "2.2s" },
+                ].map((chev, i) => {
+                  const cy = 150;
+                  const s = chev.size;
+                  return (
+                    <g key={`chev-${i}`} opacity={chev.opacity}>
+                      <polygon
+                        points={`${chev.x},${cy - s} ${chev.x + s},${cy} ${chev.x},${cy + s} ${chev.x + s * 0.3},${cy + s} ${chev.x + s * 1.3},${cy} ${chev.x + s * 0.3},${cy - s}`}
+                        fill={chev.gold}
+                        stroke="#f5d782"
+                        strokeWidth="1"
+                        strokeOpacity="0.3"
+                      >
+                        <animateTransform attributeName="transform" type="translate" from="0 0" to="1200 0" dur={chev.dur} begin={chev.delay} repeatCount="indefinite" />
+                      </polygon>
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
 
             {/* Retro TV */}
             <motion.div
