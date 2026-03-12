@@ -5,6 +5,7 @@ import AnimatedBackground from "./AnimatedBackground";
 import { useCurrentEvent, useContactInfo, useSiteSetting } from "@/hooks/use-database";
 
 const DEFAULT_REGISTRATION = "https://forms.gle/example";
+const DEFAULT_TV_VIDEO = "/theme/tgb.mp4";
 
 const ThemeSection = () => {
   const [registrationLink, setRegistrationLink] = useState(DEFAULT_REGISTRATION);
@@ -183,34 +184,31 @@ const ThemeSection = () => {
                     }} />
 
                     {/* Video content */}
-                    {themeVideoUrl ? (
-                      themeVideoUrl.includes('youtube') || themeVideoUrl.includes('youtu.be') ? (
-                        <iframe
-                          src={getEmbedUrl(themeVideoUrl)}
-                          className="w-full h-full"
-                          allow="autoplay; encrypted-media"
-                          allowFullScreen
-                          style={{ border: 'none' }}
-                          title="Theme Video"
-                        />
-                      ) : (
+                    {(() => {
+                      const videoUrl = themeVideoUrl || DEFAULT_TV_VIDEO;
+                      if (videoUrl.includes('youtube') || videoUrl.includes('youtu.be')) {
+                        return (
+                          <iframe
+                            src={getEmbedUrl(videoUrl)}
+                            className="w-full h-full"
+                            allow="autoplay; encrypted-media"
+                            allowFullScreen
+                            style={{ border: 'none' }}
+                            title="Theme Video"
+                          />
+                        );
+                      }
+                      return (
                         <video
-                          src={themeVideoUrl}
+                          src={videoUrl}
                           autoPlay
                           loop
                           muted
                           playsInline
                           className="w-full h-full object-cover"
                         />
-                      )
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="text-gray-600 text-3xl mb-1">📺</div>
-                          <p className="text-gray-600 text-[10px]">No signal</p>
-                        </div>
-                      </div>
-                    )}
+                      );
+                    })()}
                   </div>
                 </div>
 

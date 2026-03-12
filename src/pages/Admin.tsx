@@ -4,7 +4,7 @@ import {
   Send, CheckCircle, Shield, Trash2, Filter, Users,
   Calendar, ChevronDown, Search, X, Mail, Palette, Plus, Edit2,
   MessageSquare, Phone, MapPin, Link as LinkIcon, Upload, Eye, Image,
-  UserPlus, Video,
+  UserPlus, Video, ClipboardList, CreditCard, Settings,
 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -13,6 +13,10 @@ import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import CertificateTemplate from "@/components/CertificateTemplate";
 import GoogleFormDataImport from "@/components/admin/GoogleFormDataImport";
 import SpeakerFormWithImage from "@/components/admin/SpeakerFormWithImage";
+import RegistrationFormFieldsAdmin from "@/components/admin/RegistrationFormFieldsAdmin";
+import PaymentSettingsAdmin from "@/components/admin/PaymentSettingsAdmin";
+import RegistrationsAdmin from "@/components/admin/RegistrationsAdmin";
+import EmailSettingsAdmin from "@/components/admin/EmailSettingsAdmin";
 import {
   Popover,
   PopoverContent,
@@ -69,7 +73,7 @@ type Participant = {
 
 
 const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
-  const [tab, setTab] = useState<"participants" | "speakers" | "certificates" | "about" | "contact" | "gallery" | "team" | "sponsors">("participants");
+  const [tab, setTab] = useState<"participants" | "speakers" | "certificates" | "about" | "contact" | "gallery" | "team" | "sponsors" | "registrations" | "form-fields" | "payment-settings" | "email-settings">("registrations");
 
   // Toast/Notification state
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
@@ -726,6 +730,10 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
           className="flex gap-2 mb-8 overflow-x-auto pb-2 flex-wrap"
         >
           {[
+            { id: "registrations", label: "Registrations", icon: ClipboardList },
+            { id: "form-fields", label: "Form Fields", icon: Settings },
+            { id: "payment-settings", label: "Payment", icon: CreditCard },
+            { id: "email-settings", label: "Email", icon: Mail },
             { id: "participants", label: "Participants", icon: Users },
             { id: "speakers", label: "Speakers", icon: MessageSquare },
             { id: "certificates", label: "Certificates", icon: Palette },
@@ -756,6 +764,42 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
 
         {/* Tab Content */}
         <AnimatePresence mode="wait">
+          {/* Registrations Tab */}
+          {tab === "registrations" && (
+            <motion.div key="registrations" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+              <motion.div className="border border-border rounded-2xl p-6 bg-card/60 backdrop-blur-sm">
+                <RegistrationsAdmin showNotification={showNotification} />
+              </motion.div>
+            </motion.div>
+          )}
+
+          {/* Form Fields Tab */}
+          {tab === "form-fields" && (
+            <motion.div key="form-fields" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+              <motion.div className="border border-border rounded-2xl p-6 bg-card/60 backdrop-blur-sm">
+                <RegistrationFormFieldsAdmin showNotification={showNotification} />
+              </motion.div>
+            </motion.div>
+          )}
+
+          {/* Payment Settings Tab */}
+          {tab === "payment-settings" && (
+            <motion.div key="payment-settings" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+              <motion.div className="border border-border rounded-2xl p-6 bg-card/60 backdrop-blur-sm">
+                <PaymentSettingsAdmin showNotification={showNotification} />
+              </motion.div>
+            </motion.div>
+          )}
+
+          {/* Email Settings Tab */}
+          {tab === "email-settings" && (
+            <motion.div key="email-settings" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+              <motion.div className="border border-border rounded-2xl p-6 bg-card/60 backdrop-blur-sm">
+                <EmailSettingsAdmin showNotification={showNotification} />
+              </motion.div>
+            </motion.div>
+          )}
+
           {tab === "participants" && (
             <motion.div key="participants" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
               {/* Filters */}

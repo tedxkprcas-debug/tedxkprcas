@@ -12,6 +12,9 @@ import {
   teamService,
   sponsorService,
   siteSettingsService,
+  registrationFormFieldService,
+  paymentSettingsService,
+  registrationService,
 } from "@/lib/api";
 import type {
   Participant,
@@ -23,6 +26,9 @@ import type {
   GalleryImage,
   TeamMember,
   Sponsor,
+  RegistrationFormField,
+  PaymentSettings,
+  Registration,
 } from "@/lib/supabase";
 
 // ==================== PARTICIPANTS HOOKS ====================
@@ -717,6 +723,296 @@ export function useDeleteSiteSetting() {
     mutationFn: (key: string) => siteSettingsService.remove(key),
     onSuccess: (_, key) => {
       queryClient.invalidateQueries({ queryKey: ["site_settings", key] });
+    },
+  });
+}
+
+// ==================== REGISTRATION FORM FIELDS HOOKS ====================
+
+export function useRegistrationFormFields() {
+  const queryClient = useQueryClient();
+
+  const query = useQuery({
+    queryKey: ["registration_form_fields"],
+    queryFn: () => registrationFormFieldService.getAll(),
+    staleTime: 0,
+  });
+
+  useEffect(() => {
+    const subscription = supabase
+      .channel("registration-form-fields-channel")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "registration_form_fields",
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ["registration_form_fields"] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [queryClient]);
+
+  return query;
+}
+
+export function useAllRegistrationFormFields() {
+  const queryClient = useQueryClient();
+
+  const query = useQuery({
+    queryKey: ["registration_form_fields_all"],
+    queryFn: () => registrationFormFieldService.getAllIncludingInactive(),
+    staleTime: 0,
+  });
+
+  useEffect(() => {
+    const subscription = supabase
+      .channel("registration-form-fields-all-channel")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "registration_form_fields",
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ["registration_form_fields_all"] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [queryClient]);
+
+  return query;
+}
+
+export function useCreateRegistrationFormField() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: Omit<RegistrationFormField, "id" | "created_at" | "updated_at">) =>
+      registrationFormFieldService.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["registration_form_fields"] });
+      queryClient.invalidateQueries({ queryKey: ["registration_form_fields_all"] });
+    },
+  });
+}
+
+export function useUpdateRegistrationFormField() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<RegistrationFormField> }) =>
+      registrationFormFieldService.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["registration_form_fields"] });
+      queryClient.invalidateQueries({ queryKey: ["registration_form_fields_all"] });
+    },
+  });
+}
+
+export function useDeleteRegistrationFormField() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => registrationFormFieldService.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["registration_form_fields"] });
+      queryClient.invalidateQueries({ queryKey: ["registration_form_fields_all"] });
+    },
+  });
+}
+
+// ==================== PAYMENT SETTINGS HOOKS ====================
+
+export function usePaymentSettings() {
+  const queryClient = useQueryClient();
+
+  const query = useQuery({
+    queryKey: ["payment_settings"],
+    queryFn: () => paymentSettingsService.get(),
+    staleTime: 0,
+  });
+
+  useEffect(() => {
+    const subscription = supabase
+      .channel("payment-settings-channel")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "payment_settings",
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ["payment_settings"] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [queryClient]);
+
+  return query;
+}
+
+export function useUpdatePaymentSettings() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: Partial<PaymentSettings>) => paymentSettingsService.update(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["payment_settings"] });
+    },
+  });
+}
+
+export function useUploadPaymentQRCode() {
+  return useMutation({
+    mutationFn: (file: File) => paymentSettingsService.uploadQRCode(file),
+  });
+}
+
+// ==================== REGISTRATIONS HOOKS ====================
+
+export function useRegistrations() {
+  const queryClient = useQueryClient();
+
+  const query = useQuery({
+    queryKey: ["registrations"],
+    queryFn: () => registrationService.getAll(),
+    staleTime: 0,
+  });
+
+  useEffect(() => {
+    const subscription = supabase
+      .channel("registrations-channel")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "registrations",
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ["registrations"] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [queryClient]);
+
+  return query;
+}
+
+export function useRegistration(id: string) {
+  return useQuery({
+    queryKey: ["registrations", id],
+    queryFn: () => registrationService.getById(id),
+    enabled: !!id,
+  });
+}
+
+export function useCreateRegistration() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: Omit<Registration, "id" | "created_at" | "updated_at">) =>
+      registrationService.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["registrations"] });
+    },
+  });
+}
+
+export function useUpdateRegistration() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<Registration> }) =>
+      registrationService.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["registrations"] });
+    },
+  });
+}
+
+export function useDeleteRegistration() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => registrationService.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["registrations"] });
+    },
+  });
+}
+
+export function useUploadPaymentScreenshot() {
+  return useMutation({
+    mutationFn: ({ file, registrationId }: { file: File; registrationId: string }) =>
+      registrationService.uploadPaymentScreenshot(file, registrationId),
+  });
+}
+
+export function useVerifyPayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, verifiedBy }: { id: string; verifiedBy: string }) =>
+      registrationService.verifyPayment(id, verifiedBy),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["registrations"] });
+    },
+  });
+}
+
+export function useRejectPayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, reason }: { id: string; reason: string }) =>
+      registrationService.rejectPayment(id, reason),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["registrations"] });
+    },
+  });
+}
+
+export function useSearchRegistrationByCode(code: string) {
+  return useQuery({
+    queryKey: ["registrations", "search", code],
+    queryFn: () => registrationService.searchByCode(code),
+    enabled: code.length >= 3,
+  });
+}
+
+export function useGetRegistrationByCode() {
+  return useMutation({
+    mutationFn: (code: string) => registrationService.getByRegistrationCode(code),
+  });
+}
+
+export function useSubmitPaymentWithCode() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, paymentData }: { 
+      id: string; 
+      paymentData: {
+        payment_screenshot_url: string;
+        user_upi_id: string;
+        payment_amount: number;
+        transaction_id?: string;
+      }
+    }) => registrationService.submitPaymentWithCode(id, paymentData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["registrations"] });
     },
   });
 }

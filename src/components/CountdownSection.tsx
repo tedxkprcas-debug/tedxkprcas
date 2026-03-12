@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 import AnimatedBackground from "./AnimatedBackground";
-import CountdownCounter from "./ui/counter-loader";
+import FlipCountdown from "./ui/flip-countdown";
 import { useCurrentEvent, useContactInfo } from "@/hooks/use-database";
 
 const DEFAULT_TARGET = new Date("2026-04-10T09:00:00");
@@ -28,12 +27,10 @@ const useBreakpoint = () => {
 };
 
 const CountdownSection = () => {
-  const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [registrationLink, setRegistrationLink] = useState(DEFAULT_REGISTRATION);
   const [targetDate, setTargetDate] = useState<Date>(DEFAULT_TARGET);
   const bp = useBreakpoint();
   const mobile = bp === "sm";
-  const counterSize = bp === "sm" ? 7 : bp === "md" ? 12 : bp === "lg" ? 16 : 18;
 
   // Fetch event date and contact info from database
   const { data: currentEvent } = useCurrentEvent();
@@ -89,23 +86,6 @@ const CountdownSection = () => {
     }
   }, [contactInfo]);
 
-  useEffect(() => {
-    const update = () => {
-      const diff = Math.max(0, targetDate.getTime() - Date.now());
-      setTime({
-        days: Math.floor(diff / 86400000),
-        hours: Math.floor((diff % 86400000) / 3600000),
-        minutes: Math.floor((diff % 3600000) / 60000),
-        seconds: Math.floor((diff % 60000) / 1000),
-      });
-    };
-    update();
-    const id = setInterval(update, 1000);
-    return () => clearInterval(id);
-  }, [targetDate]);
-
-  const pad = (n: number) => String(n).padStart(2, "0");
-
   return (
     <section className="py-10 sm:py-14 md:py-20 lg:py-24 relative overflow-hidden">
       <AnimatedBackground variant="accent" particleCount={8} />
@@ -117,17 +97,10 @@ const CountdownSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="border border-tedx-red rounded-xl p-2 sm:p-3 md:p-6 lg:p-8 inline-block bg-card/50 backdrop-blur-sm max-w-full"
+          className="border border-tedx-red/30 rounded-xl p-4 sm:p-6 md:p-8 lg:p-10 inline-block bg-black/60 backdrop-blur-sm max-w-full"
         >
-          {/* Single CountdownCounter - sized reactively */}
-          <CountdownCounter
-            days={time.days}
-            hours={time.hours}
-            minutes={time.minutes}
-            seconds={time.seconds}
-            color="#ffffff"
-            size={counterSize}
-          />
+          {/* FlipDown Style Countdown */}
+          <FlipCountdown targetDate={targetDate} />
         </motion.div>
 
         {/* Film Roll Marquee */}

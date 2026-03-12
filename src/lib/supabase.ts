@@ -140,3 +140,48 @@ export type SiteSetting = {
   updated_at?: string;
 };
 
+export type RegistrationFormField = {
+  id?: string;
+  field_name: string;
+  field_label: string;
+  field_type: 'text' | 'email' | 'tel' | 'number' | 'select' | 'textarea' | 'checkbox';
+  placeholder?: string;
+  options?: string[];
+  is_required: boolean;
+  order: number;
+  is_active: boolean;
+  show_for_category?: string[]; // 'all', 'student', 'company', 'other'
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type PaymentSettings = {
+  id?: string;
+  qr_code_url?: string;
+  upi_id?: string;
+  payment_amount: number;
+  payment_instructions?: string;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type Registration = {
+  id?: string;
+  registration_code?: string;
+  name: string;
+  email: string;
+  phone?: string;
+  form_data: Record<string, any>;
+  payment_status: 'pending' | 'submitted' | 'verified' | 'rejected';
+  payment_screenshot_url?: string;
+  user_upi_id?: string;
+  payment_amount?: number;
+  payment_verified_at?: string;
+  payment_verified_by?: string;
+  rejection_reason?: string;
+  registration_status: 'pending' | 'confirmed' | 'cancelled';
+  created_at?: string;
+  updated_at?: string;
+};
+

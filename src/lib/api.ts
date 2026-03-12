@@ -9,6 +9,9 @@ import {
   GalleryImage,
   TeamMember,
   Sponsor,
+  RegistrationFormField,
+  PaymentSettings,
+  Registration,
 } from "./supabase";
 
 // ==================== PARTICIPANTS ====================
@@ -627,6 +630,395 @@ export const sponsorService = {
       .eq("id", id);
 
     if (error) throw error;
+  },
+};
+
+// ==================== REGISTRATION FORM FIELDS ====================
+
+export const registrationFormFieldService = {
+  async getAll() {
+    const { data, error } = await supabase
+      .from("registration_form_fields")
+      .select("*")
+      .eq("is_active", true)
+      .order("order", { ascending: true });
+
+    if (error) throw error;
+    return data as RegistrationFormField[];
+  },
+
+  async getAllIncludingInactive() {
+    const { data, error } = await supabase
+      .from("registration_form_fields")
+      .select("*")
+      .order("order", { ascending: true });
+
+    if (error) throw error;
+    return data as RegistrationFormField[];
+  },
+
+  async getById(id: string) {
+    const { data, error } = await supabase
+      .from("registration_form_fields")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+    return data as RegistrationFormField;
+  },
+
+  async create(field: Omit<RegistrationFormField, "id" | "created_at" | "updated_at">) {
+    const { data, error } = await supabase
+      .from("registration_form_fields")
+      .insert([field])
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as RegistrationFormField;
+  },
+
+  async update(id: string, field: Partial<RegistrationFormField>) {
+    const { data, error } = await supabase
+      .from("registration_form_fields")
+      .update(field)
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as RegistrationFormField;
+  },
+
+  async delete(id: string) {
+    const { error } = await supabase
+      .from("registration_form_fields")
+      .delete()
+      .eq("id", id);
+
+    if (error) throw error;
+  },
+};
+
+// ==================== PAYMENT SETTINGS ====================
+
+export const paymentSettingsService = {
+  async get() {
+    const { data, error } = await supabase
+      .from("payment_settings")
+      .select("*")
+      .eq("is_active", true)
+      .limit(1)
+      .single();
+
+    if (error && error.code === "PGRST116") {
+      return {
+        upi_id: "",
+        payment_amount: 0,
+        payment_instructions: "",
+        is_active: true,
+      } as PaymentSettings;
+    }
+
+    if (error) throw error;
+    return data as PaymentSettings;
+  },
+
+  async update(settings: Partial<PaymentSettings>) {
+    const { data: existing } = await supabase
+      .from("payment_settings")
+      .select("*")
+      .limit(1)
+      .single();
+
+    if (existing) {
+      const { data, error } = await supabase
+        .from("payment_settings")
+        .update(settings)
+        .eq("id", existing.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data as PaymentSettings;
+    } else {
+      const { data, error } = await supabase
+        .from("payment_settings")
+        .insert([{ ...settings, is_active: true }])
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data as PaymentSettings;
+    }
+  },
+
+  async uploadQRCode(file: File) {
+    const fileExt = file.name.split(".").pop();
+    const filePath = `payment-qr-${Date.now()}.${fileExt}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("site-assets")
+      .upload(filePath, file, { upsert: true });
+
+    if (uploadError) throw uploadError;
+
+    const { data } = supabase.storage
+      .from("site-assets")
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  },
+};
+
+// ==================== REGISTRATIONS ====================
+
+// Generate a unique registration code like TEDX-2026-ABC123
+function generateRegistrationCode(): string {
+  const year = new Date().getFullYear();
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let code = '';
+  for (let i = 0; i < 6; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `TEDX-${year}-${code}`;
+}
+
+// Send registration data to Google Sheets via Apps Script web app
+async function sendToGoogleSheet(data: {
+  name: string;
+  email: string;
+  phone?: string;
+  user_type?: string;
+  form_data?: Record<string, any>;
+  registration_code?: string;
+  payment_status?: string;
+  user_upi_id?: string;
+  transaction_id?: string;
+  created_at?: string;
+}) {
+  try {
+    // Get the Google Sheet Apps Script URL from site settings
+    const sheetUrl = await siteSettingsService.get("google_sheet_webhook_url");
+    
+    if (!sheetUrl) {
+      console.log("Google Sheet webhook URL not configured, skipping...");
+      return;
+    }
+
+    // Flatten form_data for the sheet
+    const flatData: Record<string, any> = {
+      timestamp: new Date().toISOString(),
+      name: data.name,
+      email: data.email,
+      phone: data.phone || "",
+      user_type: data.user_type || data.form_data?.user_type || "",
+      registration_code: data.registration_code || "",
+      payment_status: data.payment_status || "pending",
+      user_upi_id: data.user_upi_id || "",
+      transaction_id: data.transaction_id || "",
+    };
+
+    // Add all form_data fields
+    if (data.form_data) {
+      Object.entries(data.form_data).forEach(([key, value]) => {
+        if (key !== "user_type") { // Already added
+          flatData[key] = typeof value === "object" ? JSON.stringify(value) : value;
+        }
+      });
+    }
+
+    // Send to Google Sheets Apps Script
+    const response = await fetch(sheetUrl, {
+      method: "POST",
+      mode: "no-cors", // Apps Script doesn't support CORS
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(flatData),
+    });
+
+    console.log("✅ Data sent to Google Sheet successfully");
+    return true;
+  } catch (error) {
+    console.error("Failed to send data to Google Sheet:", error);
+    // Don't throw - we don't want to fail registration if sheet fails
+    return false;
+  }
+}
+
+export const registrationService = {
+  async getAll() {
+    const { data, error } = await supabase
+      .from("registrations")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+    return data as Registration[];
+  },
+
+  async getById(id: string) {
+    const { data, error } = await supabase
+      .from("registrations")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+    return data as Registration;
+  },
+
+  async getByRegistrationCode(code: string) {
+    const { data, error } = await supabase
+      .from("registrations")
+      .select("*")
+      .eq("registration_code", code.toUpperCase())
+      .single();
+
+    if (error) throw error;
+    return data as Registration;
+  },
+
+  async searchByCode(code: string) {
+    const { data, error } = await supabase
+      .from("registrations")
+      .select("*")
+      .ilike("registration_code", `%${code}%`)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+    return data as Registration[];
+  },
+
+  async create(registration: Omit<Registration, "id" | "created_at" | "updated_at">) {
+    const { data, error } = await supabase
+      .from("registrations")
+      .insert([registration])
+      .select()
+      .single();
+
+    if (error) throw error;
+    
+    // Send to Google Sheet in background (don't await to not slow down registration)
+    sendToGoogleSheet({
+      name: registration.name,
+      email: registration.email,
+      phone: registration.phone,
+      form_data: registration.form_data,
+      payment_status: registration.payment_status,
+      created_at: data.created_at,
+    });
+    
+    return data as Registration;
+  },
+
+  async update(id: string, registration: Partial<Registration>) {
+    const { data, error } = await supabase
+      .from("registrations")
+      .update(registration)
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as Registration;
+  },
+
+  async submitPaymentWithCode(id: string, paymentData: {
+    payment_screenshot_url: string;
+    user_upi_id: string;
+    payment_amount: number;
+    transaction_id?: string;
+  }) {
+    // Generate unique registration code
+    const registration_code = generateRegistrationCode();
+    
+    const { data, error } = await supabase
+      .from("registrations")
+      .update({
+        ...paymentData,
+        registration_code,
+        payment_status: "submitted",
+      })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    
+    // Send to Google Sheet with all payment details
+    sendToGoogleSheet({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      form_data: data.form_data,
+      registration_code: registration_code,
+      payment_status: "submitted",
+      user_upi_id: paymentData.user_upi_id,
+      transaction_id: paymentData.transaction_id || "",
+    });
+    
+    return data as Registration;
+  },
+
+  async delete(id: string) {
+    const { error } = await supabase
+      .from("registrations")
+      .delete()
+      .eq("id", id);
+
+    if (error) throw error;
+  },
+
+  async uploadPaymentScreenshot(file: File, registrationId: string) {
+    const fileExt = file.name.split(".").pop();
+    const filePath = `payment-${registrationId}-${Date.now()}.${fileExt}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("payment-screenshots")
+      .upload(filePath, file, { upsert: true });
+
+    if (uploadError) throw uploadError;
+
+    const { data } = supabase.storage
+      .from("payment-screenshots")
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  },
+
+  async verifyPayment(id: string, verifiedBy: string) {
+    const { data, error } = await supabase
+      .from("registrations")
+      .update({
+        payment_status: "verified",
+        payment_verified_at: new Date().toISOString(),
+        payment_verified_by: verifiedBy,
+        registration_status: "confirmed",
+      })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as Registration;
+  },
+
+  async rejectPayment(id: string, reason: string) {
+    const { data, error } = await supabase
+      .from("registrations")
+      .update({
+        payment_status: "rejected",
+        rejection_reason: reason,
+      })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as Registration;
   },
 };
 

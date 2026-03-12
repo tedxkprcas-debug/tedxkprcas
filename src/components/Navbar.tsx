@@ -14,7 +14,6 @@ const navItems = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [registrationLink, setRegistrationLink] = useState("https://forms.gle/example");
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -27,18 +26,6 @@ const Navbar = () => {
     }
     return () => { document.body.style.overflow = ""; };
   }, [open]);
-
-  useEffect(() => {
-    const savedContact = localStorage.getItem("tedx_contact");
-    if (savedContact) {
-      try {
-        const contactData = JSON.parse(savedContact);
-        setRegistrationLink(contactData.registrationLink || "https://forms.gle/example");
-      } catch (e) {
-        console.error("Error parsing contact data:", e);
-      }
-    }
-  }, []);
 
   // Handle hash link clicks – if not on home page, navigate to "/" first then scroll
   const handleHashClick = useCallback(
@@ -102,14 +89,12 @@ const Navbar = () => {
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-4 lg:gap-6">
           {navItems.map((item) => renderNavLink(item))}
-          <a
-            href={registrationLink}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/register"
             className="bg-tedx-red text-foreground font-heading text-sm px-4 lg:px-5 py-2 rounded hover:bg-tedx-dark-red transition-colors whitespace-nowrap"
           >
             Register
-          </a>
+          </Link>
         </div>
 
         {/* Mobile toggle */}
@@ -137,14 +122,13 @@ const Navbar = () => {
             <Lock className="w-4 h-4" />
             Admin
           </Link>
-          <a
-            href={registrationLink}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/register"
+            onClick={() => setOpen(false)}
             className="block mt-3 bg-tedx-red text-foreground font-heading text-base px-5 py-3.5 rounded text-center active:bg-tedx-dark-red"
           >
             Register
-          </a>
+          </Link>
         </motion.div>
       )}
       </AnimatePresence>
