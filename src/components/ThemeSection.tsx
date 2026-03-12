@@ -305,9 +305,7 @@ const ThemeSection = () => {
           >
             {/* Book Tickets Button */}
             <motion.a
-              href={registrationLink}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/register"
               className="bg-tedx-red hover:bg-red-700 text-white font-heading text-lg sm:text-xl md:text-2xl px-6 sm:px-8 py-4 sm:py-5 rounded-2xl flex items-center justify-center gap-3 transition-colors"
               whileHover={{ scale: 1.03, boxShadow: "0 0 30px hsl(0 84% 50% / 0.5)" }}
               whileTap={{ scale: 0.97 }}
