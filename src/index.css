@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Oswald:wght@700;900&family=Rubik+Dirt:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Oswald:wght@700;900&family=Rubik+Dirt:wght@400&family=Instrument+Serif&display=swap');
 
 @font-face {
   font-family: 'Neuland Inline';
@@ -12,14 +12,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Force Rubik Dirt font for body content and remove all boldness */
+/* Force Instrument Serif font for body content and remove all boldness */
 * {
-  font-family: "Rubik Dirt", sans-serif !important;
+  font-family: "Instrument Serif", serif !important;
   font-weight: 400 !important;
 }
 
 html, body {
-  font-family: "Rubik Dirt", sans-serif;
+  font-family: "Instrument Serif", serif;
   font-weight: 400;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
@@ -40,12 +40,13 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
 }
 
-/* Body text styling */
+/* Body text styling with Instrument Serif and 1.5 line spacing */
 p, span, div, li, a {
-  font-family: "Rubik Dirt", sans-serif !important;
+  font-family: "Instrument Serif", serif !important;
   font-weight: 400 !important;
   color: white !important;
   font-size: 40px;
+  line-height: 1.5 !important;
 }
 
 @layer base {
