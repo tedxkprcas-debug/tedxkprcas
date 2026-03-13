@@ -203,7 +203,7 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
             {/* Phase 3: Tagline */}
             {phase >= 3 && (
               <motion.p
-                className="text-muted-foreground font-heading text-sm sm:text-lg md:text-2xl tracking-[0.2em] sm:tracking-[0.3em] uppercase mt-4 sm:mt-5 md:mt-6 lg:mt-8"
+                className="text-muted-foreground font-heading text-base sm:text-xl md:text-3xl tracking-[0.2em] sm:tracking-[0.3em] uppercase mt-4 sm:mt-5 md:mt-6 lg:mt-8"
                 initial={{ opacity: 0, letterSpacing: "0.6em" }}
                 animate={{ opacity: 1, letterSpacing: "0.3em" }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
