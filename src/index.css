@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Oswald:wght@700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Oswald:wght@700;900&family=Rubik+Dirt:wght@400&display=swap');
 
 @font-face {
   font-family: 'Neuland Inline';
@@ -31,12 +31,15 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-/* Override all heading and bold elements */
+/* Override all heading and bold elements with Rubik Dirt */
 h1, h2, h3, h4, h5, h6, strong, b, 
 .font-bold, .font-semibold, .font-extrabold, .font-black,
 .font-heading, .heading {
   font-weight: 400 !important;
-  font-family: "Inter", sans-serif !important;
+  font-family: "Rubik Dirt", sans-serif !important;
+  color: white !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 @layer base {

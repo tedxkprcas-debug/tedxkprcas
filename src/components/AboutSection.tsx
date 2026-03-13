@@ -372,7 +372,7 @@ const AboutSection = () => {
             className="order-2 md:order-1"
           >
             <motion.h2
-              className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-foreground uppercase mb-3 sm:mb-4 md:mb-6 lg:mb-8"
+              className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl text-white uppercase tracking-wider mb-3 sm:mb-4 md:mb-6 lg:mb-8"
               whileInView={{ opacity: [0, 1], y: [30, 0] }}
               viewport={{ once: true }}
             >
@@ -430,7 +430,7 @@ const AboutSection = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <motion.h2
-              className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-foreground uppercase mb-3 sm:mb-4 md:mb-6 lg:mb-8"
+              className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl text-white uppercase tracking-wider mb-3 sm:mb-4 md:mb-6 lg:mb-8"
               whileInView={{ opacity: [0, 1], y: [30, 0] }}
               viewport={{ once: true }}
             >
@@ -461,7 +461,7 @@ const AboutSection = () => {
           className="text-center max-w-3xl mx-auto mb-16 md:mb-24"
         >
           <motion.h2
-            className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-foreground uppercase mb-3 sm:mb-4 md:mb-6 lg:mb-8"
+            className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl text-white uppercase tracking-wider mb-3 sm:mb-4 md:mb-6 lg:mb-8"
             whileInView={{ opacity: [0, 1], y: [30, 0] }}
             viewport={{ once: true }}
           >
