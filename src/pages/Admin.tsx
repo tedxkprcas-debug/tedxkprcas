@@ -1320,51 +1320,99 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                       className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 px-4 py-2 rounded-lg flex items-center gap-2"
                     >
                       <Edit2 className="w-4 h-4" />
-                      Edit
+                      Edit All Sections
                     </button>
                   )}
                 </div>
 
                 {editingAbout ? (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm mb-2">Title</label>
-                      <input
-                        type="text"
-                        value={aboutFormData.title}
-                        onChange={(e) => setAboutFormData({ ...aboutFormData, title: e.target.value })}
-                        className="w-full bg-secondary border border-border rounded-lg px-4 py-3"
-                      />
+                  <div className="space-y-8">
+                    {/* Section 1: About TED */}
+                    <div className="border-l-4 border-blue-500 pl-4">
+                      <h3 className="text-lg font-semibold mb-4 text-blue-500">About TED</h3>
+                      <div>
+                        <label className="block text-sm mb-2">Title</label>
+                        <input
+                          type="text"
+                          value={aboutFormData.about_ted_title || ""}
+                          onChange={(e) => setAboutFormData({ ...aboutFormData, about_ted_title: e.target.value })}
+                          className="w-full bg-secondary border border-border rounded-lg px-4 py-3"
+                        />
+                      </div>
+                      <div className="mt-3">
+                        <label className="block text-sm mb-2">Content</label>
+                        <textarea
+                          value={aboutFormData.about_ted_content || ""}
+                          onChange={(e) => setAboutFormData({ ...aboutFormData, about_ted_content: e.target.value })}
+                          className="w-full bg-secondary border border-border rounded-lg px-4 py-3 h-32"
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-sm mb-2">Description</label>
-                      <textarea
-                        value={aboutFormData.description}
-                        onChange={(e) => setAboutFormData({ ...aboutFormData, description: e.target.value })}
-                        className="w-full bg-secondary border border-border rounded-lg px-4 py-3 h-24"
-                      />
+
+                    {/* Section 2: About TEDx */}
+                    <div className="border-l-4 border-green-500 pl-4">
+                      <h3 className="text-lg font-semibold mb-4 text-green-500">About TEDx</h3>
+                      <div>
+                        <label className="block text-sm mb-2">Title</label>
+                        <input
+                          type="text"
+                          value={aboutFormData.about_tedx_title || ""}
+                          onChange={(e) => setAboutFormData({ ...aboutFormData, about_tedx_title: e.target.value })}
+                          className="w-full bg-secondary border border-border rounded-lg px-4 py-3"
+                        />
+                      </div>
+                      <div className="mt-3">
+                        <label className="block text-sm mb-2">Content</label>
+                        <textarea
+                          value={aboutFormData.about_tedx_content || ""}
+                          onChange={(e) => setAboutFormData({ ...aboutFormData, about_tedx_content: e.target.value })}
+                          className="w-full bg-secondary border border-border rounded-lg px-4 py-3 h-32"
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-sm mb-2">Content</label>
-                      <textarea
-                        value={aboutFormData.content}
-                        onChange={(e) => setAboutFormData({ ...aboutFormData, content: e.target.value })}
-                        className="w-full bg-secondary border border-border rounded-lg px-4 py-3 h-32"
-                      />
+
+                    {/* Section 3: Why at KPRCAS */}
+                    <div className="border-l-4 border-purple-500 pl-4">
+                      <h3 className="text-lg font-semibold mb-4 text-purple-500">Why at KPRCAS</h3>
+                      <div>
+                        <label className="block text-sm mb-2">Title</label>
+                        <input
+                          type="text"
+                          value={aboutFormData.why_at_kprcas_title || ""}
+                          onChange={(e) => setAboutFormData({ ...aboutFormData, why_at_kprcas_title: e.target.value })}
+                          className="w-full bg-secondary border border-border rounded-lg px-4 py-3"
+                        />
+                      </div>
+                      <div className="mt-3">
+                        <label className="block text-sm mb-2">Content</label>
+                        <textarea
+                          value={aboutFormData.why_at_kprcas_content || ""}
+                          onChange={(e) => setAboutFormData({ ...aboutFormData, why_at_kprcas_content: e.target.value })}
+                          className="w-full bg-secondary border border-border rounded-lg px-4 py-3 h-32"
+                        />
+                      </div>
                     </div>
+
                     <div className="flex gap-3 pt-4">
                       <button
                         onClick={() => {
                           updateAbout({
                             title: aboutFormData.title,
                             description: aboutFormData.description,
-                            content: aboutFormData.content
+                            content: aboutFormData.content,
+                            about_ted_title: aboutFormData.about_ted_title,
+                            about_ted_content: aboutFormData.about_ted_content,
+                            about_tedx_title: aboutFormData.about_tedx_title,
+                            about_tedx_content: aboutFormData.about_tedx_content,
+                            why_at_kprcas_title: aboutFormData.why_at_kprcas_title,
+                            why_at_kprcas_content: aboutFormData.why_at_kprcas_content,
                           });
                           setEditingAbout(false);
+                          showNotification("success", "About sections updated successfully!");
                         }}
                         className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-600 py-2 rounded-lg"
                       >
-                        Save
+                        Save All Changes
                       </button>
                       <button
                         onClick={() => setEditingAbout(false)}
@@ -1375,18 +1423,23 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                     </div>
                   </div>
                 ) : (
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="text-sm text-muted-foreground mb-1">Title</h3>
-                      <p className="text-lg">{about.title}</p>
+                  <div className="space-y-8">
+                    {/* Display Section 1 */}
+                    <div className="border-l-4 border-blue-500 pl-4">
+                      <h3 className="text-lg font-semibold mb-2 text-blue-500">{about.about_ted_title || "About TED"}</h3>
+                      <p className="text-foreground whitespace-pre-wrap text-sm">{about.about_ted_content || "TED is a nonprofit organization devoted to spreading ideas worth sharing..."}</p>
                     </div>
-                    <div>
-                      <h3 className="text-sm text-muted-foreground mb-1">Description</h3>
-                      <p className="text-foreground">{about.description}</p>
+
+                    {/* Display Section 2 */}
+                    <div className="border-l-4 border-green-500 pl-4">
+                      <h3 className="text-lg font-semibold mb-2 text-green-500">{about.about_tedx_title || "About TEDx"}</h3>
+                      <p className="text-foreground whitespace-pre-wrap text-sm">{about.about_tedx_content || "TEDx is an independent event that brings people together..."}</p>
                     </div>
-                    <div>
-                      <h3 className="text-sm text-muted-foreground mb-1">Content</h3>
-                      <p className="text-foreground whitespace-pre-wrap">{about.content}</p>
+
+                    {/* Display Section 3 */}
+                    <div className="border-l-4 border-purple-500 pl-4">
+                      <h3 className="text-lg font-semibold mb-2 text-purple-500">{about.why_at_kprcas_title || "Why at KPRCAS"}</h3>
+                      <p className="text-foreground whitespace-pre-wrap text-sm">{about.why_at_kprcas_content || "KPR College of Arts, Science and Research is committed..."}</p>
                     </div>
                   </div>
                 )}

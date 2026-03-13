@@ -86,6 +86,12 @@ export type AboutInfo = {
   title: string;
   description: string;
   content: string;
+  about_ted_title?: string;
+  about_ted_content?: string;
+  about_tedx_title?: string;
+  about_tedx_content?: string;
+  why_at_kprcas_title?: string;
+  why_at_kprcas_content?: string;
   created_at?: string;
   updated_at?: string;
 };

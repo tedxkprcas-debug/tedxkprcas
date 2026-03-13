@@ -268,27 +268,47 @@ const AboutSection = () => {
   const { data: aboutData, isLoading, isError, error } = useAboutInfo();
   const mobile = useIsMobile();
 
-  const content = aboutData?.content || "TEDx KPRCAS is a locally organised independently run event. Rooted in the spirit of TED's mission, it brings together thought leaders, innovators, and changemakers to share ideas worth spreading. At KPR College of Arts Science and Research, we celebrate the power of storytelling, innovation, and community building through extraordinary talks and experiences.";
+  const sections = [
+    {
+      title: aboutData?.about_ted_title || "About TED",
+      content: aboutData?.about_ted_content || "TED is a nonprofit organization devoted to spreading ideas worth sharing through short, powerful talks in a radically shareable video format. TED stands for Technology, Entertainment, Design.",
+      position: "right" as const,
+      delay: 0,
+    },
+    {
+      title: aboutData?.about_tedx_title || "About TEDx",
+      content: aboutData?.about_tedx_content || "TEDx is an independent event that brings people together to share a TED-like experience. In the spirit of ideas worth spreading, TED has created a program called TEDx.",
+      position: "left" as const,
+      delay: 0.2,
+    },
+    {
+      title: aboutData?.why_at_kprcas_title || "Why at KPRCAS",
+      content: aboutData?.why_at_kprcas_content || "KPR College of Arts, Science and Research is committed to fostering innovation, creativity, and critical thinking.",
+      position: "center" as const,
+      delay: 0.4,
+    },
+  ];
 
   return (
     <section id="about" className="py-10 sm:py-14 md:py-20 lg:py-24 relative overflow-hidden">
       <AnimatedBackground variant="default" particleCount={6} />
 
       <div className="container mx-auto px-4 relative z-10">
-        {/* ── About Row: Text left, Orbiting Rings right ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12 lg:gap-16 items-center">
+        {/* Section 1: About TED - Right side */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12 lg:gap-16 items-center mb-16 md:mb-24">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="order-2 md:order-1"
           >
             <motion.h2
               className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-foreground uppercase mb-3 sm:mb-4 md:mb-6 lg:mb-8"
               whileInView={{ opacity: [0, 1], y: [30, 0] }}
               viewport={{ once: true }}
             >
-              About
+              {sections[0].title}
             </motion.h2>
             {isError ? (
               <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
@@ -306,21 +326,87 @@ const AboutSection = () => {
               </div>
             ) : (
               <p className="text-muted-foreground leading-relaxed text-sm sm:text-sm md:text-base lg:text-lg">
-                {content}
+                {sections[0].content}
               </p>
             )}
           </motion.div>
 
-          {/* Right side: DNA Animation */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
+            className="order-1 md:order-2"
           >
             <GlobeAnimation />
           </motion.div>
         </div>
+
+        {/* Section 2: About TEDx - Left side */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12 lg:gap-16 items-center mb-16 md:mb-24">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <GlobeAnimation />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <motion.h2
+              className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-foreground uppercase mb-3 sm:mb-4 md:mb-6 lg:mb-8"
+              whileInView={{ opacity: [0, 1], y: [30, 0] }}
+              viewport={{ once: true }}
+            >
+              {sections[1].title}
+            </motion.h2>
+            {isLoading ? (
+              <div className="space-y-2">
+                <div className="h-4 bg-muted rounded animate-pulse"></div>
+                <div className="h-4 bg-muted rounded animate-pulse w-5/6"></div>
+                <div className="h-4 bg-muted rounded animate-pulse w-4/6"></div>
+              </div>
+            ) : (
+              <p className="text-muted-foreground leading-relaxed text-sm sm:text-sm md:text-base lg:text-lg">
+                {sections[1].content}
+              </p>
+            )}
+          </motion.div>
+        </div>
+
+        {/* Section 3: Why at KPRCAS - Center */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-center max-w-3xl mx-auto mb-16 md:mb-24"
+        >
+          <motion.h2
+            className="font-heading text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl 2xl:text-7xl text-foreground uppercase mb-3 sm:mb-4 md:mb-6 lg:mb-8"
+            whileInView={{ opacity: [0, 1], y: [30, 0] }}
+            viewport={{ once: true }}
+          >
+            {sections[2].title}
+          </motion.h2>
+          {isLoading ? (
+            <div className="space-y-2">
+              <div className="h-4 bg-muted rounded animate-pulse"></div>
+              <div className="h-4 bg-muted rounded animate-pulse w-5/6 mx-auto"></div>
+              <div className="h-4 bg-muted rounded animate-pulse w-4/6 mx-auto"></div>
+            </div>
+          ) : (
+            <p className="text-muted-foreground leading-relaxed text-sm sm:text-sm md:text-base lg:text-lg">
+              {sections[2].content}
+            </p>
+          )}
+        </motion.div>
       </div>
 
       {/* Train Marquee */}

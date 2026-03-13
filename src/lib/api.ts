@@ -293,6 +293,12 @@ export const aboutService = {
         title: "About TEDx KPRCAS",
         description: "TEDx is an independent event that brings people together to share a TED-like experience.",
         content: "In the spirit of ideas worth spreading, TED has created a program called TEDx.",
+        about_ted_title: "About TED",
+        about_ted_content: "TED is a nonprofit organization devoted to spreading ideas worth sharing through short, powerful talks in a radically shareable video format. TED stands for Technology, Entertainment, Design.",
+        about_tedx_title: "About TEDx",
+        about_tedx_content: "TEDx is an independent event that brings people together to share a TED-like experience. In the spirit of ideas worth spreading, TED has created a program called TEDx.",
+        why_at_kprcas_title: "Why at KPRCAS",
+        why_at_kprcas_content: "KPR College of Arts, Science and Research is committed to fostering innovation, creativity, and critical thinking.",
       } as AboutInfo;
     }
 
