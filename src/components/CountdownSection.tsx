@@ -124,7 +124,7 @@ const CountdownSection = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-red-950/40 via-transparent to-red-950/40 pointer-events-none z-[1]" />
               <div className="marquee whitespace-nowrap relative z-[2]" style={{ willChange: 'transform' }}>
                 {Array(mobile ? 4 : 8).fill(null).map((_, i) => (
-                    <span key={i} className="font-heading text-3xl sm:text-4xl md:text-6xl mx-4 sm:mx-8 drop-shadow-[0_0_10px_rgba(239,68,68,0.4)]">
+                    <span key={i} className="font-body text-3xl sm:text-4xl md:text-6xl mx-4 sm:mx-8 drop-shadow-[0_0_10px_rgba(239,68,68,0.4)]">
                     {i % 2 === 0 ? (
                       <span className="text-stroke-red">HURRY UP!</span>
                     ) : (
@@ -134,7 +134,7 @@ const CountdownSection = () => {
                   </span>
                 ))}
                 {Array(mobile ? 4 : 8).fill(null).map((_, i) => (
-                  <span key={`d-${i}`} className="font-heading text-3xl sm:text-4xl md:text-6xl mx-4 sm:mx-8 drop-shadow-[0_0_10px_rgba(239,68,68,0.4)]">
+                  <span key={`d-${i}`} className="font-body text-3xl sm:text-4xl md:text-6xl mx-4 sm:mx-8 drop-shadow-[0_0_10px_rgba(239,68,68,0.4)]">
                     {i % 2 === 0 ? (
                       <span className="text-stroke-red">HURRY UP!</span>
                     ) : (

@@ -55,6 +55,14 @@ h1, h2, h3, h4, h5, h6, .font-heading, .heading {
   line-height: inherit !important;
 }
 
+/* Normal body font override for non-heading text */
+.font-body, .font-body * {
+  font-family: "Instrument Serif", serif !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+
 @layer base {
   :root {
     --background: 0 0% 0%;
