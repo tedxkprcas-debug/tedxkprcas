@@ -63,7 +63,7 @@ const ThemeSection = () => {
 
           {/* Main content */}
           <div
-            className="relative z-10 flex flex-col lg:flex-row items-center justify-end gap-8 lg:gap-12"
+            className="relative z-10 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12"
           >
 
             {/* Animated Golden Arrow Chevrons */}
