@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useGalleryImages } from "@/hooks/use-database";
 import { AlertCircle, X } from "lucide-react";
 
+// Toggle this to true when the gallery should be visible again.
+const SHOW_GALLERY = false;
+
 /* ------------------------------------------------------------------ */
 /*  Infinite-marquee row                                               */
 /* ------------------------------------------------------------------ */
@@ -60,6 +63,8 @@ const MarqueeRow = ({
 /*  Gallery section (embeddable in home page)                          */
 /* ------------------------------------------------------------------ */
 const GallerySection = () => {
+  if (!SHOW_GALLERY) return null;
+
   const {
     data: galleryImages = [],
     isLoading,
