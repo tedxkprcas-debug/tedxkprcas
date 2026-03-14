@@ -22,7 +22,7 @@ const ContactSection = () => {
             whileHover={{ borderColor: "hsl(0 84% 50% / 0.5)" }}
             className="border border-border rounded-xl p-5 sm:p-6 md:p-8 text-center bg-card/50 backdrop-blur-sm transition-colors"
           >
-            <h3 className="font-heading text-base sm:text-lg md:text-xl lg:text-2xl text-tedx-red uppercase mb-2">Connect</h3>
+            <h3 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-tedx-red uppercase mb-2">Connect</h3>
             <p className="font-heading text-sm sm:text-base text-foreground uppercase mb-4 sm:mb-6 md:mb-8">With Us On</p>
             <div className="flex justify-center gap-4 sm:gap-6">
               {[Instagram, Mail, Linkedin].map((Icon, i) => (

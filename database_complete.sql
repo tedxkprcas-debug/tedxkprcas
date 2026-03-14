@@ -259,6 +259,39 @@ CREATE POLICY "sponsors_delete" ON sponsors FOR DELETE USING (true);
 ALTER PUBLICATION supabase_realtime ADD TABLE sponsors;
 
 
+-- ==================== THEME STATS TABLE ====================
+-- Stores theme featured content and statistics
+DROP TABLE IF EXISTS theme_stats CASCADE;
+
+CREATE TABLE theme_stats (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title TEXT NOT NULL,
+  description TEXT,
+  icon TEXT,
+  "order" INTEGER DEFAULT 0,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes
+CREATE INDEX IF NOT EXISTS idx_theme_stats_order ON theme_stats("order");
+CREATE INDEX IF NOT EXISTS idx_theme_stats_is_active ON theme_stats(is_active);
+CREATE INDEX IF NOT EXISTS idx_theme_stats_created_at ON theme_stats(created_at);
+
+-- RLS
+ALTER TABLE theme_stats ENABLE ROW LEVEL SECURITY;
+
+-- Policies
+CREATE POLICY "theme_stats_select" ON theme_stats FOR SELECT USING (true);
+CREATE POLICY "theme_stats_insert" ON theme_stats FOR INSERT WITH CHECK (true);
+CREATE POLICY "theme_stats_update" ON theme_stats FOR UPDATE USING (true) WITH CHECK (true);
+CREATE POLICY "theme_stats_delete" ON theme_stats FOR DELETE USING (true);
+
+-- Enable realtime
+ALTER PUBLICATION supabase_realtime ADD TABLE theme_stats;
+
+
 -- ============================================================================
 -- STEP 3: CREATE INDEXES FOR PERFORMANCE
 -- ============================================================================

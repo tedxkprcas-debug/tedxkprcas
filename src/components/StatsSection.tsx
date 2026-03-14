@@ -1,5 +1,17 @@
 import { motion } from "framer-motion";
-import { Mic2, Users, Lightbulb, HeartHandshake } from "lucide-react";
+import { Mic2, Users, Lightbulb, HeartHandshake, Sparkles, Star, Flame, Zap } from "lucide-react";
+import { useThemeStats } from "@/hooks/use-database";
+
+const iconMap: Record<string, any> = {
+  sparkles: Sparkles,
+  star: Star,
+  flame: Flame,
+  zap: Zap,
+  lightbulb: Lightbulb,
+  mic2: Mic2,
+  users: Users,
+  hearth: HeartHandshake,
+};
 
 const stats = [
   {
@@ -33,9 +45,61 @@ const stats = [
 ];
 
 const StatsSection = () => {
+  const { data: themeStats } = useThemeStats();
+
   return (
     <section className="py-10 sm:py-14 md:py-20 lg:py-24 relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
+        {/* ── Theme Stats Section (Centered) ── */}
+        {themeStats && themeStats.length > 0 && (
+          <div className="mb-16 sm:mb-24">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center max-w-4xl mx-auto"
+            >
+              {/* Icon */}
+              <motion.div
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="flex justify-center mb-6 sm:mb-8"
+              >
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-tedx-red/10 flex items-center justify-center border border-tedx-red/20">
+                  {(() => {
+                    const IconComponent = iconMap[themeStats[0]?.icon] || Sparkles;
+                    return <IconComponent className="w-7 h-7 sm:w-8 sm:h-8 text-tedx-red" />;
+                  })()}
+                </div>
+              </motion.div>
+
+              {/* Title */}
+              <motion.h2 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 sm:mb-8 uppercase tracking-wider"
+              >
+                {themeStats[0]?.title || "Our Theme"}
+              </motion.h2>
+
+              {/* Description */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground leading-relaxed font-light"
+              >
+                {themeStats[0]?.description || ""}
+              </motion.p>
+            </motion.div>
+          </div>
+        )}
+
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -46,7 +110,7 @@ const StatsSection = () => {
           <span className="text-tedx-red font-heading text-sm tracking-[0.3em] uppercase block mb-3">
             Quick Snapshot
           </span>
-          <h2 className="font-heading text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-foreground mb-3 sm:mb-4">
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl text-foreground mb-3 sm:mb-4">
             By The Numbers
           </h2>
           <div className="w-16 h-1 bg-tedx-red mx-auto rounded-full" />

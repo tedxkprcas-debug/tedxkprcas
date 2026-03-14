@@ -17,6 +17,7 @@ import RegistrationFormFieldsAdmin from "@/components/admin/RegistrationFormFiel
 import PaymentSettingsAdmin from "@/components/admin/PaymentSettingsAdmin";
 import RegistrationsAdmin from "@/components/admin/RegistrationsAdmin";
 import EmailSettingsAdmin from "@/components/admin/EmailSettingsAdmin";
+import ThemeStatsAdmin from "@/components/admin/ThemeStatsAdmin";
 import {
   Popover,
   PopoverContent,
@@ -73,7 +74,7 @@ type Participant = {
 
 
 const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
-  const [tab, setTab] = useState<"participants" | "speakers" | "certificates" | "about" | "contact" | "gallery" | "team" | "sponsors" | "registrations" | "form-fields" | "payment-settings" | "email-settings">("registrations");
+  const [tab, setTab] = useState<"participants" | "speakers" | "certificates" | "about" | "contact" | "gallery" | "team" | "sponsors" | "registrations" | "form-fields" | "payment-settings" | "email-settings" | "theme-stats">("registrations");
 
   // Toast/Notification state
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
@@ -736,6 +737,7 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
             { id: "email-settings", label: "Email", icon: Mail },
             { id: "participants", label: "Participants", icon: Users },
             { id: "speakers", label: "Speakers", icon: MessageSquare },
+            { id: "theme-stats", label: "Theme Stats", icon: Palette },
             { id: "certificates", label: "Certificates", icon: Palette },
             { id: "about", label: "About", icon: MessageSquare },
             { id: "contact", label: "Contact", icon: Phone },
@@ -2210,6 +2212,16 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
                     ))}
                   </div>
                 )}
+              </motion.div>
+            </motion.div>
+          )}
+
+          {/* ==================== THEME STATS TAB ==================== */}
+          {tab === "theme-stats" && (
+            <motion.div key="theme-stats" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
+              <motion.div className="border border-border rounded-2xl p-8 bg-card/60 backdrop-blur-sm">
+                <h2 className="font-heading text-2xl mb-6">Theme Stats Management</h2>
+                <ThemeStatsAdmin />
               </motion.div>
             </motion.div>
           )}

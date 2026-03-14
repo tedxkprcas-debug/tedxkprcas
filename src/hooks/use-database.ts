@@ -15,6 +15,7 @@ import {
   registrationFormFieldService,
   paymentSettingsService,
   registrationService,
+  themeStatsService,
 } from "@/lib/api";
 import type {
   Participant,
@@ -1027,6 +1028,95 @@ export function useSubmitPaymentWithCode() {
     }) => registrationService.submitPaymentWithCode(id, paymentData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["registrations"] });
+    },
+  });
+}
+
+// ==================== THEME STATS HOOKS ====================
+
+export function useThemeStats() {
+  const queryClient = useQueryClient();
+  const subscriptionRef = useRef<any>(null);
+
+  const query = useQuery({
+    queryKey: ["theme_stats"],
+    queryFn: () => themeStatsService.getAll(),
+    staleTime: 0,
+  });
+
+  useEffect(() => {
+    if (subscriptionRef.current) {
+      return;
+    }
+
+    subscriptionRef.current = supabase
+      .channel("theme-stats-channel")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "theme_stats",
+        },
+        (payload: any) => {
+          console.log("🔄 Theme stats updated from database:", payload);
+          queryClient.invalidateQueries({ queryKey: ["theme_stats"] });
+        }
+      )
+      .subscribe((status: string) => {
+        console.log("📡 Theme stats subscription status:", status);
+      });
+
+    return () => {
+      if (subscriptionRef.current) {
+        subscriptionRef.current.unsubscribe();
+        subscriptionRef.current = null;
+      }
+    };
+  }, [queryClient]);
+
+  return query;
+}
+
+export function useCreateThemeStat() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: any) => themeStatsService.create(data),
+    onSuccess: () => {
+      console.log("✅ Theme stat created successfully");
+      queryClient.invalidateQueries({ queryKey: ["theme_stats"] });
+    },
+    onError: (error) => {
+      console.error("❌ Failed to create theme stat:", error);
+    },
+  });
+}
+
+export function useUpdateThemeStat() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) =>
+      themeStatsService.update(id, data),
+    onSuccess: () => {
+      console.log("✅ Theme stat updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["theme_stats"] });
+    },
+    onError: (error) => {
+      console.error("❌ Failed to update theme stat:", error);
+    },
+  });
+}
+
+export function useDeleteThemeStat() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => themeStatsService.delete(id),
+    onSuccess: () => {
+      console.log("✅ Theme stat deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["theme_stats"] });
+    },
+    onError: (error) => {
+      console.error("❌ Failed to delete theme stat:", error);
     },
   });
 }

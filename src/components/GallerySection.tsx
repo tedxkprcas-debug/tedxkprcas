@@ -117,7 +117,7 @@ const GallerySection = () => {
           viewport={{ once: true }}
           className="text-center mb-6 sm:mb-8 md:mb-12"
         >
-          <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl uppercase mb-2 sm:mb-4">
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl uppercase mb-2 sm:mb-4">
             <span className="text-tedx-red">Gallery</span>
           </h2>
           <p className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">

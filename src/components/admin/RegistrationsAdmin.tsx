@@ -46,6 +46,7 @@ import {
   useGetRegistrationByCode,
   useSiteSetting,
   useSendVerifiedEmail,
+  useUpdateRegistration,
 } from "@/hooks/use-database";
 import type { Registration } from "@/lib/supabase";
 import { sendTicketEmail, sendConfirmationEmail } from "@/lib/email";
@@ -89,9 +90,14 @@ Important Instructions:
 
 We look forward to seeing you at the event!`);
   const [ticketUrl, setTicketUrl] = useState("");
+  
+  // Registration code edit state
+  const [isEditingCode, setIsEditingCode] = useState(false);
+  const [editingCodeValue, setEditingCodeValue] = useState("");
 
   // Database hooks
   const { data: registrations = [], isLoading } = useRegistrations();
+  const { mutate: updateRegistration, isPending: isUpdatingRegistration } = useUpdateRegistration();
   const { mutate: verifyPayment, isPending: isVerifying } = useVerifyPayment();
   const { mutate: rejectPayment, isPending: isRejecting } = useRejectPayment();
   const { mutate: deleteRegistration } = useDeleteRegistration();
@@ -506,24 +512,107 @@ We look forward to seeing you at the event!`);
               {/* Registration Code - Prominent Display */}
               {selectedRegistration.registration_code && (
                 <div className="bg-gradient-to-r from-tedx-red/10 to-orange-500/10 rounded-xl p-4 border border-tedx-red/20">
-                  <Label className="text-xs text-muted-foreground uppercase tracking-wide">
-                    Registration ID
-                  </Label>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="font-mono text-xl font-bold text-tedx-red">
-                      {selectedRegistration.registration_code}
-                    </span>
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs text-muted-foreground uppercase tracking-wide">
+                      Registration ID
+                    </Label>
                     <button
                       onClick={() => {
-                        navigator.clipboard.writeText(selectedRegistration.registration_code!);
-                        toast({ title: "Copied!", description: "Registration code copied to clipboard" });
+                        setIsEditingCode(true);
+                        setEditingCodeValue(selectedRegistration.registration_code || "");
                       }}
-                      className="p-1.5 hover:bg-tedx-red/10 rounded-lg transition-colors"
-                      title="Copy registration code"
+                      className="text-xs px-2 py-1 hover:bg-tedx-red/20 rounded transition-colors text-tedx-red font-medium"
                     >
-                      <Copy className="w-4 h-4 text-tedx-red" />
+                      Edit
                     </button>
                   </div>
+                  
+                  {isEditingCode ? (
+                    <div className="space-y-2 mt-2">
+                      <Input
+                        value={editingCodeValue}
+                        onChange={(e) => setEditingCodeValue(e.target.value.toUpperCase())}
+                        placeholder="Enter registration code"
+                        className="font-mono"
+                      />
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            // Generate new code format: TEDX-2026-ABC123
+                            const year = new Date().getFullYear();
+                            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                            let code = '';
+                            for (let i = 0; i < 6; i++) {
+                              code += chars.charAt(Math.floor(Math.random() * chars.length));
+                            }
+                            setEditingCodeValue(`TEDX-${year}-${code}`);
+                          }}
+                          variant="outline"
+                          className="flex-1"
+                        >
+                          Regenerate
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            if (!editingCodeValue.trim()) {
+                              showNotification("error", "Registration code cannot be empty");
+                              return;
+                            }
+                            
+                            updateRegistration(
+                              {
+                                id: selectedRegistration.id!,
+                                data: { registration_code: editingCodeValue },
+                              },
+                              {
+                                onSuccess: () => {
+                                  setIsEditingCode(false);
+                                  setSelectedRegistration({
+                                    ...selectedRegistration,
+                                    registration_code: editingCodeValue,
+                                  });
+                                  showNotification("success", "Registration ID updated successfully!");
+                                },
+                                onError: () => {
+                                  showNotification("error", "Failed to update registration ID");
+                                },
+                              }
+                            );
+                          }}
+                          disabled={isUpdatingRegistration}
+                          className="flex-1 bg-green-600 hover:bg-green-700"
+                        >
+                          {isUpdatingRegistration ? "Saving..." : "Save"}
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => setIsEditingCode(false)}
+                          variant="outline"
+                          disabled={isUpdatingRegistration}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="font-mono text-xl font-bold text-tedx-red">
+                        {selectedRegistration.registration_code}
+                      </span>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(selectedRegistration.registration_code!);
+                          toast({ title: "Copied!", description: "Registration code copied to clipboard" });
+                        }}
+                        className="p-1.5 hover:bg-tedx-red/10 rounded-lg transition-colors"
+                        title="Copy registration code"
+                      >
+                        <Copy className="w-4 h-4 text-tedx-red" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 

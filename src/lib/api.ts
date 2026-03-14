@@ -584,6 +584,75 @@ export const siteSettingsService = {
   },
 };
 
+// ==================== THEME STATS ====================
+
+interface ThemeStat {
+  id: string;
+  title: string;
+  description?: string;
+  icon?: string;
+  order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export const themeStatsService = {
+  async getAll() {
+    const { data, error } = await supabase
+      .from("theme_stats")
+      .select("*")
+      .eq("is_active", true)
+      .order("order", { ascending: true });
+
+    if (error) throw error;
+    return data as ThemeStat[];
+  },
+
+  async getById(id: string) {
+    const { data, error } = await supabase
+      .from("theme_stats")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+    return data as ThemeStat;
+  },
+
+  async create(themeStat: Omit<ThemeStat, "id" | "created_at" | "updated_at">) {
+    const { data, error } = await supabase
+      .from("theme_stats")
+      .insert([themeStat])
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as ThemeStat;
+  },
+
+  async update(id: string, themeStat: Partial<ThemeStat>) {
+    const { data, error } = await supabase
+      .from("theme_stats")
+      .update(themeStat)
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as ThemeStat;
+  },
+
+  async delete(id: string) {
+    const { error } = await supabase
+      .from("theme_stats")
+      .delete()
+      .eq("id", id);
+
+    if (error) throw error;
+  },
+};
+
 export const sponsorService = {
   async getAll() {
     const { data, error } = await supabase
