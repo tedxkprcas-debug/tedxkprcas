@@ -68,10 +68,10 @@ const ContactSection = () => {
                 <>
                   <motion.a
                     href={`mailto:${email}`}
-                    className="text-tedx-red font-heading text-xs sm:text-sm md:text-base lg:text-lg hover:underline block break-words"
+                    className="text-tedx-red font-heading text-xs sm:text-sm md:text-base lg:text-lg hover:underline block break-words normal-case"
                     whileHover={{ scale: 1.05 }}
                   >
-                    {email}
+                    {email.toLowerCase()}
                   </motion.a>
                 </>
               )}
