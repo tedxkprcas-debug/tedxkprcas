@@ -32,6 +32,20 @@ const VenueSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          className="mb-8 sm:mb-12 md:mb-16 text-center"
+        >
+          <p className="text-sm sm:text-base text-muted-foreground uppercase tracking-[0.4em]">
+            Venue Partner
+          </p>
+          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl text-white mt-2">
+            Our Venue Partner
+          </h2>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           className="overflow-hidden rounded-3xl bg-black/60 border border-white/10 shadow-2xl"
         >
           <div

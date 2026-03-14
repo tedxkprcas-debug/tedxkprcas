@@ -80,7 +80,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-40 bg-background/90 backdrop-blur-md border-b border-border safe-area-top">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border safe-area-top">
       <div className="container mx-auto flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4">
         <Link to="/" className="flex items-center">
           <img src="/logo.png" alt="TEDx KPRCAS" className="h-8 sm:h-10 w-auto" />
@@ -111,7 +111,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden bg-background/95 backdrop-blur-md border-b border-border px-4 py-2 pb-4 max-h-[calc(100vh-3.5rem)] overflow-y-auto safe-area-bottom"
+            className="md:hidden absolute left-0 right-0 top-14 sm:top-16 bg-background/95 backdrop-blur-md border-b border-border px-4 py-2 pb-4 max-h-[calc(100vh-3.5rem)] overflow-y-auto safe-area-bottom shadow-lg"
         >
           {navItems.map((item) => renderNavLink(item, true))}
           <Link
