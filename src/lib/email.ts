@@ -143,7 +143,7 @@ export async function sendRegistrationPendingEmail(
         <code>${data.registration_code}</code>
       </div>
       
-      <p>If you have any questions, contact us at <a href="mailto:tedxkprcas@gmail.com" style="color: #e62b1e;">tedxkprcas@gmail.com</a></p>
+      <p>If you have any questions, contact us at <a href="mailto:tedxkprcas@kprcas.ac.in" style="color: #e62b1e;">tedxkprcas@gmail.com</a></p>
       
       <p>We look forward to seeing you at the event!</p>
       <p>Best regards,<br><strong>${eventName} Team</strong></p>
