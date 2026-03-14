@@ -159,6 +159,12 @@ h1, h2, h3, h4, h5, h6, .font-heading, .heading {
     color: transparent;
   }
 
+  /* Override global white text when needed */
+  .text-force-black,
+  .text-force-black * {
+    color: #000 !important;
+  }
+
   .marquee {
     animation: marquee 20s linear infinite;
     will-change: transform;
