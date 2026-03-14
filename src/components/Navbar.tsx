@@ -107,22 +107,28 @@ const Navbar = () => {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden absolute left-0 right-0 top-14 sm:top-16 bg-background/95 backdrop-blur-md border-b border-border px-4 py-2 pb-4 max-h-[calc(100vh-3.5rem)] overflow-y-auto safe-area-bottom shadow-lg"
-        >
-          {navItems.map((item) => renderNavLink(item, true))}
-          <Link
-            to="/register"
+            className="fixed inset-0 z-40 md:hidden bg-background/95 backdrop-blur-md"
             onClick={() => setOpen(false)}
-            className="block mt-3 bg-tedx-red text-foreground font-heading text-sm px-5 py-3.5 rounded text-center active:bg-tedx-dark-red"
           >
-            Register
-          </Link>
-        </motion.div>
-      )}
+            <div
+              className="pt-16 px-4 pb-6 max-h-full overflow-y-auto border-b border-border shadow-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {navItems.map((item) => renderNavLink(item, true))}
+              <Link
+                to="/register"
+                onClick={() => setOpen(false)}
+                className="block mt-3 bg-tedx-red text-foreground font-heading text-sm px-5 py-3.5 rounded text-center active:bg-tedx-dark-red"
+              >
+                Register
+              </Link>
+            </div>
+          </motion.div>
+        )}
       </AnimatePresence>
     </nav>
   );
