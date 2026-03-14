@@ -10,7 +10,9 @@ import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
 // CORS headers
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Max-Age": "86400",
 };
 
 interface EmailRequest {
@@ -23,7 +25,10 @@ interface EmailRequest {
 serve(async (req: Request) => {
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response("ok", { 
+      status: 200,
+      headers: corsHeaders 
+    });
   }
 
   try {
@@ -49,11 +54,11 @@ serve(async (req: Request) => {
     });
 
     // Try environment variables if database settings not found
-    const host = smtpConfig.smtp_host || Deno.env.get("SMTP_HOST");
+    const host = smtpConfig.smtp_host || Deno.env.get("SMTP_HOST") || "smtp.gmail.com";
     const port = parseInt(smtpConfig.smtp_port || Deno.env.get("SMTP_PORT") || "587");
-    const user = smtpConfig.smtp_user || Deno.env.get("SMTP_USER");
-    const pass = smtpConfig.smtp_pass || Deno.env.get("SMTP_PASS");
-    const fromEmail = smtpConfig.smtp_from_email || Deno.env.get("SMTP_FROM_EMAIL") || user;
+    const user = smtpConfig.smtp_user || Deno.env.get("SMTP_USER") || Deno.env.get("VITE_APP_EMAIL") || "";
+    const pass = smtpConfig.smtp_pass || Deno.env.get("SMTP_PASS") || Deno.env.get("VITE_APP_PASSWORD") || "";
+    const fromEmail = smtpConfig.smtp_from_email || Deno.env.get("SMTP_FROM_EMAIL") || Deno.env.get("VITE_APP_EMAIL") || user;
     const fromName = smtpConfig.smtp_from_name || Deno.env.get("SMTP_FROM_NAME") || "TEDx KPRCAS";
     const secure = smtpConfig.smtp_secure === "true" || port === 465;
 
