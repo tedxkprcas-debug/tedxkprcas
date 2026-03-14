@@ -59,9 +59,6 @@ const VenueSection = () => {
                   {partner.title || fallbackVenue.title}
                 </h3>
               )}
-              <h3 className="font-heading text-3xl sm:text-4xl md:text-5xl text-white mt-3">
-                {partner.title || fallbackVenue.title}
-              </h3>
               <div className="flex flex-wrap items-center gap-3 text-white/80 mt-3 text-lg sm:text-xl">
                 <span className="inline-flex items-center gap-2">
                   <MapPin className="w-5 h-5 text-tedx-red" />
