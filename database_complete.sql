@@ -76,6 +76,11 @@ CREATE INDEX idx_site_settings_key ON site_settings(key);
 ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow all operations on site_settings" ON site_settings FOR ALL USING (true) WITH CHECK (true);
 
+-- Default site setting for registration code prefix
+INSERT INTO site_settings (key, value)
+VALUES ('registration_code_prefix', 'TEDX')
+ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
+
 -- ==================== PARTICIPANTS TABLE ====================
 -- Stores event participants/registrants
 DROP TABLE IF EXISTS participants CASCADE;

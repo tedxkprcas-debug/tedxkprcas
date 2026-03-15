@@ -894,15 +894,16 @@ export const paymentSettingsService = {
 
 // ==================== REGISTRATIONS ====================
 
-// Generate a unique registration code like TEDX-2026-ABC123
-function generateRegistrationCode(): string {
+// Generate a unique registration code like PREFIX-2026-ABC123 (prefix is configurable via site_settings)
+async function generateRegistrationCode(): Promise<string> {
   const year = new Date().getFullYear();
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let code = '';
   for (let i = 0; i < 6; i++) {
     code += chars.charAt(Math.floor(Math.random() * chars.length));
   }
-  return `TEDX-${year}-${code}`;
+  const prefix = (await siteSettingsService.get("registration_code_prefix")) || "TEDX";
+  return `${prefix}-${year}-${code}`;
 }
 
 // Send registration data to Google Sheets via Apps Script web app
@@ -1064,7 +1065,7 @@ export const registrationService = {
     transaction_id?: string;
   }) {
     // Generate unique registration code
-    const registration_code = generateRegistrationCode();
+    const registration_code = await generateRegistrationCode();
     
     const { data, error } = await supabase
       .from("registrations")

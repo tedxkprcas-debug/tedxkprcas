@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
 import {
@@ -47,6 +47,7 @@ import {
   useSiteSetting,
   useSendVerifiedEmail,
   useUpdateRegistration,
+  useUpdateSiteSetting,
 } from "@/hooks/use-database";
 import type { Registration } from "@/lib/supabase";
 import { sendTicketEmail, sendConfirmationEmail } from "@/lib/email";
@@ -73,6 +74,7 @@ const RegistrationsAdmin = ({ showNotification }: Props) => {
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
   const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [registrationPrefix, setRegistrationPrefix] = useState("TEDX");
   
   // Email compose state
   const [emailMessage, setEmailMessage] = useState(`Congratulations! Your payment has been verified and your registration is now confirmed.
@@ -103,6 +105,8 @@ We look forward to seeing you at the event!`);
   const { mutate: deleteRegistration } = useDeleteRegistration();
   const { mutate: getByCode, isPending: isSearchingCode } = useGetRegistrationByCode();
   const { mutate: sendVerifiedEmail, isPending: isSendingVerifiedEmail } = useSendVerifiedEmail();
+  const { data: registrationCodeSetting } = useSiteSetting("registration_code_prefix");
+  const { mutate: updateSiteSetting } = useUpdateSiteSetting();
 
   // Email settings (check if email is configured)
   const { data: gmailEmail } = useSiteSetting("gmail_email");
@@ -110,6 +114,13 @@ We look forward to seeing you at the event!`);
 
   // Check if email is configured
   const isEmailConfigured = !!(gmailEmail && gmailAppPassword);
+
+  // Sync registration prefix from site settings
+  useEffect(() => {
+    if (registrationCodeSetting) {
+      setRegistrationPrefix(registrationCodeSetting.toUpperCase());
+    }
+  }, [registrationCodeSetting]);
 
   // Search by registration code
   const handleCodeSearch = () => {
@@ -127,6 +138,21 @@ We look forward to seeing you at the event!`);
         showNotification("error", "No registration found with this code");
       },
     });
+  };
+
+  const saveRegistrationPrefix = () => {
+    if (!registrationPrefix.trim()) {
+      showNotification("error", "Prefix cannot be empty");
+      return;
+    }
+
+    updateSiteSetting(
+      { key: "registration_code_prefix", value: registrationPrefix.toUpperCase() },
+      {
+        onSuccess: () => showNotification("success", "Registration ID prefix updated"),
+        onError: () => showNotification("error", "Failed to update prefix"),
+      }
+    );
   };
 
   // Filtered registrations
@@ -314,6 +340,27 @@ We look forward to seeing you at the event!`);
 
   return (
     <div className="space-y-6">
+      {/* Registration ID prefix */}
+      <div className="bg-card rounded-lg border p-4">
+        <div className="flex flex-col sm:flex-row sm:items-end gap-3">
+          <div className="flex-1">
+            <Label className="text-sm">Registration ID Prefix</Label>
+            <Input
+              value={registrationPrefix}
+              onChange={(e) => setRegistrationPrefix(e.target.value.toUpperCase())}
+              className="font-mono uppercase mt-1"
+              placeholder="TEDX"
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              This prefix is used when generating new Registration IDs (e.g., {registrationPrefix || "TEDX"}-2026-ABC123).
+            </p>
+          </div>
+          <Button onClick={saveRegistrationPrefix} className="bg-tedx-red hover:bg-tedx-red/90">
+            Save Prefix
+          </Button>
+        </div>
+      </div>
+
       {/* Quick Search by Registration Code */}
       <div className="bg-gradient-to-r from-tedx-red/5 to-orange-500/5 rounded-xl border border-tedx-red/20 p-4">
         <div className="flex items-center gap-2 mb-3">
@@ -323,7 +370,7 @@ We look forward to seeing you at the event!`);
         <div className="flex gap-3">
           <div className="flex-1 relative">
             <Input
-              placeholder="Enter Registration ID (e.g., TEDX-2026-ABC123)"
+              placeholder={`Enter Registration ID (e.g., ${registrationPrefix || "TEDX"}-2026-ABC123)`}
               value={codeSearch}
               onChange={(e) => setCodeSearch(e.target.value.toUpperCase())}
               onKeyDown={(e) => e.key === "Enter" && handleCodeSearch()}
