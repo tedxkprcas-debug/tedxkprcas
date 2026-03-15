@@ -81,6 +81,14 @@ INSERT INTO site_settings (key, value)
 VALUES ('registration_code_prefix', 'TEDX')
 ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
 
+-- Registration code options
+INSERT INTO site_settings (key, value)
+VALUES
+  ('registration_code_include_year', 'true'),
+  ('registration_code_random_length', '6'),
+  ('registration_code_charset', 'ALNUM')
+ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
+
 -- ==================== PARTICIPANTS TABLE ====================
 -- Stores event participants/registrants
 DROP TABLE IF EXISTS participants CASCADE;

@@ -75,6 +75,9 @@ const RegistrationsAdmin = ({ showNotification }: Props) => {
   const [rejectionReason, setRejectionReason] = useState("");
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [registrationPrefix, setRegistrationPrefix] = useState("TEDX");
+  const [registrationIncludeYear, setRegistrationIncludeYear] = useState(true);
+  const [registrationRandomLength, setRegistrationRandomLength] = useState(6);
+  const [registrationCharset, setRegistrationCharset] = useState<"ALNUM" | "NUM">("ALNUM");
   
   // Email compose state
   const [emailMessage, setEmailMessage] = useState(`Congratulations! Your payment has been verified and your registration is now confirmed.
@@ -106,6 +109,9 @@ We look forward to seeing you at the event!`);
   const { mutate: getByCode, isPending: isSearchingCode } = useGetRegistrationByCode();
   const { mutate: sendVerifiedEmail, isPending: isSendingVerifiedEmail } = useSendVerifiedEmail();
   const { data: registrationCodeSetting } = useSiteSetting("registration_code_prefix");
+  const { data: registrationCodeIncludeYear } = useSiteSetting("registration_code_include_year");
+  const { data: registrationCodeRandomLength } = useSiteSetting("registration_code_random_length");
+  const { data: registrationCodeCharset } = useSiteSetting("registration_code_charset");
   const { mutate: updateSiteSetting } = useUpdateSiteSetting();
 
   // Email settings (check if email is configured)
@@ -120,7 +126,18 @@ We look forward to seeing you at the event!`);
     if (registrationCodeSetting) {
       setRegistrationPrefix(registrationCodeSetting.toUpperCase());
     }
-  }, [registrationCodeSetting]);
+    if (registrationCodeIncludeYear !== undefined) {
+      setRegistrationIncludeYear(registrationCodeIncludeYear === "true");
+    }
+    if (registrationCodeRandomLength) {
+      const n = parseInt(registrationCodeRandomLength, 10);
+      if (!Number.isNaN(n)) setRegistrationRandomLength(Math.max(1, n));
+    }
+    if (registrationCodeCharset) {
+      const opt = registrationCodeCharset.toUpperCase();
+      if (opt === "NUM" || opt === "ALNUM") setRegistrationCharset(opt as "ALNUM" | "NUM");
+    }
+  }, [registrationCodeSetting, registrationCodeIncludeYear, registrationCodeRandomLength, registrationCodeCharset]);
 
   // Search by registration code
   const handleCodeSearch = () => {
@@ -146,13 +163,11 @@ We look forward to seeing you at the event!`);
       return;
     }
 
-    updateSiteSetting(
-      { key: "registration_code_prefix", value: registrationPrefix.toUpperCase() },
-      {
-        onSuccess: () => showNotification("success", "Registration ID prefix updated"),
-        onError: () => showNotification("error", "Failed to update prefix"),
-      }
-    );
+    updateSiteSetting({ key: "registration_code_prefix", value: registrationPrefix.toUpperCase() });
+    updateSiteSetting({ key: "registration_code_include_year", value: registrationIncludeYear ? "true" : "false" });
+    updateSiteSetting({ key: "registration_code_random_length", value: String(registrationRandomLength) });
+    updateSiteSetting({ key: "registration_code_charset", value: registrationCharset });
+    showNotification("success", "Registration ID settings updated");
   };
 
   // Filtered registrations
@@ -354,6 +369,37 @@ We look forward to seeing you at the event!`);
             <p className="text-xs text-muted-foreground mt-1">
               This prefix is used when generating new Registration IDs (e.g., {registrationPrefix || "TEDX"}-2026-ABC123).
             </p>
+          </div>
+          <div className="flex-1">
+            <Label className="text-sm">Random Part Length</Label>
+            <Input
+              type="number"
+              min={1}
+              max={12}
+              value={registrationRandomLength}
+              onChange={(e) => setRegistrationRandomLength(Math.max(1, Math.min(12, Number(e.target.value) || 1)))}
+              className="mt-1"
+            />
+            <p className="text-xs text-muted-foreground mt-1">Characters appended after prefix (e.g., 2 gives TEDX-01).</p>
+          </div>
+          <div className="flex-1">
+            <Label className="text-sm">Character Set</Label>
+            <select
+              value={registrationCharset}
+              onChange={(e) => setRegistrationCharset(e.target.value as "ALNUM" | "NUM")}
+              className="w-full bg-secondary border border-border rounded-lg px-3 py-2 mt-1"
+            >
+              <option value="ALNUM">Alphanumeric</option>
+              <option value="NUM">Digits only</option>
+            </select>
+            <label className="inline-flex items-center gap-2 mt-2 text-sm text-muted-foreground">
+              <input
+                type="checkbox"
+                checked={registrationIncludeYear}
+                onChange={(e) => setRegistrationIncludeYear(e.target.checked)}
+              />
+              Include year in ID
+            </label>
           </div>
           <Button onClick={saveRegistrationPrefix} className="bg-tedx-red hover:bg-tedx-red/90">
             Save Prefix

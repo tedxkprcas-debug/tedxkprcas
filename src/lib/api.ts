@@ -894,16 +894,33 @@ export const paymentSettingsService = {
 
 // ==================== REGISTRATIONS ====================
 
-// Generate a unique registration code like PREFIX-2026-ABC123 (prefix is configurable via site_settings)
+// Generate a unique registration code with configurable parts
 async function generateRegistrationCode(): Promise<string> {
-  const year = new Date().getFullYear();
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let code = '';
-  for (let i = 0; i < 6; i++) {
-    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  const [prefixRaw, includeYearRaw, randomLenRaw, charsetRaw] = await Promise.all([
+    siteSettingsService.get("registration_code_prefix"),
+    siteSettingsService.get("registration_code_include_year"),
+    siteSettingsService.get("registration_code_random_length"),
+    siteSettingsService.get("registration_code_charset"),
+  ]);
+
+  const prefix = (prefixRaw || "TEDX").toUpperCase();
+  const includeYear = includeYearRaw === "true";
+  const randomLength = Math.max(1, parseInt(randomLenRaw || "6", 10) || 6);
+  const charsetOption = (charsetRaw || "ALNUM").toUpperCase();
+
+  const chars =
+    charsetOption === "NUM" ? "0123456789" : "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+  let randomPart = "";
+  for (let i = 0; i < randomLength; i++) {
+    randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
   }
-  const prefix = (await siteSettingsService.get("registration_code_prefix")) || "TEDX";
-  return `${prefix}-${year}-${code}`;
+
+  const parts = [prefix];
+  if (includeYear) parts.push(new Date().getFullYear().toString());
+  if (randomPart) parts.push(randomPart);
+
+  return parts.join("-");
 }
 
 // Send registration data to Google Sheets via Apps Script web app
