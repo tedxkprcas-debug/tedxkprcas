@@ -83,7 +83,6 @@ const Navbar = () => {
       <div className="w-full flex items-center justify-between h-12 sm:h-14 md:h-16 px-2 sm:px-3 md:px-4 max-w-full">
         <Link to="/" className="flex items-center flex-shrink-0 gap-1">
           <img src="/logo.png" alt="TEDx" className="h-5 sm:h-6 md:h-8 w-auto" />
-          <span className="hidden sm:inline text-xs md:text-sm font-semibold">KPRCAS</span>
         </Link>
 
         {/* Desktop nav */}

@@ -21,7 +21,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ["Rubik Dirt", "sans-serif"],
+        heading: ["Inter", "sans-serif"],
         body: ["Inter", "sans-serif"],
       },
       fontWeight: {

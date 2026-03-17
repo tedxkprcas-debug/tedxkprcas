@@ -12,14 +12,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Force Instrument Serif font for body content and remove all boldness */
+/* Force Inter font for body content and remove all boldness */
 * {
-  font-family: "Instrument Serif", serif !important;
+  font-family: "Inter", sans-serif !important;
   font-weight: 400 !important;
 }
 
 html, body {
-  font-family: "Instrument Serif", serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
@@ -31,18 +31,18 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-/* Keep headings as Rubik Dirt but maintain hierarchy */
+/* Keep headings as Inter and maintain hierarchy */
 h1, h2, h3, h4, h5, h6, .font-heading, .heading, .font-heading * {
   font-weight: 400 !important;
-  font-family: "Rubik Dirt", sans-serif !important;
+  font-family: "Inter", sans-serif !important;
   color: white !important;
   letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
 }
 
-/* Body text styling with Instrument Serif and 1.5 line spacing */
+/* Body text styling with Inter and 1.5 line spacing */
 p, span, div, li, a {
-  font-family: "Instrument Serif", serif !important;
+  font-family: "Inter", sans-serif !important;
   font-weight: 400 !important;
   color: white !important;
   line-height: 1.5 !important;
@@ -56,7 +56,7 @@ h1, h2, h3, h4, h5, h6, .font-heading, .heading {
 
 /* Normal body font override for non-heading text */
 .font-body, .font-body * {
-  font-family: "Instrument Serif", serif !important;
+  font-family: "Inter", sans-serif !important;
   font-weight: 400 !important;
   text-transform: none !important;
   letter-spacing: normal !important;
@@ -132,6 +132,36 @@ h1, h2, h3, h4, h5, h6, .font-heading, .heading {
     @apply font-heading;
   }
 
+  h1 {
+    font-size: 3.5rem;
+    font-weight: 400;
+  }
+
+  h2 {
+    font-size: 3rem;
+    font-weight: 400;
+  }
+
+  h3 {
+    font-size: 2.5rem;
+    font-weight: 400;
+  }
+
+  h4 {
+    font-size: 2rem;
+    font-weight: 400;
+  }
+
+  h5 {
+    font-size: 1.5rem;
+    font-weight: 400;
+  }
+
+  h6 {
+    font-size: 1.25rem;
+    font-weight: 400;
+  }
+
   /* iOS safe areas */
   .safe-area-top {
     padding-top: env(safe-area-inset-top, 0px);
@@ -195,7 +225,7 @@ h1, h2, h3, h4, h5, h6, .font-heading, .heading {
   }
 
   .about-heading-hero {
-    font-size: clamp(96px, 12vw, 200px) !important;
+    font-size: clamp(120px, 15vw, 240px) !important;
     line-height: 1.05 !important;
     font-weight: 900 !important;
     letter-spacing: 0.1em !important;

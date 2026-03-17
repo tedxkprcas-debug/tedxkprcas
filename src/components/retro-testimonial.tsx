@@ -246,17 +246,17 @@ const TestimonialCard = ({
 							</button>
 							<motion.p
 								layoutId={layout ? `category-${testimonial.name}` : undefined}
-								className="px-0 md:px-20 text-[rgba(31, 27, 29, 0.7)] text-lg dark:text-white font-thin font-tiemposHeadline underline underline-offset-8"
+								className="px-0 md:px-20 text-[rgba(31, 27, 29, 0.7)] text-lg dark:text-white font-normal font-tiemposHeadline underline underline-offset-8"
 							>
 								{testimonial.designation}
 							</motion.p>
 							<motion.p
 								layoutId={layout ? `title-${testimonial.name}` : undefined}
-								className="px-0 md:px-20 text-2xl md:text-4xl font-normal italic text-[rgba(31, 27, 29, 0.7)] mt-4 dark:text-white font-tiemposHeadline lowercase"
+								className="px-0 md:px-20 text-2xl md:text-4xl font-normal text-[rgba(31, 27, 29, 0.7)] mt-4 dark:text-white font-tiemposHeadline lowercase"
 							>
 								{testimonial.name}
 							</motion.p>
-							<div className="py-8 text-[rgba(31, 27, 29, 0.7)] px-0 md:px-20 text-3xl lowercase font-thin font-tiemposHeadline leading-snug tracking-wide">
+							<div className="py-8 text-[rgba(31, 27, 29, 0.7)] px-0 md:px-20 text-3xl lowercase font-normal font-tiemposHeadline leading-snug tracking-wide">
 								<Quote className="h-6 w-6 text-[rgba(31, 27, 29, 0.7)] dark:text-neutral-900" />
 								{testimonial.description}
 							</div>
@@ -301,13 +301,13 @@ const TestimonialCard = ({
 					</motion.p>
 					<motion.p
 						layoutId={layout ? `category-${testimonial.name}` : undefined}
-						className="text-[rgba(31, 27, 29, 0.7)] text-xl md:text-2xl font-thin font-tiemposHeadline italic text-center mt-5 lowercase"
+						className="text-[rgba(31, 27, 29, 0.7)] text-xl md:text-2xl font-normal font-tiemposHeadline text-center mt-5 lowercase"
 					>
 						{testimonial.name}.
 					</motion.p>
 					<motion.p
 						layoutId={layout ? `category-${testimonial.name}` : undefined}
-						className="text-[rgba(31, 27, 29, 0.7)] text-base md:text-base font-thin font-tiemposHeadline italic text-center mt-1 lowercase underline underline-offset-8 decoration-1"
+						className="text-[rgba(31, 27, 29, 0.7)] text-base md:text-base font-normal font-tiemposHeadline text-center mt-1 lowercase underline underline-offset-8 decoration-1"
 					>
 						{testimonial.designation.length > 25
 							? `${testimonial.designation.slice(0, 25)}...`
