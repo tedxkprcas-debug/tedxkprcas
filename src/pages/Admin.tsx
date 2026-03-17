@@ -590,8 +590,6 @@ const AdminPage = ({ onLogout }: { onLogout?: () => void }) => {
           },
         }
       );
-        }
-      );
     }
   };
 
