@@ -551,7 +551,7 @@ const Register = () => {
                   </div>
                   <h1 className="text-2xl font-bold text-foreground">Make Payment</h1>
                   <p className="text-muted-foreground mt-2">
-                    Scan the QR code or use UPI ID to pay
+                    Scan the QR code or use UPI ID to pay, then enter your details below
                   </p>
                 </div>
 
@@ -661,6 +661,51 @@ const Register = () => {
                       Find this in your payment app after making the transaction
                     </p>
                     {errors.transactionId && <p className="text-sm text-red-500">{errors.transactionId}</p>}
+                  </div>
+
+                  {/* Payment Screenshot Upload (Optional) */}
+                  <div className="space-y-2">
+                    <Label>Payment Screenshot (Optional)</Label>
+                    <div
+                      className={cn(
+                        "border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors hover:border-tedx-red/50",
+                        errors.screenshot ? "border-red-500" : "border-border"
+                      )}
+                      onClick={() => document.getElementById("payment-screenshot-input")?.click()}
+                    >
+                      <input
+                        id="payment-screenshot-input"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileSelect}
+                        className="hidden"
+                      />
+                      {previewUrl ? (
+                        <div className="space-y-4">
+                          <img
+                            src={previewUrl}
+                            alt="Payment Screenshot"
+                            className="max-h-40 mx-auto rounded-lg"
+                          />
+                          <p className="text-sm text-muted-foreground">
+                            Click to change image
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <Upload className="h-8 w-8 mx-auto text-muted-foreground" />
+                          <p className="text-sm text-muted-foreground">
+                            Click to upload payment screenshot
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            PNG, JPG up to 5MB
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    {errors.screenshot && (
+                      <p className="text-sm text-red-500">{errors.screenshot}</p>
+                    )}
                   </div>
 
                   {errors.submit && (
