@@ -201,10 +201,6 @@ const Register = () => {
 
   // Handle payment submission
   const handlePaymentSubmit = async () => {
-    if (!paymentScreenshot) {
-      setErrors({ screenshot: "Please upload payment screenshot" });
-      return;
-    }
     if (!userUpiId.trim()) {
       setErrors({ upiId: "Please enter your UPI ID" });
       return;
@@ -216,21 +212,30 @@ const Register = () => {
 
     setIsSubmitting(true);
     try {
-      // Upload screenshot
-      const screenshotUrl = await uploadScreenshot({
-        file: paymentScreenshot,
-        registrationId: registrationId!,
-      });
+      // Prepare payment data
+      let paymentData: any = {
+        user_upi_id: userUpiId,
+        payment_amount: paymentSettings?.payment_amount || 0,
+        transaction_id: transactionId || undefined,
+      };
+
+      // Upload screenshot if provided
+      if (paymentScreenshot) {
+        try {
+          const screenshotUrl = await uploadScreenshot({
+            file: paymentScreenshot,
+            registrationId: registrationId!,
+          });
+          paymentData.payment_screenshot_url = screenshotUrl;
+        } catch (screenshotError) {
+          console.error("Screenshot upload failed, continuing without it:", screenshotError);
+        }
+      }
 
       // Submit payment and generate unique registration code
       const result = await submitPaymentWithCode({
         id: registrationId!,
-        paymentData: {
-          payment_screenshot_url: screenshotUrl,
-          user_upi_id: userUpiId,
-          payment_amount: paymentSettings?.payment_amount || 0,
-          transaction_id: transactionId || undefined,
-        },
+        paymentData,
       });
 
       // Store the registration code
@@ -608,88 +613,12 @@ const Register = () => {
                       </p>
                     </div>
                   )}
-                </div>
-
-                <Button
-                  onClick={() => setStep("upload")}
-                  className="w-full mt-6 bg-tedx-red hover:bg-tedx-dark-red"
-                >
-                  I've Made the Payment
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </motion.div>
-            )}
-
-            {/* Step 3: Upload Screenshot */}
-            {step === "upload" && (
-              <motion.div
-                key="upload"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="text-center mb-8">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-tedx-red/10 mb-4">
-                    <Upload className="h-8 w-8 text-tedx-red" />
-                  </div>
-                  <h1 className="text-2xl font-bold text-foreground">Upload Payment Proof</h1>
-                  <p className="text-muted-foreground mt-2">
-                    Upload your payment screenshot and enter your UPI ID
-                  </p>
-                </div>
-
-                <div className="space-y-6">
-                  {/* Screenshot Upload */}
-                  <div className="space-y-2">
-                    <Label>Payment Screenshot *</Label>
-                    <div
-                      className={cn(
-                        "border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors hover:border-tedx-red/50",
-                        errors.screenshot ? "border-red-500" : "border-border"
-                      )}
-                      onClick={() => document.getElementById("screenshot-input")?.click()}
-                    >
-                      <input
-                        id="screenshot-input"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileSelect}
-                        className="hidden"
-                      />
-                      {previewUrl ? (
-                        <div className="space-y-4">
-                          <img
-                            src={previewUrl}
-                            alt="Payment Screenshot"
-                            className="max-h-48 mx-auto rounded-lg"
-                          />
-                          <p className="text-sm text-muted-foreground">
-                            Click to change image
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="space-y-2">
-                          <Upload className="h-10 w-10 mx-auto text-muted-foreground" />
-                          <p className="text-sm text-muted-foreground">
-                            Click to upload screenshot
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            PNG, JPG up to 5MB
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                    {errors.screenshot && (
-                      <p className="text-sm text-red-500">{errors.screenshot}</p>
-                    )}
-                  </div>
 
                   {/* UPI ID Input */}
                   <div className="space-y-2">
-                    <Label htmlFor="user-upi">Your UPI ID *</Label>
+                    <Label htmlFor="payment-upi">Your UPI ID *</Label>
                     <Input
-                      id="user-upi"
+                      id="payment-upi"
                       placeholder="yourname@upi"
                       value={userUpiId}
                       onChange={(e) => {
@@ -709,18 +638,29 @@ const Register = () => {
 
                   {/* Transaction ID Input */}
                   <div className="space-y-2">
-                    <Label htmlFor="transaction-id">
+                    <Label htmlFor="payment-transaction-id">
                       Transaction ID / Payment Reference <span className="text-red-500">*</span>
                     </Label>
                     <Input
-                      id="transaction-id"
+                      id="payment-transaction-id"
                       placeholder="Enter UPI transaction ID"
                       value={transactionId}
-                      onChange={(e) => setTransactionId(e.target.value)}
+                      onChange={(e) => {
+                        setTransactionId(e.target.value);
+                        if (errors.transactionId) {
+                          setErrors((prev) => {
+                            const newErrors = { ...prev };
+                            delete newErrors.transactionId;
+                            return newErrors;
+                          });
+                        }
+                      }}
+                      className={cn(errors.transactionId && "border-red-500")}
                     />
                     <p className="text-xs text-muted-foreground">
-                      Enter the UPI transaction reference number from your payment app
+                      Find this in your payment app after making the transaction
                     </p>
+                    {errors.transactionId && <p className="text-sm text-red-500">{errors.transactionId}</p>}
                   </div>
 
                   {errors.submit && (
@@ -729,39 +669,39 @@ const Register = () => {
                       <p className="text-sm">{errors.submit}</p>
                     </div>
                   )}
+                </div>
 
-                  <div className="flex gap-3">
-                    <Button
-                      variant="outline"
-                      onClick={() => setStep("payment")}
-                      className="flex-1"
-                    >
-                      <ArrowLeft className="mr-2 h-4 w-4" />
-                      Back
-                    </Button>
-                    <Button
-                      onClick={handlePaymentSubmit}
-                      className="flex-1 bg-tedx-red hover:bg-tedx-dark-red"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Submitting...
-                        </>
-                      ) : (
-                        <>
-                          Submit
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </>
-                      )}
-                    </Button>
-                  </div>
+                <div className="flex gap-3 mt-6">
+                  <Button
+                    variant="outline"
+                    onClick={() => setStep("form")}
+                    className="flex-1"
+                  >
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Back
+                  </Button>
+                  <Button
+                    onClick={handlePaymentSubmit}
+                    className="flex-1 bg-tedx-red hover:bg-tedx-dark-red"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        Submit Payment
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </>
+                    )}
+                  </Button>
                 </div>
               </motion.div>
             )}
 
-            {/* Step 4: Success */}
+            {/* Step 3: Success */}
             {step === "success" && (
               <motion.div
                 key="success"
