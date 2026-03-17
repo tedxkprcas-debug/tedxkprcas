@@ -76,9 +76,8 @@ const Team = () => {
                   id: member.id,
                   year: member.role,
                   title: member.name,
-                  description: member.description || member.role,
+                  description: member.description || "",
                   image: member.photo || undefined,
-                  subtitle: member.role,
                 } as TimelineEvent))}
                 title="Our Team"
                 subtitle="Meet the passionate individuals behind TEDˣ KPRCAS"
